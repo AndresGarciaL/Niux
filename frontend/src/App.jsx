@@ -1,9 +1,20 @@
-
+import { useState } from 'react'
+import Dashboard from './Views/Dashboard'
+import Error404 from './Error404';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 function App() {
+
+
   return (
-    <div className='bg-red-300'>
-      HOLA
-    </div>
+    <>
+    
+    <BrowserRouter>
+    <Routes>
+      <Route path="/Dashboard" element={<Dashboard/>}/>
+      <Route path="/*" element={<Error404/>}/>
+    </Routes>
+    </BrowserRouter>
+    </>
   )
 }
 

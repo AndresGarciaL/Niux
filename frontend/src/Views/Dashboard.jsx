@@ -1,94 +1,20 @@
-import { Link } from "react-router-dom";
-import React,{useState} from "react";
-import { RxArchive } from "react-icons/rx";
-import { MdMiscellaneousServices,MdDashboard,MdOutlineLogout,MdOutlineMenu,MdOutlineClose} from "react-icons/md";
-import { AiFillCreditCard,AiOutlineUserSwitch,AiFillShop } from "react-icons/ai";
-import imageTasks from '../assets/Img/img-tasks.svg';
+import React from "react";
+import { Outlet } from "react-router-dom";
+import SideBar_Dash from "../Components/Dashboard/SideBar_Dash";
+import Header_Dash from "../Components/Dashboard/Header_Dash";
 
-
-
-function Dashboard() {
-
-const [sidebar, setSideBar] = useState(false)
-const handleSidebar = () => {setSideBar(!sidebar)}
+const Dashboard = () => {
   return (
-    <div className='min-h-screen grid grid-cols-1 lg:grid-cols-6'>
-        {/* SIDEBAR */}
-        <div className={`bg-white fixed lg:static w-[80%] md:w-[40%]  lg:w-full top-0 z-50 ${sidebar ? "-left-0" : "-left-full"} -left-full w-full h-full overflow-y-scroll col-span-1 p-8 border-r transition-all`}>
-            {/* LOGOTIPO */}
-            <div className=" flex items-center  p-8">
-                <img className="w-[50px] " src="Images/logo2niux.png" alt="" />
-                <h1 className='uppercase font-bold'>NIUX</h1>
-            </div>
-
-            
-            <div className="flex flex-col">
-                {/*  MENU */}
-            <nav>
-            <ul>
-                <li>
-                <Link to="#" className="flex items-center gap-2 p-4 hover:text-white hover:bg-purple-400 rounded-lg transition-colors text-gray-500 font-poppins font-semibold">
-            <MdDashboard/>Dashboard                   
-            </Link>
-                </li>
-                <li>
-                <Link to="#" className="flex items-center gap-2 p-4 hover:text-white hover:bg-purple-400 rounded-lg transition-colors text-gray-500 font-poppins font-semibold">
-            <RxArchive/>Tickets                  
-            </Link>
-                </li>
-                <li>
-                <Link to="#" className="flex items-center gap-2 p-4 hover:text-white hover:bg-purple-400 rounded-lg transition-colors text-gray-500 font-poppins font-semibold">
-            <AiFillCreditCard/>Pedidos                 
-            </Link>
-                </li>
-                <li>
-                <Link to="#" className="flex items-center gap-2 p-4 hover:text-white hover:bg-purple-400 rounded-lg transition-colors text-gray-500 font-poppins font-semibold">
-            <AiOutlineUserSwitch/>Usuarios                   
-            </Link>
-                </li>
-                <li>
-                <Link to="#" className="flex items-center gap-2 p-4 hover:text-white hover:bg-purple-400 rounded-lg transition-colors text-gray-500 font-poppins font-semibold">
-            <AiFillShop/>Productos                   
-            </Link>
-                </li>
-                <li>
-                <Link to="#" className="flex items-center gap-2 p-4 hover:text-white hover:bg-purple-400 rounded-lg transition-colors text-gray-500 font-poppins font-semibold">
-            <MdMiscellaneousServices/>Servicios                  
-            </Link>
-                </li>
-            
-            </ul>
-            </nav>
-            {/* IMG AND LOGOUT */}
-            <div>
-            <img src={imageTasks} className="p-6 w-25" />
-            <Link to="#" className="flex items-center gap-2 p-4 hover:text-white hover:bg-purple-400 rounded-lg transition-colors text-gray-500 font-poppins font-semibold">
-            <MdOutlineLogout/>Logout                  
-            </Link>
-            </div>
-            </div>
-            
-        
+    <div className="min-h-screen grid grid-cols-1 xl:grid-cols-6">
+      <SideBar_Dash />
+      <div className="xl:col-span-5">
+        <Header_Dash />
+        <div className="h-[90vh] overflow-y-scroll p-8">
+          <Outlet />
         </div>
-        {/* Boton menú Movil */}
-        <button onClick={handleSidebar} className="block lg:hidden absolute bottom-4 right-4 bg-purple-400 p-2 text-white rounded-full text-2xl">
-            {sidebar ? <MdOutlineClose/> : <MdOutlineMenu/>}
-        </button>
-
-        <div className="col-span-5 bg-gray-300">
-            {/* HEADER */}
-            <header>
-                {/* SEARCH */}
-                <form action="">
-                    <div>
-                        <input type="text" id="" />
-                    </div>
-                </form>
-            </header>
-        </div>
-        
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

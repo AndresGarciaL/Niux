@@ -4,6 +4,7 @@ import { RxArchive } from "react-icons/rx";
 import { MdMiscellaneousServices,MdDashboard,MdOutlineLogout,MdOutlineMenu,MdOutlineClose} from "react-icons/md";
 import { AiFillCreditCard,AiOutlineUserSwitch,AiFillShop } from "react-icons/ai";
 import imageTasks from '../assets/Img/img-tasks.svg';
+import Navbar from "./Navbar";
 
 
 
@@ -12,6 +13,8 @@ function Dashboard() {
 const [sidebar, setSideBar] = useState(false)
 const handleSidebar = () => {setSideBar(!sidebar)}
   return (
+    <>
+    <Navbar/>
     <div className='min-h-screen grid grid-cols-1 lg:grid-cols-6'>
         {/* SIDEBAR */}
         <div className={`bg-white fixed lg:static w-[80%] md:w-[40%]  lg:w-full top-0 z-50 ${sidebar ? "-left-0" : "-left-full"} -left-full w-full h-full overflow-y-scroll col-span-1 p-8 border-r transition-all`}>
@@ -88,6 +91,7 @@ const handleSidebar = () => {setSideBar(!sidebar)}
         </div>
         
     </div>
+    </>
   )
 }
 

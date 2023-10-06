@@ -1,6 +1,7 @@
 import React from "react";
-import Header_Dash from "../Components/Dashboard/Header_Dash";
 import SideBar_Catalogue from "../Components/Dashboard/SideBar_Catalogue";
+import Navbar from "./Navbar"
+
 const Catalogue = () => {
   const products = [
     {
@@ -88,7 +89,7 @@ const Catalogue = () => {
   ];
   return (
     <div className="bg-white relative">
-      <Header_Dash />
+      <Navbar />
       <div className="w-full h-64 bg-white overflow-hidden">
         <img
           src="/Images/banner.jpg"

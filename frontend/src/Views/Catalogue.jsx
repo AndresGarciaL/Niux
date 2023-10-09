@@ -4,7 +4,6 @@ import { BsFilterRight } from "react-icons/bs";
 import SideBar_Catalogue from "../Components/Dashboard/SideBar_Catalogue";
 import Navbar from "./Navbar";
 import StarsRating from "../Components/StarsRating";
-import Dropdown from "../Components/Dropdown";
 
 const Catalogue = () => {
   const products = [

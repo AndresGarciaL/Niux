@@ -4,10 +4,10 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import {HiOutlineShoppingCart} from 'react-icons/hi2'
 
 const navigation = [
-  { name: 'Inicio', href: '#', current: false },
-  { name: 'Tienda', href: '#', current: false },
+  { name: 'Inicio', href: '/', current: false },
+  { name: 'Tienda', href: '/catalogue', current: false },
   { name: 'Servicios', href: '#', current: false },
-  { name: 'Contacto', href: '#', current: false },
+  { name: 'Contacto', href: '/Contacto', current: false },
 ]
 
 function classNames(...classes) {
@@ -16,7 +16,7 @@ function classNames(...classes) {
 
 export default function Home() {
   return (
-    <Disclosure as="nav" className="bg-white sticky top-0">
+    <Disclosure as="nav" className="bg-white sticky top-0 z-50">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -88,7 +88,7 @@ export default function Home() {
     <input
       type="search"
       id="default-search"
-      className="block w-80 h-9 p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
+      className="focus:outline-purple-500 block w-80 h-9 p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
       placeholder="Buscar..."
       required=""
     />

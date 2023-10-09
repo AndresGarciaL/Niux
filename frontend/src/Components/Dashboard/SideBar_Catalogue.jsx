@@ -27,7 +27,7 @@ import {
 const SideBar_Catalogue = () => {
   const [showMenu, setShowMenu] = useState(false);
   return (
-    <div className="bg-white h-screen sticky top-0">
+    <div className="bg-white h-screen sticky top-0 z-40">
       <div
         className={`xl:h-[100vh] overflow-y-scroll fixed xl:static w-[80%] md:w-[40%] lg:w-[30%] xl:w-auto h-full top-0 bg-secondary-100 p-4 flex flex-col justify-between z-50 bg-white ${
           showMenu ? "left-0" : "-left-full"
@@ -35,7 +35,7 @@ const SideBar_Catalogue = () => {
       >
         <div>
           <div className=" flex items-center p-8">
-            <h1 className="text-center ml-[25px] text-gray-700 font-bold text-2xl">
+            <h1 className="mt-2 text-center ml-[25px] text-gray-700 font-bold text-2xl">
               Categorías
             </h1>
           </div>

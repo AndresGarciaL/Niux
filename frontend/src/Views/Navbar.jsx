@@ -46,14 +46,14 @@ export default function Home() {
                 </div>
           
                 <div className="hidden sm:ml-6 sm:block">
-                  <div className="flex space-x-4 gap-4" >
+                  <div className="flex space-x-4 gap-4 " >
                     {navigation.map((item) => (
                       <a
                         key={item.name}
                         href={item.href}
                         className={classNames(
                           item.current ? 'bg-purple-400 text-white' : 'text-black hover:bg-purple-400 hover:text-white',
-                          'rounded-md px-3 py-2 text-sm font-medium'
+                          'rounded-md px-3 py-2 text-sm font-medium transition-colors duration-300'
                         )}
                         aria-current={item.current ? 'page' : undefined}
                       >
@@ -88,7 +88,7 @@ export default function Home() {
     <input
       type="search"
       id="default-search"
-      className="focus:outline-purple-500 block w-80 h-9 p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
+      className="focus:outline-purple-500 block w-80 h-9 p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-50 dark:border-gray-300 dark:placeholder-gray-400 dark:text-gray-900 dark:focus:ring-purple-500 dark:focus:border-purple-500 dark:focus:outline-purple-500 "
       placeholder="Buscar..."
       required=""
     />
@@ -102,7 +102,7 @@ export default function Home() {
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <button
                   type="button"
-                  className="relative rounded-full bg-white p-1 text-black hover:text-white hover:bg-purple-400 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                  className="relative rounded-full bg-white p-1 text-black hover:text-white hover:bg-purple-400 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 "
                 >
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">View notifications</span>

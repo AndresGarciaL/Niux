@@ -166,7 +166,7 @@ const Catalogue = () => {
                     </p>
 
                     <div className="flex items-center">
-                      <p className="flex items-center h-38 w-[105px] text-center rounded-[5px] font-semibold bg-gradient-to-b text-[14px] from-purple-600 via-purple-600 to-purple-500 text-white">
+                      <p className="flex items-center h-38 w-[105px] text-center rounded-[5px] font-semibold bg-gradient-to-b text-[14px] from-green-600 via-green-600 to-green-500 text-white">
                         <FaTruck className="ml-1 mr-1" /> {product.shipping}
                       </p>
 

@@ -159,7 +159,7 @@ const Catalogue = () => {
                     </h3>
 
                     <p className="text-[15px] text-gray-500">
-                      Piezas: {product.stock} disponibles
+                      Piezas: {product.stock} disponible
                     </p>
                     <p className="text-[20px] mt-0 font-bold text-purple-600">
                       $ {product.price}

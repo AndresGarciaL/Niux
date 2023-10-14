@@ -1,19 +1,29 @@
 import Breadcrums from "./Breadcrums";
 import Navbar from "./Navbar";
-import {  useState } from "react";
-import { AiOutlineArrowRight } from "react-icons/ai";
-import { BsWhatsapp } from "react-icons/bs";
-import { MdOutlineSupportAgent } from "react-icons/md";
-import { GiTechnoHeart } from "react-icons/gi";
-import { IoLogoElectron } from "react-icons/io5";
-import { GiAutoRepair } from "react-icons/gi";
-import { GiAxolotl } from "react-icons/gi";
-import {BsQuestion } from "react-icons/bs";
-
-
-
+import { useState } from "react";
+import { FaArrowCircleRight } from "react-icons/fa";
+import "../Styles/Contacto.css";
+import { RiTruckFill } from "react-icons/ri";
+import { AiOutlineThunderbolt } from "react-icons/ai";
+import { BiWorld } from "react-icons/bi";
+import { LiaStoreAltSolid } from "react-icons/lia";
 
 function Contacto() {
+  const [error, setError] = useState(null);
+  const[errorTel,setErrorTel]=useState(null);
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const [openQuestion, setOpenQuestion] = useState(null);
+  const toggleQuestion = (questionId) => {
+    if (openQuestion === questionId) {
+      setOpenQuestion(null); // Si la pregunta ya está abierta, ciérrala
+    } else {
+      setOpenQuestion(questionId); // Si no, ábrela
+    }
+  };
   const [formData, setFormData] = useState({
     nombre: "",
     email: "",
@@ -23,56 +33,59 @@ function Contacto() {
     mensaje: "",
   });
 
-
   const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+    const { name, value } = e.target;
+  setFormData({
+    ...formData,
+    [name]: value,
+  });
+};
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Validar el correo electrónico aquí, cuando el usuario hace clic en enviar
+    if (!validateEmail(formData.email)) {
+      setError("Por favor, introduce un correo electrónico válido.");
+      return; // Detiene la función aquí si el correo no es válido.
+    } else {
+      setError(null);
+    }
+   // Validación del teléfono: asegurarse de que sólo contenga números y 10 digitos
+   if (!/^\d{10}$/.test(formData.telefono)) {
+    setErrorTel("Por favor, introduce un número de teléfono de 10 dígitos.");
+    return;
+}
+
+  setErrorTel(null);
     // Aquí podrías procesar el formData, como enviarlo a un servidor
     console.log(formData);
+  
   };
   return (
     <>
       <Navbar />
       <Breadcrums />
-     
-      <div className="relative w-[100%] h-[400px]">
 
+      <div className="relative w-[100%] h-[1200px] flex flex-col items-center justify-end ">
         <img
           src="../../public/Images/img_contacto_niux.png"
           alt="Fondo de contacto"
-          className="w-[100%] h-[400px] "
+          className="w-[100%] h-full blur-sm  "
         />
+        <div className="absolute inset-0 bg-black opacity-30"></div>
 
         <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-[100%] h-[400px] z-10 space-y-8">
-          <h1 className="text-6xl font-bold text-white h-[100px] capitalize">
+          <h1 className="text-6xl font-bold text-purple-300 h-[100px] capitalize animateFromLeft">
             ¡Contactate con nosotros!
           </h1>
-          <div className="flex space-x-16 ">
-            <span className="text-3xl text-white">¿Necesitas ayuda?</span>
-            <span className="text-3xl text-white">¡Contáctanos hoy!</span>
-            <span className="text-3xl text-white">
-              Comunícate con nuestro equipo
-            </span>
-          </div>
         </div>
-       
-      </div>
-      <div className="sm:grid sm:grid-cols-1 lg:grid lg:grid-cols-5">
-        <div className=" col-span-3 mt-4">
-          <h1 className="h-[75.57px]  text-black text-[57px] font-bold text-center mb-4 italic">
-            Ponerse en contacto
-          </h1>
-          <div className=" bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-pink-200 via-fuchsia-200 to-indigo-200 border-[5px] border-purple-300 mt-4 ml-4 mr-9 p-7 pr-10 rounded-md">
-            <p className=" font-mono font-semibold text-2xl mb-5 text-gray-800">
-              Por favor complete el formulario rápido y nos comunicaremos con la
-              velocidad del rayo.
-            </p>
+        <div className="  mt-4   absolute pb-[70px] ">
+          <div className=" border-[4px] border-gray-300 mt-4 p-6  rounded-md bg-neutral-50">
+            <h1 className="h-[75.57px]  text-black text-[40px] font-bold mb-4 mx-16 slideFromBottom">
+              ¿Cómo podemos ayudarte?
+            </h1>
+
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2 ">
@@ -81,8 +94,9 @@ function Contacto() {
                 <input
                   type="text"
                   name="nombre"
+                  required="true"
                   onChange={handleInputChange}
-                  className="shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-blue-200 border-[2px] drop-shadow-md hover:drop-shadow-xl "
+                  className="shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-purple-200 border-[2px] drop-shadow-md hover:drop-shadow-xl "
                   placeholder="Nombre"
                 />
               </div>
@@ -91,32 +105,40 @@ function Contacto() {
                   Correo Electrónico
                 </label>
                 <input
+                required="true"
                   type="email"
                   name="email"
                   onChange={handleInputChange}
-                  className="shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-blue-200 border-[2px] drop-shadow-md hover:drop-shadow-xl"
+                  className="shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-purple-200 border-[2px] drop-shadow-md hover:drop-shadow-xl"
                   placeholder="Correo Electrónico"
                 />
+                {error && (
+                  <p className="text-red-500 text-xs italic">{error}</p>
+                )}
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
                   Celular/Teléfono
                 </label>
                 <input
+                pattern="\d+"
+                required="true"
                   type="tel"
                   name="telefono"
                   onChange={handleInputChange}
-                  className="shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-blue-200 border-[2px] drop-shadow-md hover:drop-shadow-xl"
+                  className="shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-purple-200 border-[2px] drop-shadow-md hover:drop-shadow-xl"
                   placeholder="Celular/Teléfono"
                 />
+                 {errorTel && (
+                  <p className="text-red-500 text-xs italic">{errorTel}</p>
+                )}
               </div>
               <div className="mb-4">
-                <span className="text-gray-700 font-semibold italic">
-                  Tipo de mensaje
-                </span>
+                <span className="text-gray-700 font-bold">Tipo de mensaje</span>
                 <div className="mt-2 italic">
                   <label className="inline-flex items-center">
                     <input
+                    required="true"
                       type="radio"
                       className="form-radio "
                       name="tipoMensaje"
@@ -162,10 +184,11 @@ function Contacto() {
                   Asunto
                 </label>
                 <input
+                required="true"
                   type="text"
                   name="asunto"
                   onChange={handleInputChange}
-                  className="shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-blue-200 border-[2px] drop-shadow-md hover:drop-shadow-xl"
+                  className="shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-purple-200 border-[2px] drop-shadow-md hover:drop-shadow-xl"
                   placeholder="Asunto"
                 />
               </div>
@@ -174,23 +197,24 @@ function Contacto() {
                   Mensaje
                 </label>
                 <textarea
+                required="true"
                   name="mensaje"
                   onChange={handleInputChange}
-                  className="shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-blue-200 border-[2px] drop-shadow-md hover:drop-shadow-xl"
+                  className="shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-purple-200 border-[2px] drop-shadow-md hover:drop-shadow-xl"
                   placeholder="Mensaje"
                   rows="4"
                 ></textarea>
               </div>
-              <div className="mb-4 bg-white border-[2px] border-blue-200 p-2 drop-shadow-md hover:drop-shadow-xl rounded">
+              <div className="mb-4 bg-white border-[2px] border-purple-200 p-2 drop-shadow-md hover:drop-shadow-xl rounded">
                 <label className="block text-gray-700 text-sm font-bold mb-2">
                   Adjuntar Archivo ( pdf, jpg, png, xls, xlsx, doc, docx )
                 </label>
                 <input type="file" name="archivo" />
               </div>
-              <div className="mb-4 text-center">
+              <div className=" text-center">
                 <button
                   type="submit"
-                  className=" bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline border-[2px] border-white"
+                  className=" bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline border-[2px] border-gray-600"
                 >
                   Enviar
                 </button>
@@ -198,144 +222,284 @@ function Contacto() {
             </form>
           </div>
         </div>
-        <div className=" col-span-2 col">
-          <div className="   flex justify-center">
-            <h1 className="bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-pink-300 via-fuchsia-300 to-purple-300  mt-28 w-150 text-center rounded-lg font-bold text-3xl p-2 ">
-              Conéctate con nosotros
+      </div>
+      <div className=" p-4  ">
+        <div className=" bg-neutral-100 grid grid-cols-5  p-5  border-[2px] mb-4">
+          <div className=" col-start-2 text-center w-[800px]">
+            <h1 className=" bg-purple-500 text-gray-100 p-2  font-semibold text-2xl rounded-md mt-3 mb-3">
+              Preguntas Frecuentes
             </h1>
           </div>
-          <div className=" text-center mt-7">
-            <p className=" text-xl font-poppins">
-              Para soporte o cualquier pregunta, envíenos un correo electrónico
-              a:{" "}
-            </p>
-            <p className=" text-blue-500 text-xl">niuxtech@hotmail.com</p>
-            <div className="bg-purple-500 h-1 mt-4 mb-4 rounded"></div>
-            <div className="flex justify-center gap-4">
-              <button>
-                <AiOutlineArrowRight size={32} className=" text-blue-500" />
-              </button>
-              <h1 className=" font-semibold text-2xl">Teléfono</h1>
-              <button>
-                <BsWhatsapp
-                  size={32}
-                  className=" text-white bg-green-400 rounded-2xl"
+          <div className=" col-start-2 w-[800px]">
+            <h1 className=" bg-white p-2  font-semibold text-xl rounded-md border-[3px] text-black flex items-center">
+              <button className="pr-[2px]  ">
+                <FaArrowCircleRight
+                  size={20}
+                  className=" text-purple-400 transition ease-in duration-300 hover:scale-110 "
+                  onClick={() => toggleQuestion(1)}
                 />
               </button>
-            </div>
-            <h1 className="text-xl font-poppins mt-2">+52 9985748347</h1>
-            <div className="bg-purple-500 h-1 mt-4 mb-4 rounded"></div>
-            <div className="flex justify-center gap-4">
-              <button>
-                <AiOutlineArrowRight size={32} className=" text-blue-500" />
+              <button onClick={() => toggleQuestion(1)} className="text-center">
+                ¿Cuáles son sus opciones de envío y plazos de entrega?
               </button>
-              <h1 className=" font-semibold text-2xl">Niux México</h1>
-              <img
-                src="../../public/Images/mexico_contacto.png"
-                alt="MX"
-                className=" h-9 w-10"
-              />
+            </h1>
+            <div
+              className={`transition-all duration-300 ${
+                openQuestion === 1 ? "visible-content" : "hidden-content"
+              }`}
+            >
+              <RiTruckFill className=" absolute mt-[46px] ml-2 text-purple-500" />
+              <AiOutlineThunderbolt className=" absolute mt-[72px] ml-2 text-purple-500" />
+              <BiWorld className=" absolute mt-[95px] ml-2 text-purple-500" />
+              <LiaStoreAltSolid className=" absolute mt-[144px] ml-2 text-purple-500" />
+              <p className="py-4  pr-4 pl-7  mt-2 bg-white border-[2px] text-base">
+                Ofrecemos diversas opciones de envío para satisfacer las
+                necesidades de nuestros clientes:
+                <br />
+                <strong>Envío Estándar: </strong> Esta opción tiene un plazo de
+                entrega de 3 a 5 días hábiles.
+                <br />
+                <strong>Envío Express:</strong> Si necesitas recibir tu producto
+                con urgencia, esta es la opción para ti.
+                <br />
+                <strong>Envío Internacional:</strong> Para nuestros clientes
+                fuera del país, ofrecemos envíos internacionales con un plazo de
+                entrega de 7 a 15 días hábiles
+                <br />
+                <strong>Recogida en Tienda:</strong> Si prefieres recoger tu
+                producto directamente en nuestra tienda o punto de venta, puedes
+                hacerlo dentro de 24 horas después de haber realizado tu compra
+              </p>
             </div>
-            <p className="text-xl font-poppins mt-2">
-              723 Avenida 20 de Noviembre, Suite 101, Cancún, Quintana Roo,
-              México, 77500
-            </p>
-            <div className="bg-purple-500 h-1 mt-4 mb-4 rounded"></div>
-            <div className="flex justify-center gap-4">
-              <button>
-                <AiOutlineArrowRight size={32} className=" text-blue-500" />
+          </div>
+          <div className=" col-start-2  w-[800px]">
+            <h1 className=" bg-white p-2  font-semibold text-xl rounded-md border-[3px] text-black flex items-center">
+              <button className="pr-[2px] ">
+                <FaArrowCircleRight
+                  size={20}
+                  className=" text-purple-400 transition ease-in duration-300 hover:scale-110 "
+                  onClick={() => toggleQuestion(2)}
+                />
               </button>
-              <h1 className=" font-semibold text-2xl">Horario de Atención</h1>
-              <button>
-                <MdOutlineSupportAgent size={32} />
+              <button onClick={() => toggleQuestion(2)}>
+                ¿Puedo cancelar o modificar un pedido después de realizarlo?
               </button>
+            </h1>
+            <div
+              className={`transition-all duration-300 ${
+                openQuestion === 2 ? "visible-content" : "hidden-content"
+              }`}
+            >
+              <p className="p-4 mt-2 bg-white border-[2px] text-base">
+                Entendemos que a veces las circunstancias cambian y es posible
+                que desees modificar o cancelar tu pedido. A continuación, te
+                explicamos nuestras políticas:
+                <br />
+                <strong>Modificación del Pedido:</strong> Si deseas agregar o
+                quitar algún artículo de tu pedido, o cambiar alguna
+                especificación (como el color o la capacidad de un dispositivo),
+                puedes hacerlo dentro de las primeras 24 horas después de haber
+                realizado tu compra. Para ello, ponte en contacto con nuestro
+                servicio al cliente a través de [número de teléfono] o [correo
+                electrónico] con tu número de pedido y los detalles de la
+                modificación que deseas realizar.
+                <br />
+                <strong>Cancelación del Pedido:</strong> Puedes solicitar la
+                cancelación de tu pedido dentro de las primeras 48 horas después
+                de la compra. Si tu pedido ya ha sido despachado para el envío,
+                lamentablemente no podremos cancelarlo, pero te ofreceremos
+                opciones para devolución una vez que recibas el producto.
+                <br />
+                <strong>Pedidos Despachados:</strong> Si tu pedido ya ha sido
+                enviado y deseas cancelarlo o modificarlo, te pedimos esperar a
+                recibirlo y seguir nuestro proceso de devolución.
+              </p>
             </div>
-            <p className="text-xl font-poppins mt-2">
-              Nuestro equipo está aquí para ayudarte durante los siguientes
-              horarios:
-            </p>
-            <div className=" flex  justify-center mt-2">
-            <ul className="list-disc pl-5 text-left">
-              <li className="mb-2 text-xl font-poppins">Lunes a Viernes: 9:00 AM - 6:00 PM</li>
-              <li className="mb-2 text-xl font-poppins">Sábados: 10:00 AM - 2:00 PM</li>
-              <li className="mb-2 text-xl font-poppins">Domingos: Cerrado</li>
-            </ul>
+          </div>
+          <div className="col-start-2  w-[800px]">
+            <h1 className=" bg-white p-2  font-semibold text-xl rounded-md border-[2px] text-black flex items-center">
+              <button className="pr-[2px]">
+                <FaArrowCircleRight
+                  size={20}
+                  className=" text-purple-400 transition ease-in duration-300 hover:scale-110 "
+                  onClick={() => toggleQuestion(3)}
+                />
+              </button>
+              <button onClick={() => toggleQuestion(3)}>
+                ¿Ofrecen descuentos o promociones especiales?
+              </button>
+            </h1>
+            <div
+              className={`transition-all duration-300 ${
+                openQuestion === 3 ? "visible-content" : "hidden-content"
+              }`}
+            >
+              <p className="p-4 mt-2 bg-white border-[2px] text-base">
+                ¡Sí, lo hacemos! Siempre buscamos brindar el mejor valor a
+                nuestros clientes, y aquí hay algunas formas en que puedes
+                ahorrar al comprar con nosotros:
+                <br />
+                <strong>Promociones Temporales:</strong> Regularmente realizamos
+                ofertas y descuentos especiales en determinados productos o
+                categorías. Te recomendamos estar atento a nuestra página
+                principal, banners promocionales y a nuestras redes sociales
+                <br />
+                <strong>Programa de Lealtad:</strong> Para nuestros clientes más
+                fieles, ofrecemos un programa de lealtad que te permite acumular
+                puntos con cada compra. Estos puntos se pueden canjear por
+                descuentos en futuras compras. ¡Cuanto más compres, más
+                ahorrarás!
+                <br />
+                <strong>Días Festivos y Fechas Especiales:</strong> Durante
+                ciertas épocas del año, como el Black Friday, Cyber Monday, o
+                fechas festivas, ofrecemos descuentos especiales en una amplia
+                gama de productos.
+                <br />
+                <strong>Rebajas y Liquidaciones:</strong> Al final de cada
+                temporada, es posible encontrar productos en liquidación con
+                descuentos significativos.
+              </p>
             </div>
-            <div className="bg-purple-500 h-1 mt-4 mb-4 rounded"></div>
-            <div className=" flex justify-center gap-5 mt-6">
-                <GiAxolotl size={100} className="bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500 rounded-xl text-white transition ease-in duration-300 hover:scale-110"/>
-                <GiTechnoHeart size={100} className=" bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500 rounded-xl text-white transition ease-in duration-300 hover:scale-110"/>
-                <IoLogoElectron size={100} className="bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500 rounded-xl text-white transition ease-in duration-300 hover:scale-110"/>
-                <GiAutoRepair size={100} className=" bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500 rounded-xl text-white transition ease-in duration-300 hover:scale-110"/>
+          </div>
+          <div className=" col-start-2  w-[800px]">
+            <h1 className=" bg-white p-2  font-semibold text-xl rounded-md border-[2px] text-black flex items-center">
+              <button className="pr-[2px]">
+                <FaArrowCircleRight
+                  size={20}
+                  className=" text-purple-400 transition ease-in duration-300 hover:scale-110 "
+                  onClick={() => toggleQuestion(4)}
+                />
+              </button>
+              <button onClick={() => toggleQuestion(4)}>
+                ¿Cómo realizo una compra en su sitio web?
+              </button>
+            </h1>
+            <div
+              className={`transition-all duration-300 ${
+                openQuestion === 4 ? "visible-content" : "hidden-content"
+              }`}
+            >
+              <p className="p-4 mt-2 bg-white border-[2px] text-base">
+                Comprar en nuestro sitio web es fácil y seguro. Aquí te
+                proporcionamos un paso a paso sobre cómo hacerlo:
+                <br />
+                <strong>Navega por el Sitio:</strong> Explora nuestras
+                categorías de productos o utiliza la barra de búsqueda si ya
+                sabes lo que estás buscando.
+                <br />
+                <strong>Selecciona el Producto:</strong> Haz clic en el producto
+                que te interese para ver más detalles, especificaciones y fotos.
+                <br />
+                <strong>Añade al Carrito:</strong> Una vez que hayas decidido
+                qué producto deseas, haz clic en el botón (Añadir al carrito).
+                Puedes continuar comprando o ir directamente al proceso de pago.
+                <br />
+                <strong>Carrito de Compras:</strong> Aquí podrás revisar los
+                productos seleccionados, modificar las cantidades o eliminar
+                ítems si así lo decides.
+                <br />
+                <strong>Proceso de Pago:</strong> Si estás listo para finalizar
+                tu compra, haz clic en (Proceder al pago). Serás dirigido a una
+                página segura donde deberás ingresar tus datos de envío y
+                seleccionar tu método de pago preferido.
+                <br />
+                <strong>Confirma Tu Pedido:</strong> Una vez que hayas
+                completado tus detalles y seleccionado el método de envío, haz
+                clic en Confirmar pedido.
+              </p>
             </div>
-
+          </div>
+          <div className="col-start-2  w-[800px]">
+            <h1 className=" bg-white p-2  font-semibold text-xl rounded-md border-[2px] text-black flex items-center">
+              <button className="pr-[2px] ">
+                <FaArrowCircleRight
+                  size={20}
+                  className=" text-purple-400 transition ease-in duration-300 hover:scale-110 "
+                  onClick={() => toggleQuestion(5)}
+                />
+              </button>
+              <button onClick={() => toggleQuestion(5)}>
+                ¿Qué hago si mi producto llega dañado o defectuoso?
+              </button>
+            </h1>
+            <div
+              className={`transition-all duration-300 ${
+                openQuestion === 5 ? "visible-content" : "hidden-content"
+              }`}
+            >
+              <p className="p-4 mt-2 bg-white border-[2px] text-base">
+                Lamentamos mucho que hayas tenido esta experiencia. Tu
+                satisfacción es nuestra prioridad, y estamos aquí para ayudarte.
+                Si tu producto llega dañado o presenta algún defecto, por favor
+                sigue estos pasos:
+                <br />
+                <strong>Documenta el Daño:</strong> Tan pronto como recibas el
+                producto y notes el daño o defecto, toma fotografías claras del
+                empaque, del producto dañado y, si es posible, del número de
+                serie o etiqueta de identificación. Esto nos ayudará a
+                identificar y resolver el problema con mayor eficacia.
+                <br />
+                <strong>Contacta a nuestro Servicio al Cliente:</strong> Envía
+                un correo electrónico a [niuxservices@gmail.com] o llámanos al
+                [+52 9983763807] dentro de los primeros [4 días] después de
+                haber recibido el producto. Incluye tu número de pedido, una
+                breve descripción del problema y las fotografías que tomaste.
+                <br />
+                <strong>Devolución o Cambio:</strong> Una vez que recibamos tu
+                reclamo y la evidencia fotográfica, evaluaremos la situación. Si
+                tu producto está dentro del periodo de garantía y cumple con
+                nuestras políticas de devolución.
+                <br />
+                <strong>Seguimiento:</strong> Nuestro equipo te mantendrá
+                informado sobre el estado de tu reclamo y te proporcionará
+                detalles sobre la reposición o reparación del producto.
+              </p>
+            </div>
+          </div>
+          <div className=" col-start-2 w-[800px]">
+            <h1 className=" bg-white p-2  font-semibold text-xl rounded-md border-[2px] text-black flex items-center">
+              <button className="pr-[2px] ">
+                <FaArrowCircleRight
+                  size={20}
+                  className=" text-purple-400 transition ease-in duration-300 hover:scale-110 "
+                  onClick={() => toggleQuestion(6)}
+                />
+              </button>
+              <button onClick={() => toggleQuestion(6)}>
+                ¿Ofrecen soporte técnico en caso de problemas con el producto?
+              </button>
+            </h1>
+            <div
+              className={`transition-all duration-300 ${
+                openQuestion === 6 ? "visible-content" : "hidden-content"
+              }`}
+            >
+              <p className="p-4 mt-2 bg-white border-[2px] text-base">
+                Sí, absolutamente. Valoramos a nuestros clientes y queremos
+                asegurarnos de que tengan la mejor experiencia posible con
+                nuestros productos.
+                <br />
+                <strong>
+                  Contacta a nuestro Equipo de Soporte Técnico:
+                </strong>{" "}
+                Si no encuentras la solución en nuestro Centro de Ayuda o si tu
+                problema es más específico, puedes comunicarte con nuestro
+                equipo de soporte técnico.
+                <br />
+                <strong>Información a Proporcionar:</strong> Al contactarnos,
+                asegúrate de tener a mano tu número de pedido y una descripción
+                detallada del problema.
+                <br />
+                <strong>Soluciones:</strong> Dependiendo de la naturaleza del
+                problema, nuestro equipo podría guiarte a través de pasos para
+                solucionarlo, ofrecerte una actualización de software, o
+                recomendarte que envíes el producto para una reparación o
+                reemplazo bajo garantía.
+              </p>
+            </div>
           </div>
         </div>
       </div>
-
-      <div className=" bg-white flex justify-center pt-4">
-       <div className=" bg-purple-100 mt-4 flex justify-center w-[85%] pt-5 ">
-          <div className="bg-white w-[85%] flex justify-center "> 
-            <h1 className=" bg-purple-500 text-white p-2  pl-4 font-semibold text-2xl rounded-l-md mt-3 mb-3">
-            Preguntas Frecuentes
-            </h1>
-            <BsQuestion size={48} className=" bg-purple-500 text-white rounded-r-md mt-3 mb-3"/>
-          </div>
-        </div>
-      </div>
-
-       <div className=" bg-white flex justify-center">
-        <div className="flex justify-center bg-purple-100 w-[85%]">
-        <div className=" bg-white w-[85%]  py-5 xl:pl-[120px] 2xl:pl-64 lg:pl-[80px] md:pl-[40px] ">
-          <div className=" bg-white flex gap-3  "> 
-          <AiOutlineArrowRight size={48} className=" text-purple-600" />
-            <h1 className=" bg-white p-2  font-semibold text-xl rounded-md border-[2px] border-purple-600 transition ease-in duration-300 hover:scale-105">
-            ¿Cuáles son sus opciones de envío y plazos de entrega?
-            </h1>
-          </div>
-        </div>
-        </div>
-       </div>
-
-         <div className=" bg-white flex justify-center">
-        <div className="flex justify-center bg-purple-100 w-[85%]">
-        <div className=" bg-white w-[85%]  py-5 xl:pl-[120px] 2xl:pl-64 lg:pl-[80px] md:pl-[40px] ">
-          <div className=" bg-white flex gap-3  "> 
-          <AiOutlineArrowRight size={48} className=" text-purple-600" />
-            <h1 className=" bg-white p-2  font-semibold text-xl rounded-md border-[2px] border-purple-600 transition ease-in duration-300 hover:scale-105">
-            ¿Puedo cancelar o modificar un pedido después de realizarlo?
-            </h1>
-          </div>
-        </div>
-        </div>
-         </div>
-
-        <div className=" bg-white flex justify-center">
-        <div className="flex justify-center bg-purple-100 w-[85%]">
-        <div className=" bg-white w-[85%]  py-5 xl:pl-[120px] 2xl:pl-64 lg:pl-[80px] md:pl-[40px]  ">
-          <div className=" bg-white flex gap-3  "> 
-          <AiOutlineArrowRight size={48} className=" text-purple-600" />
-            <h1 className=" bg-white p-2  font-semibold text-xl rounded-md border-[2px] border-purple-600 transition ease-in duration-300 hover:scale-105">
-            ¿Ofrecen descuentos o promociones especiales?
-            </h1>
-          </div>
-        </div>
-        </div>
-        </div>
-
-
-        <div className=" bg-white flex justify-center pb-8">
-        <div className="flex justify-center  bg-purple-100 w-[85%]">
-        <div className=" bg-white w-[85%] xl:pl-[120px] 2xl:pl-64 lg:pl-[80px] md:pl-[40px] py-5 mb-5">
-          <div className=" bg-white flex gap-3  "> 
-          <AiOutlineArrowRight size={48} className=" text-purple-600" />
-            <h1 className=" bg-white p-2  font-semibold text-xl rounded-md border-[2px] border-purple-600 transition ease-in duration-300 hover:scale-105">
-            ¿Cómo realizo una compra en su sitio web?
-            </h1>
-          </div>
-        </div>
-        </div>
-        </div>
     </>
   );
 }

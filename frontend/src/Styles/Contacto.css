@@ -1,0 +1,49 @@
+/* Animación */
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Clase para elementos animados */
+.animateFromLeft {
+  animation: slideInFromLeft 0.7s forwards;
+}
+
+@keyframes slideInFromBottom {
+  0% {
+    transform: translateY(100%); /* Comienza desde el 100% hacia abajo */
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0); /* Termina en su posición original */
+    opacity: 1;
+  }
+}
+
+.slideFromBottom {
+  animation: slideInFromBottom 0.8s forwards;
+}
+
+.hidden-content {
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  transition: opacity 0.3s ease, height 0.3s ease;
+}
+
+.visible-content {
+  opacity: 1;
+  height: auto;
+}
+
+/* Eliminar los controles de número en Chrome, Safari y Opera */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+

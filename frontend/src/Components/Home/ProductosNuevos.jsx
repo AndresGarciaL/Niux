@@ -2,6 +2,8 @@ import "../../Styles/Home.css";
 import { FaTruck, FaShoppingCart } from "react-icons/fa";
 import { BsFilterRight } from "react-icons/bs";
 import StarsRating from "../StarsRating";
+import { useEffect } from 'react';
+
 
 function ProductosNuevos() {
   const products = [
@@ -106,6 +108,42 @@ function ProductosNuevos() {
       shipping: "Envío gratis",
     },
   ];
+  useEffect(() => {
+    const slider = document.querySelector(".gridOfertas");
+    let isDown = false;
+    let initialDifference = 0; 
+    let scrollLeft = 0;
+
+    const startSlide = (e) => {
+        if (e.touches && e.touches.length === 2) { // Comprobar si hay dos toques
+            isDown = true;
+            initialDifference = Math.abs(e.touches[0].pageX - e.touches[1].pageX);
+            scrollLeft = slider.scrollLeft;
+        }
+    };
+
+    const stopSlide = () => {
+        isDown = false;
+    };
+
+    const doSlide = (e) => {
+        if (!isDown || !e.touches || e.touches.length !== 2) return;
+        const currentDifference = Math.abs(e.touches[0].pageX - e.touches[1].pageX);
+        const walk = (initialDifference - currentDifference) * 3; // Multiplicador de sensibilidad
+        slider.scrollLeft = scrollLeft + walk;
+    };
+
+    slider.addEventListener("touchstart", startSlide);
+    slider.addEventListener("touchend", stopSlide);
+    slider.addEventListener("touchmove", doSlide);
+
+    // Limpia los listeners al desmontar el componente
+    return () => {
+        slider.removeEventListener("touchstart", startSlide);
+        slider.removeEventListener("touchend", stopSlide);
+        slider.removeEventListener("touchmove", doSlide);
+    };
+}, []);
   return (
     <>
       <div className="mx-auto  px-4 py-16 sm:px-6 sm:py-24 lg:px-8 abs">
@@ -119,7 +157,7 @@ function ProductosNuevos() {
           </button>
         </div>
 
-        <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-2">
+        <div className=" gridOfertas mt-2 gap-x-6 gap-y-2  xl:gap-x-2">
           {products.map((product) => (
             <div
               key={product.id}

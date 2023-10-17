@@ -224,13 +224,13 @@ function Contacto() {
         </div>
       </div>
       <div className=" p-4  ">
-        <div className=" bg-neutral-100 grid grid-cols-5  p-5  border-[2px] mb-4">
-          <div className=" col-start-2 text-center w-[800px]">
-            <h1 className=" bg-purple-500 text-gray-100 p-2  font-semibold text-2xl rounded-md mt-3 mb-3">
+        <div className=" bg-neutral-100 lg:grid lg:grid-cols-5  p-5  border-[2px] mb-4 sm:grid sm:grid-cols-1">
+          <div className=" lg:col-start-2 text-center lg:w-[800px] sm:grid sm:grid-cols-1 sm:col-start-2 sm:w-[600px]">
+            <h1 className=" bg-purple-500 text-gray-100 p-2  font-semibold text-2xl rounded-md mt-3 mb-3 ">
               Preguntas Frecuentes
             </h1>
           </div>
-          <div className=" col-start-2 w-[800px]">
+          <div className=" lg:col-start-2 lg:w-[800px] sm:grid sm:grid-cols-1 sm:col-start-2 sm:w-[600px] text-start">
             <h1 className=" bg-white p-2  font-semibold text-xl rounded-md border-[3px] text-black flex items-center">
               <button className="pr-[2px]  ">
                 <FaArrowCircleRight
@@ -248,10 +248,10 @@ function Contacto() {
                 openQuestion === 1 ? "visible-content" : "hidden-content"
               }`}
             >
-              <RiTruckFill className=" absolute mt-[46px] ml-2 text-purple-500" />
-              <AiOutlineThunderbolt className=" absolute mt-[72px] ml-2 text-purple-500" />
-              <BiWorld className=" absolute mt-[95px] ml-2 text-purple-500" />
-              <LiaStoreAltSolid className=" absolute mt-[144px] ml-2 text-purple-500" />
+              <RiTruckFill className=" absolute mt-[54px] ml-2 text-purple-500" />
+              <AiOutlineThunderbolt className=" absolute mt-[80px] ml-2 text-purple-500" />
+              <BiWorld className=" absolute mt-[103px] ml-2 text-purple-500" />
+              <LiaStoreAltSolid className=" absolute mt-[150px] ml-2 text-purple-500" />
               <p className="py-4  pr-4 pl-7  mt-2 bg-white border-[2px] text-base">
                 Ofrecemos diversas opciones de envío para satisfacer las
                 necesidades de nuestros clientes:
@@ -272,7 +272,7 @@ function Contacto() {
               </p>
             </div>
           </div>
-          <div className=" col-start-2  w-[800px]">
+          <div className=" lg:col-start-2 text-start lg:w-[800px] sm:grid sm:grid-cols-1 sm:col-start-2 sm:w-[600px]">
             <h1 className=" bg-white p-2  font-semibold text-xl rounded-md border-[3px] text-black flex items-center">
               <button className="pr-[2px] ">
                 <FaArrowCircleRight
@@ -316,7 +316,7 @@ function Contacto() {
               </p>
             </div>
           </div>
-          <div className="col-start-2  w-[800px]">
+          <div className="lg:col-start-2 text-start lg:w-[800px] sm:grid sm:grid-cols-1 sm:col-start-2 sm:w-[600px]">
             <h1 className=" bg-white p-2  font-semibold text-xl rounded-md border-[2px] text-black flex items-center">
               <button className="pr-[2px]">
                 <FaArrowCircleRight
@@ -361,7 +361,7 @@ function Contacto() {
               </p>
             </div>
           </div>
-          <div className=" col-start-2  w-[800px]">
+          <div className=" lg:col-start-2 text-start lg:w-[800px] sm:grid sm:grid-cols-1 sm:col-start-2 sm:w-[600px]">
             <h1 className=" bg-white p-2  font-semibold text-xl rounded-md border-[2px] text-black flex items-center">
               <button className="pr-[2px]">
                 <FaArrowCircleRight
@@ -409,7 +409,7 @@ function Contacto() {
               </p>
             </div>
           </div>
-          <div className="col-start-2  w-[800px]">
+          <div className="lg:col-start-2 text-start lg:w-[800px] sm:grid sm:grid-cols-1 sm:col-start-2 sm:w-[600px]">
             <h1 className=" bg-white p-2  font-semibold text-xl rounded-md border-[2px] text-black flex items-center">
               <button className="pr-[2px] ">
                 <FaArrowCircleRight
@@ -456,7 +456,7 @@ function Contacto() {
               </p>
             </div>
           </div>
-          <div className=" col-start-2 w-[800px]">
+          <div className=" lg:col-start-2 text-start lg:w-[800px] sm:grid sm:grid-cols-1 sm:col-start-2 sm:w-[600px]">
             <h1 className=" bg-white p-2  font-semibold text-xl rounded-md border-[2px] text-black flex items-center">
               <button className="pr-[2px] ">
                 <FaArrowCircleRight

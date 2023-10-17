@@ -3,30 +3,33 @@ import { StarIcon } from "@heroicons/react/20/solid";
 import Navbar from "./Navbar";
 import Breadcrums from "./Breadcrums";
 import ImageGallery from "react-image-gallery";
-
+import { AiFillLock } from "react-icons/ai";
+import { FaTruck, FaShoppingCart } from "react-icons/fa";
+import { RiRefund2Line } from "react-icons/ri";
+import { MdOutlineFavorite } from "react-icons/md";
 
 const product = {
-  name: "RTX 4090 TI ASUS ROG STRIX GAMING",
+  name: "AMD RYZEN 5 5600G ",
   price: "$192",
   stock: 15,
-  brand: "Tesla",
+  brand: "AMD",
   href: "#",
   images: [
     {
-      original: "Images/camisa.jpg",
-      thumbnail: "Images/camisa.jpg",
+      original: "Images/amd5.png",
+      thumbnail: "Images/amd5.png",
     },
     {
-      original: "Images/camisa.jpg",
-      thumbnail: "Images/camisa.jpg",
+      original: "Images/amd5.png",
+      thumbnail: "Images/amd5.png",
     },
     {
-      original: "Images/camisa.jpg",
-      thumbnail: "Images/camisa.jpg",
+      original: "Images/amd5.png",
+      thumbnail: "Images/amd5.png",
     },
     {
-      original: "Images/camisa.jpg",
-      thumbnail: "Images/camisa.jpg",
+      original: "Images/amd5.png",
+      thumbnail: "Images/amd5.png",
     },
   ],
 
@@ -60,6 +63,20 @@ const Viewproduct = () => {
     }
   };
 
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isAddedToCart, setIsAddedToCart] = useState(false);
+
+  const handleClick = () => {
+    setIsAddedToCart(!isAddedToCart);
+  };
+
+  const props = {
+    width: 500,
+    height: 500,
+    zoomWidth: 500,
+    img: "Images/amd5.png",
+  };
+
   return (
     <div className="bg-white">
       <Navbar />
@@ -71,10 +88,16 @@ const Viewproduct = () => {
         <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
           <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8"></div>
 
+          {/* Contenido de la galería de imágenes */}
+          <div className="lg:hidden rounded-lg mb-8">
+            <ImageGallery showPlayButton={false} items={product.images} />
+          </div>
+
           {/* Options */}
+
           <div className="mt-4 lg:row-span-3 lg:mt-0">
             <h2 className="sr-only">Product information</h2>
-            <h1 className="text-2xl font-bold text-gray-700 sm:text-2xl">
+            <h1 className="w-full text-2xl font-bold text-gray-700 sm:text-2xl">
               {product.name}
             </h1>
             <h2 className="text-orange-600 font-semibold">
@@ -86,8 +109,6 @@ const Viewproduct = () => {
             <p className="mt-4 text-3xl text-purple-600 font-bold">
               {product.price}
             </p>
-
-            
 
             {/* Reviews */}
             <div className="mt-4">
@@ -115,12 +136,53 @@ const Viewproduct = () => {
                   {reviews.totalCount} opiniones
                 </a>
               </div>
+
+              {/* Contador */}
+              <div className="gap-1 mt-4 flex items-center text-gray-700">
+                <button
+                  className="rounded-[10px] bg-purple-700 hover:bg-purple-500 text-white font-bold py-2 px-4 flex items-center justify-center w-10"
+                  onClick={decrement}
+                >
+                  -
+                </button>
+                <span className="rounded-[10px] flex items-center justify-center bg-gray-200 h-10 text-lg font-normal w-10 text-center py-2 px-4">
+                  {count}
+                </span>
+                <button
+                  className="rounded-[10px] bg-purple-700 hover:bg-purple-500 text-white font-bold py-2 px-4"
+                  onClick={increment}
+                >
+                  +
+                </button>
+
+                <button
+                  type="submit"
+                  className={`w-52 justify-center items-center flex text-center rounded-[10px] ${
+                    isAddedToCart
+                      ? "bg-red-500 hover:bg-red-400"
+                      : "bg-purple-700 hover:bg-purple-500"
+                  } text-white font-semibold py-2 px-4 flex-shrink-0`}
+                  onClick={count >= 1 ? handleClick : null}
+                >
+                  <FaShoppingCart className="mr-2" />
+                  {isAddedToCart ? "Borrar del carrito" : "Agregar al carrito"}
+                </button>
+
+                <button
+                  className={`ml-1 rounded-[10px] flex items-center justify-center text-center border-gray-300 py-4 px-2 w-10 h-10 border-[2px] ${
+                    isFavorite ? "text-red-500" : "text-gray-500"
+                  }`}
+                  onClick={() => setIsFavorite(!isFavorite)}
+                >
+                  <MdOutlineFavorite size={20} />
+                </button>
+              </div>
             </div>
 
-            <form className="mt-10">
+            <form className="mt-4">
               <button
                 type="submit"
-                className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-purple-600 px-8 py-3 text-base text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 font-bold"
+                className="flex w-full items-center justify-center rounded-md border border-transparent bg-purple-600 px-8 py-3 text-base text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 font-bold"
               >
                 Comprar
               </button>
@@ -128,15 +190,53 @@ const Viewproduct = () => {
                 type="submit"
                 className="mt-4 flex w-full items-center justify-center rounded-md border border-transparent bg-purple-300 px-8 py-3 text-base text-purple-600 hover:bg-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-offset-2 font-bold"
               >
-                Añadir al carrito
+                Ver métodos de pago
               </button>
             </form>
+            {/* Certificaciones */}
+            <div className="flex items-center gap-10 justify-center">
+              <div className="flex flex-col items-center">
+                <div className="mt-4 flex items-center justify-center py-3 px-6 text-gray-700 text-lg border-gray-300 rounded-full w-24 h-24 btn-lg border-[3px]">
+                  <AiFillLock size={40} />
+                </div>
+                <p className="text-center mt-2 text-gray-700 text-md">
+                  Transacción segura
+                </p>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <div className="mt-5 flex items-center justify-center py-3 px-6 text-gray-700 text-lg border-gray-300 rounded-full w-24 h-24 btn-lg border-[3px]">
+                  <FaTruck size={40} />
+                </div>
+                <p className="mt-2 text-gray-700 text-md text-center">
+                  Envío protegido
+                </p>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <div className="mt-5 flex items-center justify-center py-3 px-6 text-gray-700 text-lg border-gray-300 rounded-full w-24 h-24 btn-lg border-[3px]">
+                  <RiRefund2Line size={40} />
+                </div>
+                <p className="mt-2 text-gray-700 text-md text-center">
+                  Ofrece reembolso
+                </p>
+              </div>
+            </div>
           </div>
 
           <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
-            <div className="rounded-lg">
-              <ImageGallery showPlayButton={false} items={product.images} />
+            <div className="hidden lg:block rounded-lg">
+              {
+                <ImageGallery
+                  showFullscreenButton={false}
+                  showNav={false}
+                  thumbnailPosition="left"
+                  showPlayButton={false}
+                  items={product.images}
+                />
+              }
             </div>
+
             {/* Description and details */}
             <div>
               <h3 className="sr-only">Description</h3>

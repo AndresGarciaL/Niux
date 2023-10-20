@@ -2,26 +2,54 @@ import React, { useEffect, useState } from 'react';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import { Link } from 'react-router-dom';
+import OptionsTickets_Dash from '../Components/Dashboard/Tickets/OptionsTickets_Dash';
+import EstadoTicket from '../Components/Dashboard/Tickets/EstadoTicket';
 
 const Tickets_Dash = () => {
-  const [loading, setLoading] = useState(true); // Añade este estado
+  const [loading, setLoading] = useState(true);
+  const [selectAll, setSelectAll] = useState(false);
+  const [selected, setSelected] = useState({});
 
   useEffect(() => {
-    // Simula una carga con setTimeout, aquí deberías hacer tu llamada a la API o carga de datos.
     const timer = setTimeout(() => {
-      setLoading(false); // Cambia el estado de loading después de 3 segundos
+      setLoading(false);
     }, 300);
-
-    // Limpia el timeout si el componente se desmonta antes de que se complete
     return () => clearTimeout(timer);
-  }, []); // Con [] como segundo argumento, useEffect se ejecuta una vez cuando el componente se monta.
+  }, []);
 
+  const tickets = [
+    { id: '0001', titulo: 'Fidencio Solicitó la revision de su equipo HP que no enciende', estado: <EstadoTicket ticket="enProceso" text="En Proceso"/> , solicitante: 'Fidencio Garcia López', location: 'Publico en General', categoria: 'Mantenimiento correctivo PC', active: 'Si' },
+    { id: '0002', titulo: 'Angel Solicitó la revisión de su DVR DAHUA que no da video', estado:<EstadoTicket ticket="espera" text="En espera"/>, solicitante: 'Angel Guzman Hoil', location: 'Mexleasing', categoria: 'Mantenimiento correctivo DVR', active: 'Si' },
+    { id: '0003', titulo: 'Angel Solicitó la revisión de su DVR DAHUA que no da video', estado:<EstadoTicket ticket="nuevo" text="Nuevo"/>, solicitante: 'Angel Guzman Hoil', location: 'Mexleasing', categoria: 'Mantenimiento correctivo DVR', active: 'Si' },
+    { id: '0004', titulo: 'Angel Solicitó la revisión de su DVR DAHUA que no da video', estado:<EstadoTicket ticket="cerrado" text="Cerrado"/>, solicitante: 'Angel Guzman Hoil', location: 'Mexleasing', categoria: 'Mantenimiento correctivo DVR', active: 'Si' },
+    { id: '0005', titulo: 'Angel Solicitó la revisión de su DVR DAHUA que no da video', estado:<EstadoTicket ticket="resuelto" text="Resuelto"/>, solicitante: 'Angel Guzman Hoil', location: 'Mexleasing', categoria: 'Mantenimiento correctivo DVR', active: 'Si' },
+    // ... Más usuarios si los necesitas
+  ];
+
+  const handleSelectAll = () => {
+    const newSelected = {};
+    tickets.forEach((ticket) => {
+      newSelected[ticket.id] = !selectAll;
+    });
+    setSelectAll(!selectAll);
+    setSelected(newSelected);
+  };
+
+  const handleSelect = (id) => {
+    setSelected((prevSelected) => ({ ...prevSelected, [id]: !prevSelected[id] }));
+  };
+
+  const getInitials = (name) => {
+    const names = name.split(' ');
+    const initials = names[0].substring(0, 1) + names[1].substring(0, 1);
+    return initials.toUpperCase();
+  };
   return (
     <div>
       {loading && (
-        <div class="flex items-center justify-center min-h-screen">
-          <div role="status" className="text-center flex loading-indicator">
-            <svg aria-hidden="true" className="inline w-20 h-20 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-purple-400 " viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div className="flex items-center justify-center min-h-screen">
+          <div categoriae="status" className="text-center flex loading-indicator">
+            <svg aria-hidden="true" className="inline w-20 h-20 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-purple-600 " viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
                 fill="currentColor"
@@ -34,71 +62,60 @@ const Tickets_Dash = () => {
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      )}
-      {!loading && (
+      )}{' '}
+      {
         <div className="">
+          <OptionsTickets_Dash />
+
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-900 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                  <th scope="col" className="text-white px-6 py-3">
-                    ID
+                  <th className="sticky top-0 bg-white px-4 py-2">
+                    <input type="checkbox" id="SelectAll" checked={selectAll} onChange={handleSelectAll} className="h-5 w-5 rounded border-gray-300" />
                   </th>
-                  <th scope="col" className="text-white px-6 py-3">
-                    TITULO
-                  </th>
-                  <th scope="col" className="text-white px-6 py-3">
-                    UBICACION
-                  </th>
-                  <th scope="col" className="text-white px-6 py-3">
-                    SOLICITANTE
-                  </th>
-                  <th scope="col" className="text-white px-6 py-3">
-                    ESTADO
-                  </th>
-                  <th scope="col" className="text-white px-6 py-3">
-                    <span className="sr-only">Edit</span>
-                  </th>
+                  {/* Otros encabezados de la tabla aquí */}
+                  <th className="flex justify-center items-center text-white px-6 py-3">ID</th>
+                  <th className="text-white px-6 py-3">TITULO</th>
+                  <th className="text-white px-6 py-3">ESTADO</th>
+                  <th className="text-white px-6 py-3">SOLICITANTE</th>
+                  <th className="text-white px-6 py-3">UBICACION</th>
+                  <th className="text-white px-6 py-3">CATEGORIA</th>
+                  <th className="text-white px-6 py-3"></th>
+                  <th className="text-white px-6 py-3"></th>
                 </tr>
               </thead>
               <tbody>
-                <tr className="bg-white hover:bg-gray-200  border-b dark:bg-gray-800 dark:border-gray-700">
-                    <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      0001
-                    </th>
-                 
-                  <Link to="/dashboard">
-                  <td className="px-6 py-4">Mi computadora no enciende</td>
-                  </Link>
-                  <td className="px-6 py-4">Publico en general</td>
-                  <td className="px-6 py-4">Lorena Hernandez</td>
-                  <td className="flex flex-col items-center justify-center bg-green-500/30 text-green-500 rounded-lg mt-3">Nuevo</td>
-                  <td className="px-6 py-4 text-right">
-                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                  <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    0002
-                  </th>
-                  <td className="px-6 py-4">No puedo ver las camaras de mi DVR</td>
-                  <td className="px-6 py-4">Publico en general</td>
-                  <td className="px-6 py-4">Omar Caballero</td>
-                  <td className="flex flex-col items-center justify-center bg-green-500/30 text-green-500 rounded-lg mt-3">Nuevo</td>
-                  <td className="px-6 py-4 text-right">
-                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                      Edit
-                    </a>
-                  </td>
-                </tr>
+                {tickets.map((ticket) => (
+                  <tr key={ticket.id} className="bg-white hover:bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td className="sticky left-0 bg-white px-4 py-2">
+                      <input type="checkbox" id={`select-${ticket.id}`} checked={!!selected[ticket.id]} onChange={() => handleSelect(ticket.id)} className="h-5 w-5 rounded border-gray-300" />
+                    </td>
+                    <td className="px-6 py-4">{ticket.id}</td>
+                    <Link to="/dashboard" className="flex items-center">
+                      <td className="px-6 py-4">{ticket.titulo}</td>
+                    </Link>
+                    <td className="">{ticket.estado}</td>
+                    <td className="px-6 py-4">{ticket.solicitante}</td>
+                    <td className="px-6 py-4">{ticket.location}</td>
+                    <td className="px-6 py-4">{ticket.categoria}</td>
+                    <td className="px-6 py-4 text-right">
+                      <Link to="/dashboard/update-ticket" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                        Editar
+                      </Link>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <Link to="/dashboard" className="font-medium text-red-600 dark:text-red-500 hover:underline">
+                        Eliminar
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </div>
-      )}
+      }
     </div>
   );
 };

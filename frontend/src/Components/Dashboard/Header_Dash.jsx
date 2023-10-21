@@ -14,13 +14,13 @@ import { Link } from "react-router-dom";
 
 const Header_Dash = () => {
   return (
-    <header className="bg-gray-900 h-[7vh] md:h-[10vh] border-b border-gray-100 p-8 flex items-center justify-end">
+    <header className="bg-neutral-200 h-[7vh] md:h-[10vh] border-b border-gray-100 p-8 flex items-center justify-end">
       <nav className="flex items-center gap-2">
-        <Menu
+        <Menu className="hover:text-white transition-colors"
           menuButton={
-            <MenuButton className="text-white relative hover:bg-gray-500 hover:text-white p-2 rounded-lg transition-colors">
-              <RiNotification3Line />
-              <span className="absolute -top-0.5 right-0 bg-primary py-0.5 px-[5px] box-content text-white rounded-full text-[8px] font-bold">
+            <MenuButton className="text-gray-900 hover:text-white relative hover:bg-gray-500  p-2 rounded-lg transition-colors">
+              <RiNotification3Line className="" />
+              <span className="absolute -top-0.5 right-0 bg-purple-200 py-0.5 px-[5px] box-content text-gray-900  rounded-full text-[8px] font-bold">
                 2
               </span>
             </MenuButton>
@@ -101,7 +101,7 @@ const Header_Dash = () => {
         </Menu>
         <Menu
           menuButton={
-            <MenuButton className="text-white flex items-center gap-x-2 hover:bg-gray-500 p-2 rounded-lg transition-colors">
+            <MenuButton className="text-gray-900 hover:text-white flex items-center gap-x-2 hover:bg-gray-500 p-2 rounded-lg transition-colors">
               <img
                 src="https://img.freepik.com/foto-gratis/feliz-optimista-guapo-gerente-ventas-latina-apuntando-lado-mirando-camara_1262-12679.jpg"
                 className="w-6 h-6 object-cover rounded-full"

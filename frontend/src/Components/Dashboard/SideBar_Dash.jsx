@@ -20,7 +20,7 @@ const Sidebar_Dash = () => {
   return (
     <>
       <div
-        className={`xl:h-[100vh] overflow-y-scroll fixed xl:static w-[80%] md:w-[40%] lg:w-[30%] xl:w-auto h-full top-0 bg-white p-4 flex flex-col justify-between z-50 ${
+        className={`xl:h-[100vh] overflow-y-scroll fixed xl:static sm:w-[30%] md:w-[30%] lg:w-[20%] xl:w-auto h-full top-0 bg-white p-4 flex flex-col justify-between z-50 ${
           showMenu ? "left-0" : "-left-full"
         } transition-all`}
       >
@@ -67,7 +67,7 @@ const Sidebar_Dash = () => {
                 </li>
                 <li>
                   <Link
-                    to="/"
+                    to="/dashboard/add-ticket"
                     className="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-purple-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white hover:bg-purple-400 rounded-e-xl transition-colors"
                   >
                     Crear Ticket

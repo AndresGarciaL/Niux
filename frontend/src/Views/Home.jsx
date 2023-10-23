@@ -4,15 +4,19 @@ import Carrusel from "../Components/Home/Carrusel";
 import "../Styles/Home.css";
 import ProductosNuevos from "../Components/Home/ProductosNuevos";
 import OfertasEspeciales from "../Components/Home/OfertasEspeciales";
-import Testimonios from "../Components/Home/Testimonios";
 import Principal from "../../public/Images/img_principal_home.jpg";
 import { Link } from "react-router-dom";
-import ImagenFinal from "../../public/Images/astronauta.png";
 import Background from "../Components/Home/Background";
+import { ScrollMarcas } from "../Components/Home/ScrollMarcas";
+import { CountOnUs } from "../Components/Home/CountOnUs";
+
 
 function Home() {
+
   return (
     <>
+    <div className=" bg-neutral-100">
+
       <Navbar />
       <Breadcrums />
       <div className=" relative ">
@@ -30,18 +34,18 @@ function Home() {
         </div>
         <Background />
       </div>
+
+      
+        
+        <Carrusel />
+      
       <ProductosNuevos />
 
-      <div className=" bg-neutral-100 pt-12 mt-10">
-        <h1 className=" font-popins text-center text-5xl mb-8">
-          Próximos Lanzamientos
-        </h1>
-        <Carrusel />
-      </div>
-
       <OfertasEspeciales />
-      <Testimonios />
-      <img src={ImagenFinal} alt="" className=" h-32 w-32 imagen-final" />
+      <CountOnUs/>
+      <ScrollMarcas/>
+      
+            </div>
     </>
   );
 }

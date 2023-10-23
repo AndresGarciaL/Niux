@@ -1,11 +1,9 @@
-/* Styles/Home.css */
 
 .ofertasEspeciales {
     width: 100%;
     overflow: hidden; /* Para que no muestre barras de desplazamiento */
 }
-
-.gridOfertas {
+.ofertasEspeciales {
     display: flex; /* Alinear los elementos de oferta horizontalmente */
     overflow-x: auto; /* Permitir desplazamiento horizontal */
     white-space: nowrap; /* Asegurarse de que los elementos no se envuelvan a la siguiente línea */
@@ -16,7 +14,6 @@
     flex: 0 0 auto; /* No crecer, no encoger, auto base width */
     margin-right: 16px; /* Espacio entre ofertas */
     box-sizing: border-box;
-    padding: 16px;
 }
 
 .oferta img {
@@ -31,13 +28,14 @@
 }
 
 .precioDescuento {
-    color: #e60023; /* Color rojo */
+    color: #b400e6; /* Color rojo */
     font-weight: bold;
+    font-size: large;
 }
-.gridOfertas::-webkit-scrollbar {
+.ofertasEspeciales::-webkit-scrollbar {
     display: none; /* Oculta la barra de desplazamiento en navegadores WebKit como Chrome y Safari */
 }
 
-.gridOfertas {
+.ofertasEspeciales {
     -ms-overflow-style: none; /* Oculta la barra de desplazamiento en IE y Edge */
 }

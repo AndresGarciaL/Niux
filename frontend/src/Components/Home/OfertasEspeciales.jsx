@@ -1,22 +1,41 @@
 
 import '../../Styles/OfertasEspeciales.css';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import {GrNext} from 'react-icons/gr';
+import {GrPrevious} from 'react-icons/gr';
 // Ejemplo de datos de productos en oferta. En una aplicación real, estos probablemente serían recuperados de una API.
 const ofertas = [
-  { id: 1, nombre: 'Smartphone ABC', precioOriginal: '$500', precioDescuento: '$400', imagenUrl: '../../../public/Images/carruselCinco_home.png' },
-  { id: 2, nombre: 'Tablet XYZ', precioOriginal: '$300', precioDescuento: '$250', imagenUrl: '../../../public/Images/carruselUno_home.png' },
-  { id: 3, nombre: 'Tablet XYZ', precioOriginal: '$300', precioDescuento: '$250', imagenUrl: '../../../public/Images/carruselUno_home.png' },
-  { id: 4, nombre: 'Tablet XYZ', precioOriginal: '$300', precioDescuento: '$250', imagenUrl: '../../../public/Images/carruselUno_home.png' },
-  { id: 5, nombre: 'Tablet XYZ', precioOriginal: '$300', precioDescuento: '$250', imagenUrl: '../../../public/Images/carruselUno_home.png' },
-  { id: 6, nombre: 'Tablet XYZ', precioOriginal: '$300', precioDescuento: '$250', imagenUrl: '../../../public/Images/carruselUno_home.png' },
-  { id: 7, nombre: 'Tablet XYZ', precioOriginal: '$300', precioDescuento: '$250', imagenUrl: '../../../public/Images/carruselUno_home.png' },
+  { id: 1, nombre: 'Smartphone ABC', precioOriginal: '$500', precioDescuento: '$400', imagenUrl: '../../../public/Images/ofertas-especiales-uno.png' },
+  { id: 2, nombre: 'Tablet XYZ', precioOriginal: '$300', precioDescuento: '$250', imagenUrl: '../../../public/Images/ofertas-especiales-dos.png' },
+  { id: 3, nombre: 'Tablet XYZ', precioOriginal: '$300', precioDescuento: '$250', imagenUrl: '../../../public/Images/ofertas-especiales-tres.png' },
+  { id: 4, nombre: 'Tablet XYZ', precioOriginal: '$300', precioDescuento: '$250', imagenUrl: '../../../public/Images/ofertas-especiales-cuatro.png' },
+  { id: 5, nombre: 'Tablet XYZ', precioOriginal: '$300', precioDescuento: '$250', imagenUrl: '../../../public/Images/ofertas-especiales-cinco.png' },
+  { id: 6, nombre: 'Tablet XYZ', precioOriginal: '$300', precioDescuento: '$250', imagenUrl: '../../../public/Images/ofertas-especiales-seis.png' },
+  { id: 7, nombre: 'Tablet XYZ', precioOriginal: '$300', precioDescuento: '$250', imagenUrl: '../../../public/Images/ofertas-especiales-siete.png' },
 
   // ...otros productos en oferta
 ];
 
 function OfertasEspeciales() {
+  const slider = useRef(null); // Usamos useRef para referenciar el contenedor de productos.
+  const handleNext = () => {
+    if (slider.current) {
+      slider.current.scrollBy({
+        left: 300 * 3, // Asumiendo que cada producto tiene un ancho de 300px. Ajusta según sea necesario.
+        behavior: "smooth"
+      });
+    }
+  };
+  const handlePrevious = () => {
+    if (slider.current) {
+      slider.current.scrollBy({
+        left: -300 * 3, // Asumiendo que cada producto tiene un ancho de 300px. Ajusta según sea necesario.
+        behavior: "smooth"
+      });
+    }
+  };
     useEffect(() => {
-        const slider = document.querySelector(".gridOfertas");
+        const slider = document.querySelector(".ofertasEspeciales");
         let isDown = false;
         let initialDifference = 0; 
         let scrollLeft = 0;
@@ -52,17 +71,35 @@ function OfertasEspeciales() {
         };
     }, []);
   return (
-    <div className="ofertasEspeciales mt-8   ">
-      <h2 className='mb-5 text-5xl font-poppins text-black'>Ofertas Especiales</h2>
-      <div className="gridOfertas bg-transparent">
+    <div className=" mt-8  bg-white pb-6 px-4" >
+      <h2 className=' text-4xl font-poppins text-gray-600 p-[16px]'>Ofertas Especiales</h2>
+      <div className=' relative'>
+
+      <div className="ofertasEspeciales bg-transparent" ref={slider}>
+      <div className=" absolute z-10  h-full flex items-center justify-end ">
+
+        <button onClick={handlePrevious} className="">
+        <GrPrevious size={45}className="hover:bg-gray-200 px-1 rounded bg-white text-gray-600 ml-1" />
+      </button>
+          </div>
         {ofertas.map(oferta => (
-          <div key={oferta.id} className="oferta border-[2px] border-gray-400 bg-purple-400">
-            <img src={oferta.imagenUrl} alt={oferta.nombre} className=' h-[400ppx] w-[400px]'/>
-            <h3>{oferta.nombre}</h3>
+          <div key={oferta.id} className="oferta border-[1px] border-gray-400  rounded-t-xl  ">
+            <img src={oferta.imagenUrl} alt={oferta.nombre} className=' h-[400px] w-[400px]  rounded-t-xl'/>
+            <div className=' bg-zinc-100 mt-2 p-1 pl-2'>
+            <h3  className=' font-poppins'>{oferta.nombre}</h3>
             <p className="precioOriginal">{oferta.precioOriginal}</p>
             <p className="precioDescuento">{oferta.precioDescuento}</p>
+            </div>
           </div>
         ))}
+        <div className=" absolute right-0 h-full flex">
+
+<button onClick={handleNext} className="">
+<GrNext size={45} className="hover:bg-gray-200 px-1 rounded bg-white text-gray-600 mr-1"/>
+</button>
+  </div>
+      </div>
+      
       </div>
     </div>
   );

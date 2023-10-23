@@ -4,7 +4,7 @@ import { MdLaptop } from 'react-icons/md';
 import { BsGpuCard, BsNvidia, BsAmd } from 'react-icons/bs';
 import { FaComputer } from 'react-icons/fa6';
 import { IoHeadsetSharp } from 'react-icons/io5';
-import { AiFillStar, AiFillRightCircle } from 'react-icons/ai';
+import { AiFillStar, AiFillRightCircle, AiFillDownCircle } from 'react-icons/ai';
 import { RiMenu3Line, RiCloseLine } from 'react-icons/ri';
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid';
@@ -96,13 +96,13 @@ const SideBar_Catalogue = () => {
             <h3 className="sr-only">Categories</h3>
 
             {filters.map((section) => (
-              <Disclosure as="div" key={section.id} className="border-b border-gray-200 py-6">
+              <Disclosure as="div" key={section.id} className="py-4">
                 {({ open }) => (
                   <>
                     <h3 className="-my-3 flow-root">
-                      <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-purple-700 hover:text-gray-500">
-                        <span className="font-bold text-lg text-gray-900">{section.name}</span>
-                        <span className="ml-6 flex items-center">{open ? <MinusIcon className="h-5 w-5" aria-hidden="true" /> : <AiFillRightCircle className="h-5 w-5" aria-hidden="true" />}</span>
+                      <Disclosure.Button className="flex items-center gap-4 py-3 px-6  hover:bg-purple-400 hover:text-white transition-colors text-gray-600 font-bold text-lg border border-gray-300 rounded-2xl btn-lg">
+                        {section.name}
+                        <span className="ml-6 flex items-center">{open ? <AiFillDownCircle className="h-5 w-5" aria-hidden="true" /> : <AiFillRightCircle className="h-5 w-5" aria-hidden="true" />}</span>
                       </Disclosure.Button>
                     </h3>
                     <Disclosure.Panel className="pt-6">

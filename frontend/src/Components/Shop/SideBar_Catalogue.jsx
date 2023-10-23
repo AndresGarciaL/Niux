@@ -1,85 +1,69 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { MdLaptop } from 'react-icons/md';
-import { BsGpuCard, BsNvidia, BsAmd } from 'react-icons/bs';
+import { BsGpuCard } from 'react-icons/bs';
 import { FaComputer } from 'react-icons/fa6';
 import { IoHeadsetSharp } from 'react-icons/io5';
 import { AiFillStar, AiFillRightCircle, AiFillDownCircle } from 'react-icons/ai';
 import { RiMenu3Line, RiCloseLine } from 'react-icons/ri';
-import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid';
+import { Disclosure } from '@headlessui/react';
 
 const SideBar_Catalogue = () => {
+  const sectionIcons = {
+    Destacados: <AiFillStar />,
+    Componentes: <BsGpuCard />,
+    Laptops: <MdLaptop />,
+    Accesorios: <IoHeadsetSharp />,
+    Software: <FaComputer />,
+  };
+
   const filters = [
     {
-      id: 'Destacados',
+      id: 'destacados',
       name: 'Destacados',
       options: [
-        { value: 'white', label: 'White', checked: false },
-        { value: 'beige', label: 'Beige', checked: false },
-        { value: 'blue', label: 'Blue', checked: false },
-        { value: 'brown', label: 'Brown', checked: false },
-        { value: 'green', label: 'Green', checked: false },
-        { value: 'purple', label: 'Purple', checked: false },
+        { value: 'ofertas', label: 'Ofertas', checked: false },
+        { value: 'nuevos', label: 'Nuevos', checked: false },
+        { value: 'mejor-valorados', label: 'Mejor Valorados', checked: false },
       ],
     },
     {
-      id: 'Componentes',
+      id: 'componentes',
       name: 'Componentes',
       options: [
-        { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-        { value: 'sale', label: 'Sale', checked: false },
-        { value: 'travel', label: 'Travel', checked: <i class="fa fa-bullseye" aria-hidden="true"></i> },
-        { value: 'organization', label: 'Organization', checked: false },
-        { value: 'accessories', label: 'Accessories', checked: false },
+        { value: 'tarjetas-graficas', label: 'Tarjetas Gráficas', checked: false },
+        { value: 'procesadores', label: 'Procesadores', checked: false },
+        { value: 'memoria-ram', label: 'Memoria RAM', checked: false },
+        { value: 'almacenamiento', label: 'Almacenamiento', checked: false },
+        { value: 'placas-base', label: 'Placas Base', checked: false },
       ],
     },
     {
-      id: 'Escritorio',
-      name: 'Escritorio',
-      options: [
-        { value: '2l', label: '2L', checked: false },
-        { value: '6l', label: '6L', checked: false },
-        { value: '12l', label: '12L', checked: false },
-        { value: '18l', label: '18L', checked: false },
-        { value: '20l', label: '20L', checked: false },
-        { value: '40l', label: '40L', checked: false },
-      ],
-    },
-    {
-      id: 'Laptops',
+      id: 'laptops',
       name: 'Laptops',
       options: [
-        { value: '2l', label: '2L', checked: false },
-        { value: '6l', label: '6L', checked: false },
-        { value: '12l', label: '12L', checked: false },
-        { value: '18l', label: '18L', checked: false },
-        { value: '20l', label: '20L', checked: false },
-        { value: '40l', label: '40L', checked: false },
+        { value: 'gaming', label: 'Gaming', checked: false },
+        { value: 'ultrabooks', label: 'Ultrabooks', checked: false },
+        { value: 'estudiantes', label: 'Estudiantes', checked: false },
+        { value: 'creativos', label: 'Creativos', checked: false },
       ],
     },
     {
-      id: 'Accesorios',
+      id: 'accesorios',
       name: 'Accesorios',
       options: [
-        { value: '2l', label: '2L', checked: false },
-        { value: '6l', label: '6L', checked: false },
-        { value: '12l', label: '12L', checked: false },
-        { value: '18l', label: '18L', checked: false },
-        { value: '20l', label: '20L', checked: false },
-        { value: '40l', label: '40L', checked: false },
+        { value: 'ratones', label: 'Ratones', checked: false },
+        { value: 'teclados', label: 'Teclados', checked: false },
+        { value: 'monitores', label: 'Monitores', checked: false },
+        { value: 'auriculares', label: 'Auriculares', checked: false },
       ],
     },
     {
-      id: 'Software',
+      id: 'software',
       name: 'Software',
       options: [
-        { value: '2l', label: '2L', checked: false },
-        { value: '6l', label: '6L', checked: false },
-        { value: '12l', label: '12L', checked: false },
-        { value: '18l', label: '18L', checked: false },
-        { value: '20l', label: '20L', checked: false },
-        { value: '40l', label: '40L', checked: false },
+        { value: 'sistemas-operativos', label: 'Sistemas Operativos', checked: false },
+        { value: 'software-creativo', label: 'Software Creativo', checked: false },
+        { value: 'antivirus', label: 'Antivirus', checked: false },
       ],
     },
   ];
@@ -95,14 +79,16 @@ const SideBar_Catalogue = () => {
           <form className="">
             <h3 className="sr-only">Categories</h3>
 
-            {filters.map((section) => (
+            {filters.map((section, index) => (
               <Disclosure as="div" key={section.id} className="py-4">
                 {({ open }) => (
                   <>
                     <h3 className="-my-3 flow-root">
-                      <Disclosure.Button className="flex items-center gap-4 py-3 px-6  hover:bg-purple-400 hover:text-white transition-colors text-gray-600 font-bold text-lg border border-gray-300 rounded-2xl btn-lg">
+                      <Disclosure.Button className={`relative w-[230px] flex items-center gap-4 py-3 px-6 hover:bg-purple-400 hover:text-white transition-colors text-gray-600 font-bold text-lg border border-gray-300 rounded-2xl btn-lg ${index === 0 ? 'bg-purple-500 text-white' : ''}`}>
+                        {sectionIcons[section.name]}
+
                         {section.name}
-                        <span className="ml-6 flex items-center">{open ? <AiFillDownCircle className="h-5 w-5" aria-hidden="true" /> : <AiFillRightCircle className="h-5 w-5" aria-hidden="true" />}</span>
+                        <span className="absolute right-6 top-1/2 transform -translate-y-1/2">{open ? <AiFillDownCircle /> : <AiFillRightCircle />}</span>
                       </Disclosure.Button>
                     </h3>
                     <Disclosure.Panel className="pt-6">

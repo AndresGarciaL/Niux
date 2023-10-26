@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import OptionsUsers_Dash from '../Components/Dashboard/Users/OptionsUsers_Dash';
-const Users_Dash = () => {
+import OptionsProductos_Dash from '../Components/Dashboard/Productos/OptionsProductos_Dash';
+const Productos_Dash = () => {
   const [loading, setLoading] = useState(true);
   const [selectAll, setSelectAll] = useState(false);
   const [selected, setSelected] = useState({});
@@ -14,8 +14,8 @@ const Users_Dash = () => {
   }, []);
 
   const users = [
-    { id: '0001', username: 'AGarcia', fullName: 'Andrés Garcia Leyva', email: 'andresgarciia09@gmail.com', location: 'Niux', rol: 'Administrador', active: 'Si' },
-    { id: '0002', username: 'FideFrecks', fullName: 'Fidencio Garcia López', email: 'fidefrecks@gmail.com', location: 'Público en General', rol: 'Cliente', active: 'Si' },
+    { id: '0001', productname: 'Tarjeta de video RTX 3060 Ti', categoria: 'Tarjetas de video', stock: '19', costo: '$11,000', active: 'Si', marca: 'Msi', },
+    { id: '0002', productname: 'Memoria Ram 8 GB DDR4 3600MHz Kingston', categoria: 'Memorias RAM', stock: '20', costo: '$1,200', active: 'Si', marca: 'Kingston' },
     // ... Más usuarios si los necesitas
   ];
 
@@ -42,7 +42,7 @@ const Users_Dash = () => {
     <div>
       {loading && (
         <div className="flex items-center justify-center min-h-screen">
-          <div role="status" className="text-center flex loading-indicator">
+          <div marcae="status" className="text-center flex loading-indicator">
             <svg aria-hidden="true" className="inline w-20 h-20 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-purple-600 " viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
@@ -59,7 +59,7 @@ const Users_Dash = () => {
       )}{' '}
       {
         <div className="">
-          <OptionsUsers_Dash/>
+          <OptionsProductos_Dash/>
 
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -69,12 +69,15 @@ const Users_Dash = () => {
                     <input type="checkbox" id="SelectAll" checked={selectAll} onChange={handleSelectAll} className="h-5 w-5 rounded border-gray-300" />
                   </th>
                   {/* Otros encabezados de la tabla aquí */}
-                  <th className="flex justify-center items-center text-white px-6 py-3">ID</th>
-                  <th className="text-white px-6 py-3">NOMBRE</th>
-                  <th className="text-white px-6 py-3">CORREO ELECTRÓNICO</th>
-                  <th className="text-white px-6 py-3">UBICACION</th>
-                  <th className="text-white px-6 py-3">Rol</th>
+                  <th className="text-white px-6 py-3">ID</th>
+                  
+                  <th className="text-white px-6 py-3">NOMBRE PRODUCTO</th>
+                  
+                  <th className="text-white px-6 py-3">CATEGORIA</th>
+                  <th className="text-white px-6 py-3">STOCK</th>
+                  <th className="text-white px-6 py-3">COSTO UNITARIO</th>
                   <th className="text-white px-6 py-3">ACTIVO</th>
+                  <th className="text-white px-6 py-3">MARCA</th>
                   <th className="text-white px-6 py-3"></th>
                   <th className="text-white px-6 py-3"></th>
                 </tr>
@@ -86,19 +89,17 @@ const Users_Dash = () => {
                       <input type="checkbox" id={`select-${user.id}`} checked={!!selected[user.id]} onChange={() => handleSelect(user.id)} className="h-5 w-5 rounded border-gray-300" />
                     </td>
                     <td className="px-6 py-4">{user.id}</td>
-                    <td className="">
-                      <Link to="/dashboard/update-user" className="flex items-center">
-                        <span className="flex items-center justify-center w-25 h-25 bg-purple-100 uppercase text-purple-600 rounded-full font-bold border border-purple-600/30 mr-4">{getInitials(user.fullName)}</span>
-                        {user.fullName}
-                      </Link>
-                    </td>
-
-                    <td className="px-6 py-4">{user.email}</td>
-                    <td className="px-6 py-4">{user.location}</td>
-                    <td className="px-6 py-4">{user.rol}</td>
+                    <Link to="/dashboard/update-products">
+                    <td className="px-6 py-4">{user.productname}</td>
+                    </Link>
+                    <td className="px-6 py-4">{user.categoria}</td>
+                    <td className="px-6 py-4">{user.stock}</td>
+                    <td className="px-6 py-4">{user.costo}</td>
                     <td className="px-6 py-4">{user.active}</td>
+                    <td className="px-6 py-4">{user.marca}</td>
+                    
                     <td className="px-6 py-4 text-right">
-                      <Link to="/dashboard/update-user" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                      <Link to="/dashboard/update-product" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                         Editar
                       </Link>
                     </td>
@@ -118,4 +119,4 @@ const Users_Dash = () => {
   );
 };
 
-export default Users_Dash;
+export default Productos_Dash;

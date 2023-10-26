@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import '@szhsin/react-menu/dist/index.css';
+import '@szhsin/react-menu/dist/transitions/slide.css';
 import { Link } from 'react-router-dom';
-import OptionsUsers_Dash from '../Components/Dashboard/Users/OptionsUsers_Dash';
-const Users_Dash = () => {
+import EstadoPedido from '../Components/Dashboard/Pedidos/EstadoPedido';
+import OptionsPedidos_Dash from '../Components/Dashboard/Pedidos/OptionsPedidos_Dash';
+import ModalDetallesPedido from '../Components/Dashboard/Pedidos/ModalDetallesPedido';
+import ModalEditarPedido from '../Components/Dashboard/Pedidos/ModalEditarPedido';
+
+const Pedidos_Dash = () => {
   const [loading, setLoading] = useState(true);
   const [selectAll, setSelectAll] = useState(false);
   const [selected, setSelected] = useState({});
@@ -13,16 +19,19 @@ const Users_Dash = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const users = [
-    { id: '0001', username: 'AGarcia', fullName: 'Andrés Garcia Leyva', email: 'andresgarciia09@gmail.com', location: 'Niux', rol: 'Administrador', active: 'Si' },
-    { id: '0002', username: 'FideFrecks', fullName: 'Fidencio Garcia López', email: 'fidefrecks@gmail.com', location: 'Público en General', rol: 'Cliente', active: 'Si' },
+  const pedido = [
+    { id: '0001', usuario: 'Fidencio Garcia Lopez', detallePedido: 'Teclado VelocityStrike RGB', estado: <EstadoPedido pedido="cancelado" text="Cancelado"/> , total: '$ 1999.00', fechaPedido: '12/10/2023' },
+    { id: '0002', usuario: 'Rosa Leyva Arevalo', detallePedido: 'Disco Duro TurboStorage 1TB', estado:<EstadoPedido pedido="espera" text="En espera"/>, total: '$ 294.00', fechaPedido: '12/10/2023'},
+    { id: '0003', usuario: 'Omar Caballero Hinojosa',detallePedido: 'Tarjeta Gráfica ThunderFire GTX 3080', estado:<EstadoPedido pedido="completado" text="Completado"/>, total: '$ 1999.00', fechaPedido: '12/10/2023'},
+    { id: '0004', usuario: 'Diego Mendoza Gutierrez', detallePedido: 'Impresora LaserJet Pro 9000', estado:<EstadoPedido pedido="enProceso" text="En Proceso"/>, total: '$ 159.00', fechaPedido: '12/10/2023' },
+    { id: '0005', usuario: 'Maria Jose Sosa', detallePedido: 'Memoria USB TurboFlash 128GB', estado:<EstadoPedido  pedido="completado" text="Completado"/>, total: '$ 1234.00', fechaPedido: '12/10/2023' },
     // ... Más usuarios si los necesitas
   ];
 
   const handleSelectAll = () => {
     const newSelected = {};
-    users.forEach((user) => {
-      newSelected[user.id] = !selectAll;
+    pedido.forEach((ticket) => {
+      newSelected[ticket.id] = !selectAll;
     });
     setSelectAll(!selectAll);
     setSelected(newSelected);
@@ -37,12 +46,11 @@ const Users_Dash = () => {
     const initials = names[0].substring(0, 1) + names[1].substring(0, 1);
     return initials.toUpperCase();
   };
-
   return (
     <div>
       {loading && (
         <div className="flex items-center justify-center min-h-screen">
-          <div role="status" className="text-center flex loading-indicator">
+          <div fechaPedidoe="status" className="text-center flex loading-indicator">
             <svg aria-hidden="true" className="inline w-20 h-20 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-purple-600 " viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
@@ -59,7 +67,7 @@ const Users_Dash = () => {
       )}{' '}
       {
         <div className="">
-          <OptionsUsers_Dash/>
+          <OptionsPedidos_Dash />
 
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -69,38 +77,33 @@ const Users_Dash = () => {
                     <input type="checkbox" id="SelectAll" checked={selectAll} onChange={handleSelectAll} className="h-5 w-5 rounded border-gray-300" />
                   </th>
                   {/* Otros encabezados de la tabla aquí */}
-                  <th className="flex justify-center items-center text-white px-6 py-3">ID</th>
-                  <th className="text-white px-6 py-3">NOMBRE</th>
-                  <th className="text-white px-6 py-3">CORREO ELECTRÓNICO</th>
-                  <th className="text-white px-6 py-3">UBICACION</th>
-                  <th className="text-white px-6 py-3">Rol</th>
-                  <th className="text-white px-6 py-3">ACTIVO</th>
+                  <th className="text-white px-6 py-3">ID</th>
+                  <th className="text-white px-6 py-3">Usuario</th>
+                  <th className="text-white px-6 py-3 text-center">detalle Pedido</th>
+                  <th className="text-white px-6 py-3 text-center">ESTADO</th>
+                  <th className="text-white px-6 py-3">total</th>
+                  <th className="text-white px-6 py-3">fecha Pedido</th>
                   <th className="text-white px-6 py-3"></th>
                   <th className="text-white px-6 py-3"></th>
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
-                  <tr key={user.id} className="bg-white hover:bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
+                {pedido.map((ticket) => (
+                  <tr key={ticket.id} className="bg-white hover:bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
                     <td className="sticky left-0 bg-white px-4 py-2">
-                      <input type="checkbox" id={`select-${user.id}`} checked={!!selected[user.id]} onChange={() => handleSelect(user.id)} className="h-5 w-5 rounded border-gray-300" />
+                      <input type="checkbox" id={`select-${ticket.id}`} checked={!!selected[ticket.id]} onChange={() => handleSelect(ticket.id)} className="h-5 w-5 rounded border-gray-300" />
                     </td>
-                    <td className="px-6 py-4">{user.id}</td>
-                    <td className="">
-                      <Link to="/dashboard/update-user" className="flex items-center">
-                        <span className="flex items-center justify-center w-25 h-25 bg-purple-100 uppercase text-purple-600 rounded-full font-bold border border-purple-600/30 mr-4">{getInitials(user.fullName)}</span>
-                        {user.fullName}
-                      </Link>
-                    </td>
+                    <td className="px-6 py-4">{ticket.id}</td>
+                    <td className="">{ticket.usuario}</td>
+                    <td className="px-6 py-4 text-center">
+                        <ModalDetallesPedido className="z-10 font-medium  text-purple-600 dark:text-blue-500 hover:underline"/>
 
-                    <td className="px-6 py-4">{user.email}</td>
-                    <td className="px-6 py-4">{user.location}</td>
-                    <td className="px-6 py-4">{user.rol}</td>
-                    <td className="px-6 py-4">{user.active}</td>
+                    </td>
+                    <td className="">{ticket.estado}</td>
+                    <td className="px-6 py-4">{ticket.total}</td>
+                    <td className="px-6 py-4">{ticket.fechaPedido}</td>
                     <td className="px-6 py-4 text-right">
-                      <Link to="/dashboard/update-user" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                        Editar
-                      </Link>
+                     <ModalEditarPedido/>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <Link to="/dashboard" className="font-medium text-red-600 dark:text-red-500 hover:underline">
@@ -118,4 +121,4 @@ const Users_Dash = () => {
   );
 };
 
-export default Users_Dash;
+export default Pedidos_Dash;

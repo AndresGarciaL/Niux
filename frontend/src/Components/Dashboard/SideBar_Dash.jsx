@@ -5,6 +5,7 @@ import { MdMiscellaneousServices,MdDashboard,MdOutlineLogout,MdOutlineMenu,MdOut
 import { AiFillCreditCard,AiOutlineUserSwitch,AiFillShop } from "react-icons/ai";
 import {
   RiBarChart2Line,
+  RiTicketLine,
   RiEarthLine,
   RiCustomerService2Line,
   RiCalendarTodoLine,
@@ -12,6 +13,7 @@ import {
   RiArrowRightSLine,
   RiMenu3Line,
   RiCloseLine,
+  RiAddCircleLine
 } from "react-icons/ri";
 
 const Sidebar_Dash = () => {
@@ -61,8 +63,8 @@ const Sidebar_Dash = () => {
                   <Link
                     to="/dashboard/tickets"
                     className="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-purple-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white hover:bg-purple-400 rounded-e-xl transition-colors"
-                  >
-                    Tickets
+                  ><div className="flex items-center"><RiTicketLine className="m-2"/>Tickets</div>
+                    
                   </Link>
                 </li>
                 <li>
@@ -70,12 +72,12 @@ const Sidebar_Dash = () => {
                     to="/dashboard/add-ticket"
                     className="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-purple-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white hover:bg-purple-400 rounded-e-xl transition-colors"
                   >
-                    Crear Ticket
+                    <div className="flex items-center"><RiAddCircleLine className="m-2"/>Crear</div>
                   </Link>
                 </li>
                 <li>
                   <Link
-                    to="/"
+                    to="/dashboard"
                     className="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-purple-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white hover:bg-purple-400 rounded-e-xl transition-colors"
                   >
                     Estadisticas
@@ -85,7 +87,7 @@ const Sidebar_Dash = () => {
             </li>
             <li>
               <Link
-                to="/tickets"
+                to="/dashboard/orders"
                 className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-purple-400 hover:text-white transition-colors"
               >
                 <AiFillCreditCard /> Pedidos
@@ -101,7 +103,7 @@ const Sidebar_Dash = () => {
             </li>
             <li>
               <Link
-                to="/pedidos"
+                to="/dashboard/products"
                 className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-purple-400 hover:text-white transition-colors"
               >
                 <AiFillShop /> Productos

@@ -92,7 +92,7 @@ const Tickets_Dash = () => {
                       <input type="checkbox" id={`select-${ticket.id}`} checked={!!selected[ticket.id]} onChange={() => handleSelect(ticket.id)} className="h-5 w-5 rounded border-gray-300" />
                     </td>
                     <td className="px-6 py-4">{ticket.id}</td>
-                    <Link to="/dashboard" className="flex items-center">
+                    <Link to="/dashboard/add-ticket" className="flex items-center">
                       <td className="px-6 py-4">{ticket.titulo}</td>
                     </Link>
                     <td className="">{ticket.estado}</td>

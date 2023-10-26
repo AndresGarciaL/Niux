@@ -72,14 +72,17 @@ const Home_Dash = () => {
                   <th scope="col" className="text-white px-6 py-3">
                     TITULO
                   </th>
-                  <th scope="col" className="text-white px-6 py-3">
+                  <th scope="col" className="text-white px-6 py-3 text-center">
                     UBICACION
                   </th>
-                  <th scope="col" className="text-white px-6 py-3">
+                  <th scope="col" className="text-white px-6 py-3 text-center">
                     SOLICITANTE
                   </th>
-                  <th scope="col" className="text-white px-6 py-3">
+                  <th scope="col" className="text-white px-6 py-3 text-center">
                     ESTADO
+                  </th>
+                  <th scope="col" className="text-white px-6 py-3 text-center">
+                    Fecha Apertura
                   </th>
                   <th scope="col" className="text-white px-6 py-3">
                     <span className="sr-only">Edit</span>
@@ -87,28 +90,34 @@ const Home_Dash = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <tr className="bg-white hover:bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
                   <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     0001
                   </th>
+                  <Link to="/dashboard/add-ticket" className="flex items-center">
                   <td className="px-6 py-4">Mi computadora no enciende</td>
+                  </Link>
                   <td className="px-6 py-4">Publico en general</td>
                   <td className="px-6 py-4">Lorena Hernandez</td>
                   <td className="flex flex-col items-center justify-center bg-green-500/30 text-green-500 rounded-lg mt-3">Nuevo</td>
+                  <td className="px-6 py-4 text-center">10/10/2023</td>
                   <td className="px-6 py-4 text-right">
                     <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                       Edit
                     </a>
                   </td>
                 </tr>
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <tr className="bg-white hover:bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
                   <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     0002
                   </th>
-                  <td className="px-6 py-4">No puedo ver las camaras de mi DVR</td>
+                  <Link to="/dashboard/add-ticket" className="flex items-center">
+                  <td className="px-6 py-4">Mi computadora no enciende</td>
+                  </Link>
                   <td className="px-6 py-4">Publico en general</td>
                   <td className="px-6 py-4">Omar Caballero</td>
                   <td className="flex flex-col items-center justify-center bg-green-500/30 text-green-500 rounded-lg mt-3">Nuevo</td>
+                  <td className="px-6 py-4 text-center">10/10/2023</td>
                   <td className="px-6 py-4 text-right">
                     <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                       Edit

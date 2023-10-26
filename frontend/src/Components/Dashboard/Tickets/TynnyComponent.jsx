@@ -9,13 +9,14 @@
      }
    };
    return (
-     <>
+     <div className='border border-gray-300 rounded-md'>
        <Editor
+         apiKey='d0phs830m1lya2tkztd0t7z5wkcqu0ux61rfyer1r1qhrb3y'
          onInit={(evt, editor) => editorRef.current = editor}
          initialValue=""
          init={{
            height: 500,
-           menubar: false,
+           menubar: true,
            plugins: [
              'advlist autolink lists link image charmap print preview anchor',
              'searchreplace visualblocks code fullscreen',
@@ -28,6 +29,6 @@
            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
          }}
        />
-     </>
+     </div>
    );
  }

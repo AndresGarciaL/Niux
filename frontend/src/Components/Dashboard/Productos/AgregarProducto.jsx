@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { Switch } from "@headlessui/react";
 
 
-const EditarUsuario = () => {
+const AgregarProducto = () => {
     const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,20 +39,26 @@ const EditarUsuario = () => {
         </div>
       )}{' '}
       {
+        <>
+        <div className="w-full h-16 flex items-center justify-center bg-purple-400 text-white h-18 text-2xl font-bold mb-10">
+        <h1 >Agregar Nuevo Producto</h1>
+        </div>
+        
        <form>
        <div className="flex items-center mb-8">
+
          <div className="w-1/4">
-           <p>Avatar</p>
+           <p>Imagen de Producto</p>
          </div>
          <div className="flex-1">
            <div className="relative mb-2">
              <img
-               src="https://img.freepik.com/foto-gratis/negocios-finanzas-empleo-concepto-mujeres-emprendedoras-exitosas-joven-empresaria-segura-anteojos-mostrando-gesto-pulgar-arriba-sostenga-computadora-portatil-garantice-mejor-calidad-servicio_1258-59118.jpg"
-               className="w-28 h-28 object-cover rounded-lg"
+               src="../../../../public/Images/msi3060.jpg"
+               className="w-40 h-40 object-cover rounded-lg"
              />
              <label
                htmlFor="avatar"
-               className="absolute bg-gray-100 p-2 rounded-full hover:cursor-pointer -top-2 left-24"
+               className="absolute bg-purple-400 text-white p-2 rounded-full hover:cursor-pointer -top-2 left-36"
              >
                <RiEdit2Line />
              </label>
@@ -66,57 +72,76 @@ const EditarUsuario = () => {
        <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
          <div className="w-full md:w-1/4">
            <p>
-             Nombre completo <span className="text-red-500">*</span>
+             ID <span className="text-red-500">*</span>
+           </p>
+         </div>
+         <div className="flex-1 flex items-center gap-4">
+           <div className="w-full">
+             <input
+               type="number"
+               className="w-full py-2 px-4 outline-none rounded-lg bg-white"
+               placeholder="Id"
+             />
+           </div>
+         </div>
+       </div>
+       <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
+         <div className="w-full md:w-1/4">
+           <p>
+             Nombre Producto <span className="text-red-500">*</span>
            </p>
          </div>
          <div className="flex-1 flex items-center gap-4">
            <div className="w-full">
              <input
                type="text"
-               value={"Andres"}
                className="w-full py-2 px-4 outline-none rounded-lg bg-white"
-               placeholder="Nombre(s)"
+               placeholder="Nombre de producto"
              />
            </div>
+         </div>
+       </div>
+       <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
+         <div className="w-full md:w-1/4">
+           <p>
+             Descripción <span className="text-red-500">*</span>
+           </p>
+         </div>
+         <div className="flex-1 flex items-center gap-4">
            <div className="w-full">
-             <input
-             value={"Garcia Leyva"}
+             <textarea
                type="text"
-               className="w-full py-2 px-4 outline-none rounded-lg bg-white"
-               placeholder="Apellido(s)"
+               className="w-full h-40 py-2 px-4 outline-none rounded-lg bg-white"
+               placeholder="Descripcion del producto"
              />
            </div>
          </div>
        </div>
-
        <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
          <div className="w-full md:w-1/4">
            <p>
-                Correo Electrónico <span className="text-red-500">*</span>
+             Stock <span className="text-red-500">*</span>
            </p>
          </div>
          <div className="flex-1">
            <input
-           value={"andresgarciia09@gmail.com"}
-             type="text"
+             type="number"
              className="w-full py-2 px-4 outline-none rounded-lg bg-white"
-             placeholder="E-mail"
+             placeholder="Stock"
            />
          </div>
        </div>
-     
        <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
          <div className="w-full md:w-1/4">
            <p>
-             Número de Telefono <span className="text-red-500">*</span>
+             Costo Unitario <span className="text-red-500">*</span>
            </p>
          </div>
          <div className="flex-1">
            <input
-           value={"9987323022"}
-             type="text"
+             type="number"
              className="w-full py-2 px-4 outline-none rounded-lg bg-white"
-             placeholder="Nombre(s)"
+             placeholder="Costo Unitario"
            />
          </div>
        </div>
@@ -124,77 +149,60 @@ const EditarUsuario = () => {
        <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
          <div className="w-full md:w-1/4">
            <p>
-             Ubicacion <span className="text-red-500">*</span>
+             Categoria <span className="text-red-500">*</span>
            </p>
          </div>
          <div className="flex-1">
            <select className="w-full py-2 px-4 outline-none rounded-lg ">
-             <option value="Niux">Niux</option>
-             <option value="Publico en General">Publico en General</option>
+             <option value="" selected>----------</option>
+             <option value="Tarjeta Grafica">Tarjeta Grafica</option>
+             <option value="Memorias Ram">Memorias RAM</option>
            </select>
          </div>
        </div>
+     
+      
 
        <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
          <div className="w-full md:w-1/4">
            <p>
-             Rol <span className="text-red-500">*</span>
+             Marca <span className="text-red-500">*</span>
            </p>
          </div>
          <div className="flex-1">
            <select className="w-full py-2 px-4 outline-none rounded-lg">
-             <option value="Argentina">Cliente</option>
-             <option value="Colombia">Administrador</option>
+             <option value="" selected>----------</option>
+             <option value="MSI">MSI</option>
+             <option value="Kingston">Kingston</option>
+           </select>
+         </div>
+       </div>
+       <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
+         <div className="w-full md:w-1/4">
+           <p>
+             Activo <span className="text-red-500">*</span>
+           </p>
+         </div>
+         <div className="flex-1">
+           <select className="w-full py-2 px-4 outline-none rounded-lg">
+             <option value="">----------</option>
+             <option value="si">Si</option>
+             <option value="no">No</option>
            </select>
          </div>
        </div>
   
-       <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-         <div className="w-full md:w-1/4">
-           <p>
-             País <span className="text-red-500">*</span>
-           </p>
-         </div>
-         <div className="flex-1">
-           <select className="w-full py-2 px-4 outline-none rounded-lg">
-             <option value="Argentina">Argentina</option>
-             <option value="Colombia">Colombia</option>
-             <option value="México">México</option>
-             <option value="Perú">Perú</option>
-             <option value="Uruguay">Uruguay</option>
-             <option value="Venezuela">Venezuela</option>
-           </select>
-         </div>
-       </div>
-       <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-         <div className="w-full md:w-1/4">
-           <p>
-             Ciudad <span className="text-red-500">*</span>
-           </p>
-         </div>
-         <div className="flex-1">
-           <select className="w-full py-2 px-4 outline-none rounded-lg bg-white">
-             <option value="Barquisiméto">Barquisiméto</option>
-             <option value="Bogotá">Bogotá</option>
-             <option value="Buga">Buga</option>
-             <option value="Chihuahua">Chihuahua</option>
-             <option value="Ciudad de México">Ciudad de México</option>
-             <option value="Lima">Lima</option>
-             <option value="Montevideo">Montevideo</option>
-             <option value="Caracas">Caracas</option>
-             <option value="Venezuela">Venezuela</option>
-           </select>
-         </div>
-       </div>
+       
        <hr className="my-8 border-gray-500/30" />
         <div className="flex justify-end">
         
                 <button type="submit" className="w-[150px]  font-poppins bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-purple-600 hover:text-white hover:border-purple-600 transition-colors">
-                Guardar
+                Agregar
               </button>
            
         </div>
      </form>
+     </>
      
       }
     </div>
@@ -202,4 +210,4 @@ const EditarUsuario = () => {
   );
 };
 
-export default EditarUsuario;
+export default AgregarProducto;

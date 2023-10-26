@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Filtro_Tickets = () => {
+const Filtro_Users = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(' Filtrar');
 
@@ -48,7 +48,7 @@ const Filtro_Tickets = () => {
         </div>
         <div id="dropdown" className={`absolute left-0 top-10 transition-all transform mt-2 z-20 ${isDropdownOpen ? 'animate__animated animate__fadeIn' : 'hidden'} bg-gray-900 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}>
           <ul className="py-2 text-sm  text-white dark:text-gray-200" aria-labelledby="dropdown-button">
-            {['Id', 'Estado', 'Solicitante','Fecha Apertura', 'Titulo', 'Ubicación', 'Categoria'].map((category) => (
+            {['Id', 'Nombre', 'Costo Unitario','Categoria','Marca', 'Descripcion', 'Agotado', 'Activo', 'Inactivo'].map((category) => (
               <li key={category}>
                 <button type="button" className="inline-flex w-full px-4 py-2 hover:bg-slate-400 dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => selectCategory(category)}>
                   {category}
@@ -57,10 +57,9 @@ const Filtro_Tickets = () => {
             ))}
           </ul>
         </div>
-        
       </div>
     </form>
   );
 };
 
-export default Filtro_Tickets;
+export default Filtro_Users;

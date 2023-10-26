@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { Switch } from "@headlessui/react";
 
 
-const EditarUsuario = () => {
+const AgregarUsuario = () => {
     const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,6 +39,11 @@ const EditarUsuario = () => {
         </div>
       )}{' '}
       {
+        <>
+         <div className="w-full h-16 flex items-center justify-center bg-purple-400 text-white h-18 text-2xl font-bold mb-10">
+        <h1 >Agregar Nuevo Usuario</h1>
+        </div>
+        
        <form>
        <div className="flex items-center mb-8">
          <div className="w-1/4">
@@ -73,14 +78,12 @@ const EditarUsuario = () => {
            <div className="w-full">
              <input
                type="text"
-               value={"Andres"}
                className="w-full py-2 px-4 outline-none rounded-lg bg-white"
                placeholder="Nombre(s)"
              />
            </div>
            <div className="w-full">
              <input
-             value={"Garcia Leyva"}
                type="text"
                className="w-full py-2 px-4 outline-none rounded-lg bg-white"
                placeholder="Apellido(s)"
@@ -97,10 +100,23 @@ const EditarUsuario = () => {
          </div>
          <div className="flex-1">
            <input
-           value={"andresgarciia09@gmail.com"}
              type="text"
              className="w-full py-2 px-4 outline-none rounded-lg bg-white"
              placeholder="E-mail"
+           />
+         </div>
+       </div>
+       <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
+         <div className="w-full md:w-1/4">
+           <p>
+                Contraseña <span className="text-red-500">*</span>
+           </p>
+         </div>
+         <div className="flex-1">
+           <input
+             type="password"
+             className="w-full py-2 px-4 outline-none rounded-lg bg-white"
+             placeholder="password"
            />
          </div>
        </div>
@@ -113,10 +129,9 @@ const EditarUsuario = () => {
          </div>
          <div className="flex-1">
            <input
-           value={"9987323022"}
-             type="text"
+             type="number"
              className="w-full py-2 px-4 outline-none rounded-lg bg-white"
-             placeholder="Nombre(s)"
+             placeholder="Numero de telefono"
            />
          </div>
        </div>
@@ -129,6 +144,7 @@ const EditarUsuario = () => {
          </div>
          <div className="flex-1">
            <select className="w-full py-2 px-4 outline-none rounded-lg ">
+             <option value="" selected>----------</option>
              <option value="Niux">Niux</option>
              <option value="Publico en General">Publico en General</option>
            </select>
@@ -143,6 +159,7 @@ const EditarUsuario = () => {
          </div>
          <div className="flex-1">
            <select className="w-full py-2 px-4 outline-none rounded-lg">
+           <option value="" selected>----------</option>
              <option value="Argentina">Cliente</option>
              <option value="Colombia">Administrador</option>
            </select>
@@ -157,6 +174,7 @@ const EditarUsuario = () => {
          </div>
          <div className="flex-1">
            <select className="w-full py-2 px-4 outline-none rounded-lg">
+           <option value="" selected>----------</option>
              <option value="Argentina">Argentina</option>
              <option value="Colombia">Colombia</option>
              <option value="México">México</option>
@@ -174,6 +192,7 @@ const EditarUsuario = () => {
          </div>
          <div className="flex-1">
            <select className="w-full py-2 px-4 outline-none rounded-lg bg-white">
+           <option value="" selected>----------</option>
              <option value="Barquisiméto">Barquisiméto</option>
              <option value="Bogotá">Bogotá</option>
              <option value="Buga">Buga</option>
@@ -190,11 +209,12 @@ const EditarUsuario = () => {
         <div className="flex justify-end">
         
                 <button type="submit" className="w-[150px]  font-poppins bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-purple-600 hover:text-white hover:border-purple-600 transition-colors">
-                Guardar
+                Agregar
               </button>
            
         </div>
      </form>
+     </>
      
       }
     </div>
@@ -202,4 +222,4 @@ const EditarUsuario = () => {
   );
 };
 
-export default EditarUsuario;
+export default AgregarUsuario;

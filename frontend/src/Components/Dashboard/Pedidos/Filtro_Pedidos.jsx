@@ -22,7 +22,7 @@ const Filtro_Tickets = () => {
         <button
           id="dropdown-button"
           data-dropdown-toggle="dropdown"
-          className="flex-shrink-0  z-20 bottom-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
+          className="flex-shrink-0  z-3 bottom-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
           type="button"
           onClick={toggleDropdown}
         >
@@ -48,7 +48,7 @@ const Filtro_Tickets = () => {
         </div>
         <div id="dropdown" className={`absolute left-0 top-10 transition-all transform mt-2 z-20 ${isDropdownOpen ? 'animate__animated animate__fadeIn' : 'hidden'} bg-gray-900 divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}>
           <ul className="py-2 text-sm  text-white dark:text-gray-200" aria-labelledby="dropdown-button">
-            {['Id', 'Estado', 'Solicitante','Fecha Apertura', 'Titulo', 'Ubicación', 'Categoria'].map((category) => (
+            {['Id', 'Estado','Fecha Pedido', 'Usuario', 'Total', 'Productos'].map((category) => (
               <li key={category}>
                 <button type="button" className="inline-flex w-full px-4 py-2 hover:bg-slate-400 dark:hover:bg-gray-600 dark:hover:text-white" onClick={() => selectCategory(category)}>
                   {category}

@@ -17,6 +17,11 @@ import Tickets_Dash from './Views/Tickets_Dash';
 import EditarUsuario from './Components/Dashboard/Users/EditarUsuario';
 import CrearTicket_Dash from './Views/CrearTicket_Dash';
 import PrivateRoute from './PrivateRoute';
+import Pedidos_Dash from './Views/Pedidos_Dash';
+import Productos_Dash from './Views/Productos_Dash';
+import EditarProducto from './Components/Dashboard/Productos/EditarProducto';
+import AgregarProducto from './Components/Dashboard/Productos/AgregarProducto';
+import AgregarUsuario from './Components/Dashboard/Users/AgregarUsuario';
 
 function App() {
   return (
@@ -39,6 +44,11 @@ function App() {
               <Route path="update-user" element={<EditarUsuario />}></Route>
               <Route path="tickets" element={<Tickets_Dash />}></Route>
               <Route path="add-ticket" element={<CrearTicket_Dash />}></Route>
+              <Route path="orders" element={<Pedidos_Dash />}></Route>
+              <Route path="products" element={<Productos_Dash />}></Route>
+              <Route path="update-product" element={<EditarProducto />}></Route>
+              <Route path="add-product" element={<AgregarProducto />}></Route>
+              <Route path="add-user" element={<AgregarUsuario />}></Route>
             </Route>
           </Route>
 

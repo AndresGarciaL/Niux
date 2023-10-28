@@ -6,7 +6,7 @@ import { HiOutlineShoppingCart } from 'react-icons/hi2';
 const navigation = [
   { name: 'Inicio', href: '/', current: false },
   { name: 'Tienda', href: '/catalogue', current: false },
-  { name: 'Servicios', href: '#', current: false },
+  { name: 'Servicios', href: '/services', current: false },
   { name: 'Contacto', href: '/Contacto', current: false },
 ];
 

@@ -1,0 +1,15 @@
+#modal-id{
+    background: url(../../public/Images/fondo-servicios-cuatro.png);
+    background-size: cover;   /* Esto hace que la imagen cubra todo el espacio disponible */
+    background-repeat: no-repeat;  /* Esto evita que la imagen se repita */
+    background-position: center;
+    height: 100%;
+    
+}
+.bg-form{
+    background: url(../../public/Images/fondo-servicios-cuatro.png);
+}
+.pep{
+    filter: brightness(50%);
+}
+

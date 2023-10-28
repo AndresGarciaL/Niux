@@ -42,7 +42,8 @@ export const CountOnUs = () => {
       onMouseEnter={() => handleMouseEnter(videoRefUno)}
       onMouseLeave={() => handleMouseLeave(videoRefUno)}
       />
-       <div className="absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white opacity-0 hover:opacity-100 transition duration-300 text-4xl font-bold">
+       <div className="absolute z-10 inset-0 flex justify-center items-center text-white opacity-0 hover:opacity-100 transition duration-300 text-4xl font-bold  text-center "  onMouseEnter={() => handleMouseEnter(videoRefUno)}
+      onMouseLeave={() => handleMouseLeave(videoRefUno)}>
        Servicios que marcan la diferencia
     </div>
         </div>
@@ -56,7 +57,8 @@ export const CountOnUs = () => {
       onMouseEnter={() => handleMouseEnter(videoRefDos)}
                         onMouseLeave={() => handleMouseLeave(videoRefDos)}
                         />   
-                         <div className="absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white opacity-0 hover:opacity-100 transition duration-300 lg:text-5xl font-bold text-4xl">
+                         <div className="absolute z-10 inset-0 flex justify-center items-center text-white opacity-0 hover:opacity-100 transition duration-300 lg:text-5xl font-bold text-4xl text-center"  onMouseEnter={() => handleMouseEnter(videoRefDos)}
+                        onMouseLeave={() => handleMouseLeave(videoRefDos)}>
                          Creando soluciones para ti
     </div>
         </div>
@@ -70,7 +72,8 @@ export const CountOnUs = () => {
       onMouseEnter={() => handleMouseEnter(videoRefTres)}
       onMouseLeave={() => handleMouseLeave(videoRefTres)}
       /> 
-       <div className="absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white opacity-0 hover:opacity-100 transition duration-300 text-4xl font-bold">
+       <div className="absolute z-10 inset-0 flex justify-center items-center text-white opacity-0 hover:opacity-100 transition duration-300 text-4xl font-bold text-center" onMouseEnter={() => handleMouseEnter(videoRefTres)}
+      onMouseLeave={() => handleMouseLeave(videoRefTres)}>
        Innovación en cada solución
     </div> 
         </div>
@@ -84,7 +87,8 @@ export const CountOnUs = () => {
       onMouseEnter={() => handleMouseEnter(videoRefCuatro)}
       onMouseLeave={() => handleMouseLeave(videoRefCuatro)}
     />  
-     <div className="absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white opacity-0 hover:opacity-100 transition duration-300 lg:text-4xl font-bold text-3xl sm:text-5xl">
+     <div className="absolute z-10 inset-0 flex justify-center items-center text-white opacity-0 hover:opacity-100 transition duration-300 lg:text-4xl font-bold text-3xl sm:text-5xl text-center"  onMouseEnter={() => handleMouseEnter(videoRefCuatro)}
+      onMouseLeave={() => handleMouseLeave(videoRefCuatro)}>
      Compromiso inquebrantable
     </div>
         </div>
@@ -98,7 +102,8 @@ export const CountOnUs = () => {
       onMouseEnter={() => handleMouseEnter(videoRefCinco)}
       onMouseLeave={() => handleMouseLeave(videoRefCinco)}
       />
-       <div className="absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white opacity-0 hover:opacity-100 transition duration-300 text-5xl font-bold">
+       <div className="absolute z-10 inset-0 flex justify-center items-center text-white opacity-0 hover:opacity-100 transition duration-300 text-5xl font-bold text-center"  onMouseEnter={() => handleMouseEnter(videoRefCinco)}
+      onMouseLeave={() => handleMouseLeave(videoRefCinco)}>
        Siempre un paso adelante
     </div>
         </div>

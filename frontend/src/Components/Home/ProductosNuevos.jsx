@@ -165,7 +165,7 @@ function ProductosNuevos() {
   return (
     <>
     
-      <div className="mx-auto  px-4 py-10 sm:px-6 sm:py-18 lg:px-6 abs  mt-6 bg-white">
+      <div className="mx-auto  px-4 py-10 sm:px-6 sm:py-18 lg:px-6 abs  mt-28 bg-white">
         <div className="flex items-center justify-between">
           <h1 className="mt-[-35px] font-popins text-4xl  mb-4 text-gray-600 w-full">
             Productos Nuevos

@@ -27,7 +27,7 @@ function Home() {
         <div className="absolute inset-0 text-white  flex justify-center items-end z-20">
           <Link
             to="/catalogue"
-            className="  h-[30px] w-[150px] bg-slate-600 flex justify-center mb-20 rounded-lg items-center transition ease-in duration-100 hover:scale-105"
+            className="  h-[30px] w-[150px] bg-purple-600 flex justify-center mb-20 rounded-lg items-center transition ease-in duration-100 hover:scale-105"
           >
             Comprar Ahora
           </Link>
@@ -44,6 +44,7 @@ function Home() {
       <OfertasEspeciales />
       <CountOnUs/>
       <ScrollMarcas/>
+      
       
             </div>
     </>

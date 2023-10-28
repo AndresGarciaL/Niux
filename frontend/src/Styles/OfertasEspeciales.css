@@ -14,8 +14,11 @@
     flex: 0 0 auto; /* No crecer, no encoger, auto base width */
     margin-right: 16px; /* Espacio entre ofertas */
     box-sizing: border-box;
+    transition: box-shadow 0.3s;
 }
-
+.oferta:hover{
+    box-shadow: 0 0 10px rgba(128, 0, 128, 0.7); /* Sombra morada al hacer hover */
+}
 .oferta img {
     max-width: 100%;
     height: auto;

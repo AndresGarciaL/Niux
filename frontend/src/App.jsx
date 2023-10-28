@@ -8,6 +8,8 @@ import Home from './Views/Home';
 import Viewproduct from './Views/Viewproduct';
 import Login from './Views/Login';
 import Register from './Views/Register';
+import Services from './Views/Services';
+import ServicesForm from './Views/ServicesForm'
 
 /* Importaciones Dashboard */
 import Dashboard from './Views/Dashboard';
@@ -30,6 +32,10 @@ function App() {
           <Route path="/product" element={<Viewproduct />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/services/form" element={<ServicesForm />} />
+
+
 
           {/* Rutas Dashboard */}
           <Route element={<PrivateRoute />}>

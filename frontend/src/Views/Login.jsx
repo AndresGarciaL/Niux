@@ -1,23 +1,27 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import '../Styles/Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
 import useUserStore from '../stores/userStore';
-import { RiFacebookCircleFill, RiGoogleFill} from 'react-icons/ri';
-import { TfiMicrosoftAlt } from "react-icons/tfi";
-
-import { useIsAuthenticated } from '@azure/msal-react';
+import { RiFacebookCircleFill, RiGoogleFill } from 'react-icons/ri';
+import { useMsal } from '@azure/msal-react';
 import { SignInButton } from '../Components/Login/SignIn';
-import { SignOutButton } from '../Components/Login/SignOut';
 
 const Login = () => {
   const navigate = useNavigate();
-  const setGoogleApiData = useUserStore((state) => state.setUser);
+  const setUserData = useUserStore((state) => state.setUser);
 
   const [user, setUser] = useState(null);
 
-  const isAuthenticated = useIsAuthenticated();
+  const { instance } = useMsal();
+
+  useEffect(() => {
+    const currentAccount = instance.getActiveAccount();
+    if (currentAccount) {
+      setUserData({ name: currentAccount.name, email: currentAccount.username });
+    }
+  }, [instance]);
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => setUser(codeResponse),
@@ -56,7 +60,7 @@ const Login = () => {
             },
           });
 
-          setGoogleApiData(response.data);
+          setUserData(response.data);
 
           navigate('/dashboard');
         }
@@ -81,29 +85,24 @@ const Login = () => {
             <span className="typing-cursor"></span>
           </h1>
           {/* Contenedor botones Login*/}
-          <div className='flex flex-col gap-3'>
+          <div className="flex flex-col gap-3">
+            {/* Boton de Google */}
 
-          {/* Boton de Google */}
+            <button onClick={() => login()} className="flex items-center gap-2 hover:bg-purple-400 hover:text-white transition-colors hover:border-purple-400 bg-gray-200 py-2 px-4 rounded-lg shadow-lg">
+              <RiGoogleFill className="w-5 h-5" />
+              Iniciar sesion con Google
+            </button>
 
-          <button onClick={() => login()} className="flex items-center gap-2 hover:bg-purple-400 hover:text-white transition-colors hover:border-purple-400 bg-gray-200 py-2 px-4 rounded-lg shadow-lg">
-          < RiGoogleFill className='w-5 h-5'/>
-          Iniciar sesion con Google
-         
-          </button>
+            {/* Boton de Facebook */}
 
-          {/* Boton de Facebook */}
+            <button onClick={() => login()} className="flex items-center gap-2 hover:bg-purple-400 hover:text-white transition-colors hover:border-purple-400 bg-gray-200 py-2 px-4 rounded-lg shadow-lg">
+              <RiFacebookCircleFill className="w-5 h-5" />
+              Iniciar sesión con Facebook
+            </button>
 
-          <button onClick={() => login()} className="flex items-center gap-2 hover:bg-purple-400 hover:text-white transition-colors hover:border-purple-400 bg-gray-200 py-2 px-4 rounded-lg shadow-lg">
-             <RiFacebookCircleFill className='w-5 h-5'/>
-            Iniciar sesión con Facebook
-          </button>
+            {/* Boton Microsoft */}
 
-          {/* Boton Microsoft */}
-
-          <button onClick={() => login()} className="flex items-center gap-2 hover:bg-purple-400 hover:text-white transition-colors hover:border-purple-400 bg-gray-200 py-2 px-4 rounded-lg shadow-lg">
-             <TfiMicrosoftAlt/>
-            Iniciar sesión con Microsoft
-          </button>
+            {<SignInButton />}
           </div>
         </div>
         <div className="my-14">
@@ -130,8 +129,7 @@ const Login = () => {
               <button type="submit" className="w-full font-poppins bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-purple-600 hover:text-white hover:border-purple-600 transition-colors">
                 Iniciar sesión
               </button>
-              {/* { Login Microsoft} */}
-              {isAuthenticated ? <SignOutButton /> : <SignInButton />}
+              <button>Hola</button>
             </div>
           </form>
         </div>

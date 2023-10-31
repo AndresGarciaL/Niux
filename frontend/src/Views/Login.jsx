@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
 import useUserStore from '../stores/userStore';
+import { RiFacebookCircleFill, RiGoogleFill} from 'react-icons/ri';
+import { TfiMicrosoftAlt } from "react-icons/tfi";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -72,15 +74,31 @@ const Login = () => {
             {displayText}
             <span className="typing-cursor"></span>
           </h1>
-          <button onClick={() => login()} className="flex items-center gap-2 bg-gray-200 py-2 px-4 rounded-lg">
-            <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-              <g>
-                <path fill="none" d="M0 0h24v24H0z"></path>
-                <path d="M3.064 7.51A9.996 9.996 0 0 1 12 2c2.695 0 4.959.99 6.69 2.605l-2.867 2.868C14.786 6.482 13.468 5.977 12 5.977c-2.605 0-4.81 1.76-5.595 4.123-.2.6-.314 1.24-.314 1.9 0 .66.114 1.3.314 1.9.786 2.364 2.99 4.123 5.595 4.123 1.345 0 2.49-.355 3.386-.955a4.6 4.6 0 0 0 1.996-3.018H12v-3.868h9.418c.118.654.182 1.336.182 2.045 0 3.046-1.09 5.61-2.982 7.35C16.964 21.105 14.7 22 12 22A9.996 9.996 0 0 1 2 12c0-1.614.386-3.14 1.064-4.49z"></path>
-              </g>
-            </svg>
-            Iniciar sesión con Google
+          {/* Contenedor botones Login*/}
+          <div className='flex flex-col gap-3'>
+
+          {/* Boton de Google */}
+
+          <button onClick={() => login()} className="flex items-center gap-2 hover:bg-purple-400 hover:text-white transition-colors hover:border-purple-400 bg-gray-200 py-2 px-4 rounded-lg shadow-lg">
+          < RiGoogleFill className='w-5 h-5'/>
+          Iniciar sesion con Google
+         
           </button>
+
+          {/* Boton de Facebook */}
+
+          <button onClick={() => login()} className="flex items-center gap-2 hover:bg-purple-400 hover:text-white transition-colors hover:border-purple-400 bg-gray-200 py-2 px-4 rounded-lg shadow-lg">
+             <RiFacebookCircleFill className='w-5 h-5'/>
+            Iniciar sesión con Facebook
+          </button>
+
+          {/* Boton Microsoft */}
+
+          <button onClick={() => login()} className="flex items-center gap-2 hover:bg-purple-400 hover:text-white transition-colors hover:border-purple-400 bg-gray-200 py-2 px-4 rounded-lg shadow-lg">
+             <TfiMicrosoftAlt/>
+            Iniciar sesión con Microsoft
+          </button>
+          </div>
         </div>
         <div className="my-14">
           <p className="text-center relative text-purple-400 font-bold bg-gray-100 before:max-w-[50px] md:before:max-w-[120px] before:w-full before:-left-[60px] md:before:-left-[140px] before:h-[1px] before:bg-current before:absolute before:top-[50%] after:max-w-[50px] md:after:max-w-[120px] after:w-full after:h-[1px] after:bg-current after:absolute after:top-[50%] after:-right-[60px] md:after:-right-[140px]">

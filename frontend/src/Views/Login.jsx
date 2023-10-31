@@ -5,11 +5,17 @@ import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
 import useUserStore from '../stores/userStore';
 
+import { useIsAuthenticated } from '@azure/msal-react';
+import { SignInButton } from '../Components/Login/SignIn';
+import { SignOutButton } from '../Components/Login/SignOut';
+
 const Login = () => {
   const navigate = useNavigate();
   const setGoogleApiData = useUserStore((state) => state.setUser);
 
   const [user, setUser] = useState(null);
+
+  const isAuthenticated = useIsAuthenticated();
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => setUser(codeResponse),
@@ -106,6 +112,8 @@ const Login = () => {
               <button type="submit" className="w-full font-poppins bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-purple-600 hover:text-white hover:border-purple-600 transition-colors">
                 Iniciar sesión
               </button>
+              {/* { Login Microsoft} */}
+              {isAuthenticated ? <SignOutButton /> : <SignInButton />}
             </div>
           </form>
         </div>

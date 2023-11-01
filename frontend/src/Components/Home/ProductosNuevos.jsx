@@ -1,7 +1,7 @@
 import '../../Styles/ProductosNuevos.css';
 import { FaTruck, FaShoppingCart } from 'react-icons/fa';
 import { BsFilterRight } from 'react-icons/bs';
-import StarsRating from '../StarsRating';
+import StarsRating from '../Shop/StarsRating';
 import { useEffect, useRef } from 'react';
 import { GrNext } from 'react-icons/gr';
 import { GrPrevious } from 'react-icons/gr';

@@ -5,7 +5,6 @@ import Navbar from './Navbar';
 import StarsRating from '../Components/Shop/StarsRating';
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
 const sortOptions = [
   { name: 'Mejor puntuación', href: '#', current: false },

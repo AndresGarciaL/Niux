@@ -5,23 +5,15 @@ import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
 import useUserStore from '../stores/userStore';
 import { RiFacebookCircleFill, RiGoogleFill } from 'react-icons/ri';
-import { useMsal } from '@azure/msal-react';
+import { useIsAuthenticated, useMsal } from '@azure/msal-react';
 import { SignInButton } from '../Components/Login/SignIn';
 
 const Login = () => {
   const navigate = useNavigate();
   const setUserData = useUserStore((state) => state.setUser);
-
-  const [user, setUser] = useState(null);
-
   const { instance } = useMsal();
 
-  useEffect(() => {
-    const currentAccount = instance.getActiveAccount();
-    if (currentAccount) {
-      setUserData({ name: currentAccount.name, email: currentAccount.username });
-    }
-  }, [instance]);
+  const [user, setUser] = useState(null);
 
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => setUser(codeResponse),
@@ -71,6 +63,18 @@ const Login = () => {
 
     fetchUserProfile();
   }, [user]);
+
+  const getInfo = async () => {
+    const currentAccount = instance.getActiveAccount();
+    if (currentAccount) {
+      setUserData({ name: currentAccount.name, email: currentAccount.username });
+      navigate('/dashboard');
+    }
+  };
+
+  if (useIsAuthenticated()) {
+    getInfo();
+  }
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
@@ -129,7 +133,6 @@ const Login = () => {
               <button type="submit" className="w-full font-poppins bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-purple-600 hover:text-white hover:border-purple-600 transition-colors">
                 Iniciar sesión
               </button>
-              <button>Hola</button>
             </div>
           </form>
         </div>

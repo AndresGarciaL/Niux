@@ -10,14 +10,9 @@ export const SignOutButton = () => {
   const { instance } = useMsal();
 
   const handleLogout = (logoutType) => {
-    if (logoutType === 'popup') {
-      instance.logoutPopup({
-        postLogoutRedirectUri: '/',
-        mainWindowRedirectUri: '/',
-      });
-    } else if (logoutType === 'redirect') {
+    if (logoutType === 'redirect') {
       instance.logoutRedirect({
-        postLogoutRedirectUri: '/',
+        postLogoutRedirectUri: '/login',
       });
     }
   };

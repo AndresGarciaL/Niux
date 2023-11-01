@@ -5,9 +5,21 @@ import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import { Link } from 'react-router-dom';
 import useUserStore from '../../stores/userStore';
+
+import { useMsal } from '@azure/msal-react';
+
 const Header_Dash = () => {
   const user = useUserStore((state) => state.user);
   const logout = useUserStore((state) => state.logout);
+
+  const { instance } = useMsal();
+  const sessionMicrosoft = () => {
+    localStorage.removeItem('user');
+    instance.logoutPopup({
+      postLogoutRedirectUri: '/login',
+      mainWindowRedirectUri: '/login',
+    });
+  };
 
   const logoutSession = () => {
     logout();
@@ -102,7 +114,7 @@ const Header_Dash = () => {
             </Link>
           </MenuItem>
           <MenuItem className="p-0 hover:bg-transparent">
-            <button onClick={logoutSession} className="rounded-lg transition-colors text-gray-500 hover:text-white hover:bg-purple-400 flex items-center gap-x-4 py-2 px-6 flex-1">
+            <button onClick={instance.getActiveAccount() ? sessionMicrosoft : logoutSession} className="rounded-lg transition-colors text-gray-500 hover:text-white hover:bg-purple-400 flex items-center gap-x-4 py-2 px-6 flex-1">
               <RiLogoutCircleRLine /> Cerrar sesión
             </button>
             {/* <Link to="/cerrar-sesion" className="rounded-lg transition-colors text-gray-500 hover:text-white hover:bg-purple-400 flex items-center gap-x-4 py-2 px-6 flex-1">

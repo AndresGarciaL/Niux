@@ -3,8 +3,9 @@ import { BsFilterRight } from 'react-icons/bs';
 import SideBar_Catalogue from '../Components/Shop/SideBar_Catalogue';
 import Navbar from './Navbar';
 import StarsRating from '../Components/Shop/StarsRating';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
+import axios from 'axios';
 
 const sortOptions = [
   { name: 'Mejor puntuación', href: '#', current: false },
@@ -18,97 +19,115 @@ function classNames(...classes) {
 }
 
 const Catalogue = () => {
-  const products = [
-    {
-      id: 1,
-      name: 'Raspberry Pi 4 Model B 8GB de una sola Placa W125890212212',
-      href: '#',
-      imageSrc: 'Images/camisa.jpg',
-      imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
-      price: '4,999',
-      stock: 15,
-      rating: 5,
-      shipping: 'Envío gratis',
-    },
-    {
-      id: 2,
-      name: 'UltraHD Gaming Monitor 32 Pulgadas Curvo HDR 1000 HDMI DisplayPort USB-C',
-      href: '#',
-      imageSrc: 'Images/camisa.jpg',
-      imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
-      price: '4,999',
-      stock: 21,
-      rating: 5.0,
-      shipping: 'Envío gratis',
-    },
-    {
-      id: 3,
-      name: 'Teclado Mecánico Cherry MX Retroiluminado RGB USB 2.0',
-      href: '#',
-      imageSrc: 'Images/camisa.jpg',
-      imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
-      price: '4,999',
-      stock: 300,
-      rating: 3.0,
-      shipping: 'Envío gratis',
-    },
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/products');
+        const images = response.data.map((product) => {
+          const imageSrc = `http://localhost:3000/api/files/product/${product.images[0]}`;
+          const imageAlt = product.title;
+          return { ...product, imageSrc, imageAlt };
+        });
+        setProducts(images);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchProducts();
+  }, []);
 
-    {
-      id: 4,
-      name: 'Tarjeta Gráfica NVIDIA GeForce RTX 3080 Ti 12GB GDDR6X PCI-E 4.0',
-      href: '#',
-      imageSrc: 'Images/camisa.jpg',
-      imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
-      price: '4,999',
-      stock: 100,
-      rating: 2.0,
-      shipping: 'Envío gratis',
-    },
-    {
-      id: 5,
-      name: 'SSD NVMe M.2 1TB PCIe 4.0 3D NAND TLC Velocidad de Lectura 5000MB/s',
-      href: '#',
-      imageSrc: 'Images/camisa.jpg',
-      imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
-      price: '4,999',
-      stock: 21,
-      rating: 2.5,
-      shipping: 'Envío gratis',
-    },
-    {
-      id: 6,
-      name: 'Procesador AMD Ryzen 9 5950X 16 Núcleos 32 Hilos 4.9GHz Socket AM4',
-      href: '#',
-      imageSrc: 'Images/camisa.jpg',
-      imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
-      price: '4,999',
-      stock: 31,
-      rating: 1.5,
-      shipping: 'Envío gratis',
-    },
-    {
-      id: 7,
-      name: 'Mouse Gaming Inalámbrico Recargable con Sensor Óptico 16000 DPI RGB',
-      href: '#',
-      imageSrc: 'Images/camisa.jpg',
-      imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
-      price: '4,999',
-      stock: 71,
-      rating: 4.5,
-      shipping: 'Envío gratis',
-    },
-    {
-      id: 8,
-      name: 'Silla Gaming Ergonómica Ajustable con Reposapiés Masajeador Bluetooth',
-      href: '#',
-      imageSrc: 'Images/camisa.jpg',
-      imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
-      price: '4,999',
-      stock: 45,
-      rating: 3.9,
-      shipping: 'Envío gratis',
-    },
-  ];
+  // const products = [
+  //   {
+  //     id: 1,
+  //     name: 'Raspberry Pi 4 Model B 8GB de una sola Placa W125890212212',
+  //     href: '#',
+  //     imageSrc: 'Images/camisa.jpg',
+  //     imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
+  //     price: '4,999',
+  //     stock: 15,
+  //     rating: 5,
+  //     shipping: 'Envío gratis',
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'UltraHD Gaming Monitor 32 Pulgadas Curvo HDR 1000 HDMI DisplayPort USB-C',
+  //     href: '#',
+  //     imageSrc: 'Images/camisa.jpg',
+  //     imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
+  //     price: '4,999',
+  //     stock: 21,
+  //     rating: 5.0,
+  //     shipping: 'Envío gratis',
+  //   },
+  //   {
+  //     id: 3,
+  //     name: 'Teclado Mecánico Cherry MX Retroiluminado RGB USB 2.0',
+  //     href: '#',
+  //     imageSrc: 'Images/camisa.jpg',
+  //     imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
+  //     price: '4,999',
+  //     stock: 300,
+  //     rating: 3.0,
+  //     shipping: 'Envío gratis',
+  //   },
+
+  //   {
+  //     id: 4,
+  //     name: 'Tarjeta Gráfica NVIDIA GeForce RTX 3080 Ti 12GB GDDR6X PCI-E 4.0',
+  //     href: '#',
+  //     imageSrc: 'Images/camisa.jpg',
+  //     imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
+  //     price: '4,999',
+  //     stock: 100,
+  //     rating: 2.0,
+  //     shipping: 'Envío gratis',
+  //   },
+  //   {
+  //     id: 5,
+  //     name: 'SSD NVMe M.2 1TB PCIe 4.0 3D NAND TLC Velocidad de Lectura 5000MB/s',
+  //     href: '#',
+  //     imageSrc: 'Images/camisa.jpg',
+  //     imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
+  //     price: '4,999',
+  //     stock: 21,
+  //     rating: 2.5,
+  //     shipping: 'Envío gratis',
+  //   },
+  //   {
+  //     id: 6,
+  //     name: 'Procesador AMD Ryzen 9 5950X 16 Núcleos 32 Hilos 4.9GHz Socket AM4',
+  //     href: '#',
+  //     imageSrc: 'Images/camisa.jpg',
+  //     imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
+  //     price: '4,999',
+  //     stock: 31,
+  //     rating: 1.5,
+  //     shipping: 'Envío gratis',
+  //   },
+  //   {
+  //     id: 7,
+  //     name: 'Mouse Gaming Inalámbrico Recargable con Sensor Óptico 16000 DPI RGB',
+  //     href: '#',
+  //     imageSrc: 'Images/camisa.jpg',
+  //     imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
+  //     price: '4,999',
+  //     stock: 71,
+  //     rating: 4.5,
+  //     shipping: 'Envío gratis',
+  //   },
+  //   {
+  //     id: 8,
+  //     name: 'Silla Gaming Ergonómica Ajustable con Reposapiés Masajeador Bluetooth',
+  //     href: '#',
+  //     imageSrc: 'Images/camisa.jpg',
+  //     imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
+  //     price: '4,999',
+  //     stock: 45,
+  //     rating: 3.9,
+  //     shipping: 'Envío gratis',
+  //   },
+  // ];
   return (
     <div className="bg-white relative">
       <Navbar />
@@ -152,9 +171,9 @@ const Catalogue = () => {
           <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-2">
             {products.map((product) => (
               <div key={product.id} className="border-gray-200 border-[0.5px] rounded-[5px] group relative">
-                <div className=" aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
+                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-white lg:aspect-none group-hover:opacity-75 lg:h-56 flex items-center justify-center">
                   <a href={product.href}>
-                    <img src={product.imageSrc} alt={product.imageAlt} className="h-full w-full object-cover object-center lg:h-full lg:w-full" />
+                    <img src={product.imageSrc} alt={product.imageAlt} className="h-full w-full object-cover object-center" />
                   </a>
                 </div>
 
@@ -162,7 +181,7 @@ const Catalogue = () => {
                   <div>
                     <h3 className="text-[15px] font-semibold text-gray-700">
                       <span aria-hidden="true" className="absolute" />
-                      {product.name.length >= 54 ? `${product.name.substring(0, 50)}...` : product.name}
+                      {product.title.length >= 54 ? `${product.title.substring(0, 50)}...` : product.title}
                     </h3>
 
                     <p className="text-[15px] text-gray-500">Piezas: {product.stock} disponibles</p>

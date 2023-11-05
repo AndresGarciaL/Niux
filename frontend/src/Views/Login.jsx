@@ -7,8 +7,11 @@ import useUserStore from '../stores/userStore';
 import { RiFacebookCircleFill, RiGoogleFill } from 'react-icons/ri';
 import { useIsAuthenticated, useMsal } from '@azure/msal-react';
 import { SignInButton } from '../Components/Login/SignIn';
+import { LoginSocialFacebook } from 'reactjs-social-login';
 
 const Login = () => {
+  const facebookAppId = import.meta.env.VITE_REACT_APP_FACEBOOK_APP_ID;
+
   const navigate = useNavigate();
   const setUserData = useUserStore((state) => state.setUser);
   const { instance } = useMsal();
@@ -98,11 +101,33 @@ const Login = () => {
             </button>
 
             {/* Boton de Facebook */}
+            <LoginSocialFacebook
+              appId={facebookAppId}
+              onResolve={async (response) => {
+                try {
+                  const pictureResponse = await axios.get(`https://graph.facebook.com/v18.0/${response.data.userID}/picture`);
 
-            <button onClick={() => login()} className="flex items-center gap-2 hover:bg-purple-400 hover:text-white transition-colors hover:border-purple-400 bg-gray-200 py-2 px-4 rounded-lg shadow-lg">
-              <RiFacebookCircleFill className="w-5 h-5" />
-              Iniciar sesión con Facebook
-            </button>
+                  const userData = {
+                    name: response.data.name,
+                    email: response.data.email,
+                    picture: pictureResponse.request.responseURL,
+                  };
+
+                  setUserData(userData);
+                  navigate('/dashboard');
+                } catch (error) {
+                  console.error('Error al hacer la solicitud:', error);
+                }
+              }}
+              onReject={(error) => {
+                console.log(error);
+              }}
+            >
+              <button className="flex items-center gap-2 hover:bg-purple-400 hover:text-white transition-colors hover:border-purple-400 bg-gray-200 py-2 px-4 rounded-lg shadow-lg">
+                <RiFacebookCircleFill className="w-5 h-5" />
+                Iniciar sesión con Facebook
+              </button>
+            </LoginSocialFacebook>
 
             {/* Boton Microsoft */}
 

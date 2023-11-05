@@ -102,9 +102,9 @@ const Home_Dash = () => {
                   <td className="flex flex-col items-center justify-center bg-green-500/30 text-green-500 rounded-lg mt-3">Nuevo</td>
                   <td className="px-6 py-4 text-center">10/10/2023</td>
                   <td className="px-6 py-4 text-right">
-                    <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                    <Link to="/dashboard/add-ticket" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                       Edit
-                    </a>
+                    </Link>
                   </td>
                 </tr>
                 <tr className="bg-white hover:bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">

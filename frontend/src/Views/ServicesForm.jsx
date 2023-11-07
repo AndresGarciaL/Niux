@@ -53,7 +53,7 @@ export const ServicesForm = () => {
         <>
         <Navbar/>
         <Breadcrums/>
-        <div className={` relative top-0  left-0 right-0 bottom-0 z-0 flex justify-center items-center p-8  inset-0  bg-form`}>
+        <div className={` relative top-0  left-0 right-0 bottom-0 z-0 flex justify-center items-center p-8  inset-0  bg-form `}>
           <div className="relative w-full max-w-2xl">
             {/* Modal content */}
             <div
@@ -96,7 +96,7 @@ export const ServicesForm = () => {
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="message">
                       Mensaje
                     </label>
-                    <textarea className="shadow appearance-none focus:border-purple-500 border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32" id="message" name="message" value={formData.message} onChange={handleChange} placeholder="Escribe tu mensaje aquí"></textarea>
+                    <textarea className="shadow appearance-none focus:border-purple-500 border border-gray-400 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32 textfor" id="message" name="message" value={formData.message} onChange={handleChange} placeholder="Escribe tu mensaje aquí"></textarea>
                   </div>
                   <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="service">

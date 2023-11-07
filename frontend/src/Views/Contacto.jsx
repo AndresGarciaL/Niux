@@ -200,7 +200,7 @@ function Contacto() {
                 required="true"
                   name="mensaje"
                   onChange={handleInputChange}
-                  className="shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-purple-200 border-[2px] drop-shadow-md hover:drop-shadow-xl"
+                  className="shadow appearance-none rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline border-purple-200 border-[2px] drop-shadow-md hover:drop-shadow-xl textfor"
                   placeholder="Mensaje"
                   rows="4"
                 ></textarea>

@@ -78,7 +78,7 @@ export const Services = () => {
       <Navbar />
       <Breadcrums />
       <div
-        className={`relative left-0 top-0 flex justify-center items-center   outline-none focus:outline-none  pb-8 md:px-10 px-8 
+        className={`relative left-0 top-0 flex justify-center items-center   outline-none focus:outline-none  pb-8 md:px-10 px-8
           `}
         id="modal-id"
       >
@@ -360,11 +360,11 @@ export const Services = () => {
 
             {/* Reparacion Producto Informacion */}
             {ReparacionProducto ? (
-              <div id="staticModal" data-modal-backdrop="static" tabIndex={-1} aria-hidden="true" className={`absolute top-0 left-0 right-0 bottom-0 z-10 flex  justify-center items-center p-4   inset-0`}>
-                <div className="relative w-full max-w-2xl h-full ">
+              <div id="staticModal" data-modal-backdrop="static" tabIndex={-1} aria-hidden="true" className={`absolute top-0 left-0 right-0 bottom-0 z-10 flex  justify-center items-center p-4 inset-0  `}>
+                <div className=" relative w-full max-w-2xl h-full">
                   {/* Modal content */}
                   <div
-                    className="relative bg-white rounded-lg shadow dark:bg-gray-700
+                    className="relative bg-white rounded-lg shadow  flex-wrap 
       "
                   >
                     {/* Modal header */}
@@ -411,7 +411,7 @@ export const Services = () => {
                 <div className="relative w-full max-w-2xl h-full ">
                   {/* Modal content */}
                   <div
-                    className="relative bg-white rounded-lg shadow dark:bg-gray-700
+                    className="relative bg-white rounded-lg shadow dark:bg-gray-700 flex-wrap
       "
                   >
                     {/* Modal header */}
@@ -457,7 +457,7 @@ export const Services = () => {
                 <div className="relative w-full max-w-2xl h-full ">
                   {/* Modal content */}
                   <div
-                    className="relative bg-white rounded-lg shadow dark:bg-gray-700
+                    className="relative bg-white rounded-lg shadow dark:bg-gray-700 flex-wrap
       "
                   >
                     {/* Modal header */}
@@ -499,11 +499,11 @@ export const Services = () => {
             ) : null}
             {/*Recuperacion de datos */}
             {RecuperacionDatos ? (
-              <div id="staticModal" data-modal-backdrop="static" tabIndex={-1} aria-hidden="true" className={`absolute top-0 left-0 right-0 bottom-0 z-10 flex  justify-center items-center p-4   inset-0`}>
+              <div id="staticModal" data-modal-backdrop="static" tabIndex={-1} aria-hidden="true" className={`absolute top-0 left-0 right-0 bottom-0 z-10 flex  justify-center items-center p-4   inset-0 `}>
                 <div className="relative w-full max-w-2xl h-full ">
                   {/* Modal content */}
                   <div
-                    className="relative bg-white rounded-lg shadow dark:bg-gray-700
+                    className="relative bg-white rounded-lg shadow dark:bg-gray-700 flex-wrap
       "
                   >
                     {/* Modal header */}
@@ -545,11 +545,11 @@ export const Services = () => {
             ) : null}
              {/*Seguridad cibernetica */}
              {SeguridadCibernetica ? (
-              <div id="staticModal" data-modal-backdrop="static" tabIndex={-1} aria-hidden="true" className={`absolute top-0 left-0 right-0 bottom-0 z-10 flex  justify-center items-center p-4   inset-0`}>
+              <div id="staticModal" data-modal-backdrop="static" tabIndex={-1} aria-hidden="true" className={`absolute top-0 left-0 right-0 bottom-0 z-10 flex  justify-center items-center p-4   inset-0 `}>
                 <div className="relative w-full max-w-2xl h-full ">
                   {/* Modal content */}
                   <div
-                    className="relative bg-white rounded-lg shadow dark:bg-gray-700
+                    className="relative bg-white rounded-lg shadow dark:bg-gray-700 flex flex-wrap
       "
                   >
                     {/* Modal header */}
@@ -591,17 +591,17 @@ export const Services = () => {
             ) : null}
             {/*Configuracion de redes */}
             {ConfiguracionRedes ? (
-              <div id="staticModal" data-modal-backdrop="static" tabIndex={-1} aria-hidden="true" className={`absolute top-0 left-0 right-0 bottom-0 z-10 flex  justify-center items-center p-4   inset-0`}>
+              <div id="staticModal" data-modal-backdrop="static" tabIndex={-1} aria-hidden="true" className={`absolute top-0 left-0 right-0 bottom-0 z-10 flex  justify-center items-center p-4   inset-0 `}>
                 <div className="relative w-full max-w-2xl h-full ">
                   {/* Modal content */}
                   <div
-                    className="relative bg-white rounded-lg shadow dark:bg-gray-700
+                    className="relative bg-white rounded-lg shadow dark:bg-gray-700 flex-wrap
       "
                   >
                     {/* Modal header */}
-                    <div className="flex items-center justify-center text-center p-4 border-b rounded-t bg-purple-300">
+                    <div className="flex items-center justify-center text-center p-4 border-b rounded-t bg-purple-300 ">
                       <h3 className="text-2xl font-semibold text-gray-900  text-center">Configuración de Redes</h3>
-                      <button type="button" className="text-black bg-transparent border hover:bg-purple-300 hover:text-white rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center" data-modal-hide="staticModal" onClick={ChangeCR}>
+                      <button type="button" className="text-black bg-transparent border hover:bg-purple-300 hover:text-white rounded-lg text-sm w-8 h-8 sm:ml-auto inline-flex justify-center items-center ml-1" data-modal-hide="staticModal" onClick={ChangeCR}>
                         <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                           <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                         </svg>

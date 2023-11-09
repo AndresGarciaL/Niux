@@ -8,11 +8,20 @@ import { RiFacebookCircleFill, RiGoogleFill } from 'react-icons/ri';
 import { useIsAuthenticated, useMsal } from '@azure/msal-react';
 import { SignInButton } from '../Components/Login/SignIn';
 import { LoginSocialFacebook } from 'reactjs-social-login';
+import { useAuthStore } from '../stores/Auth/authStore';
+import { AuthService } from '../services/authService';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const useLogin = useAuthStore((state) => state.login);
+  const useSocialLogin = useAuthStore((state) => state.socialLogin);
+  const useSocialRegister = useAuthStore((state) => state.socialRegister);
+
+  const [userEmail, setEmail] = useState('');
+  const [userPassword, setPassword] = useState('');
+
   const facebookAppId = import.meta.env.VITE_REACT_APP_FACEBOOK_APP_ID;
 
-  const navigate = useNavigate();
   const setUserData = useUserStore((state) => state.setUser);
   const { instance } = useMsal();
 
@@ -55,9 +64,18 @@ const Login = () => {
             },
           });
 
-          setUserData(response.data);
-
-          navigate('/dashboard');
+          const validateUser = await AuthService.socialUserAlreadyExists(response.data.email, response.data.id, 'google');
+          if (!validateUser) {
+            useSocialRegister(response.data.email, response.data.name, response.data.id, 'google', response.data.picture);
+            setTimeout(() => {
+              navigate('/dashboard');
+            }, 2000);
+          } else {
+            useSocialLogin(response.data.email, response.data.id, 'google');
+            setTimeout(() => {
+              navigate('/dashboard');
+            }, 2000);
+          }
         }
       } catch (error) {
         console.error('Error al obtener el perfil del usuario:', error);
@@ -70,14 +88,31 @@ const Login = () => {
   const getInfo = async () => {
     const currentAccount = instance.getActiveAccount();
     if (currentAccount) {
-      setUserData({ name: currentAccount.name, email: currentAccount.username });
-      navigate('/dashboard');
+      const validateUser = await AuthService.socialUserAlreadyExists(currentAccount.username, currentAccount.homeAccountId, 'microsoft');
+      if (!validateUser) {
+        useSocialRegister(currentAccount.username, currentAccount.name, currentAccount.homeAccountId, 'microsoft');
+        navigate('/dashboard');
+      } else {
+        useSocialLogin(currentAccount.username, currentAccount.homeAccountId, 'microsoft');
+        navigate('/dashboard');
+      }
     }
   };
 
   if (useIsAuthenticated()) {
     getInfo();
   }
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await useLogin(userEmail, userPassword);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
@@ -107,14 +142,18 @@ const Login = () => {
                 try {
                   const pictureResponse = await axios.get(`https://graph.facebook.com/v18.0/${response.data.userID}/picture`);
 
-                  const userData = {
-                    name: response.data.name,
-                    email: response.data.email,
-                    picture: pictureResponse.request.responseURL,
-                  };
-
-                  setUserData(userData);
-                  navigate('/dashboard');
+                  const validateUser = await AuthService.socialUserAlreadyExists(response.data.email, response.data.id, 'facebook');
+                  if (!validateUser) {
+                    useSocialRegister(response.data.email, response.data.name, response.data.userID, 'facebook', pictureResponse.request.responseURL);
+                    setTimeout(() => {
+                      navigate('/dashboard');
+                    }, 2000);
+                  } else {
+                    useSocialLogin(response.data.email, response.data.userID, 'facebook');
+                    setTimeout(() => {
+                      navigate('/dashboard');
+                    }, 2000);
+                  }
                 } catch (error) {
                   console.error('Error al hacer la solicitud:', error);
                 }
@@ -140,12 +179,12 @@ const Login = () => {
           </p>
         </div>
         <div className="w-full mb-8">
-          <form>
+          <form onSubmit={onSubmit}>
             <div className="flex justify-center mb-4">
-              <input type="email" className="w-full max-w-md py-2 px-4 rounded-lg outline-purple-600 border-[2px] border-purple-400" placeholder="Correo electrónico" />
+              <input value={userEmail} onChange={(e) => setEmail(e.target.value)} type="email" className="w-full max-w-md py-2 px-4 rounded-lg outline-purple-600 border-[2px] border-purple-400" placeholder="Correo electrónico" />
             </div>
             <div className="flex justify-center mb-6">
-              <input type="password" className="w-full max-w-md py-2 px-4 rounded-lg outline-purple-600 border-[2px] border-purple-400" placeholder="Password" />
+              <input value={userPassword} onChange={(e) => setPassword(e.target.value)} type="password" className="w-full max-w-md py-2 px-4 rounded-lg outline-purple-600 border-[2px] border-purple-400" placeholder="Password" />
             </div>
             <div className="w-full max-w-md mx-auto flex items-center text-gray-500 mb-8 justify-end">
               <div>

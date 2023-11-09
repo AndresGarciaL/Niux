@@ -3,21 +3,34 @@ import { RiNotification3Line, RiArrowDownSLine, RiSettings3Line, RiLogoutCircleR
 import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
-import { Link } from 'react-router-dom';
-import useUserStore from '../../stores/userStore';
+import { Link, Navigate } from 'react-router-dom';
 
 import { useMsal } from '@azure/msal-react';
+import { useAuthStore } from '../../stores/Auth/authStore';
 
 const Header_Dash = () => {
-  const user = useUserStore((state) => state.user);
-  const logout = useUserStore((state) => state.logout);
+  const user = useAuthStore((state) => state.user?.fullName || 'No user');
+  const picture = useAuthStore((state) => state.user?.picture || 'No picture');
+  const email = useAuthStore((state) => state.user?.email || 'No email');
+
+  const authStatus = useAuthStore((state) => state.status);
+  const checkAuth = useAuthStore((state) => state.checkAuthStatus);
+  if (authStatus === 'pending') {
+    checkAuth();
+    return <div>Loading...</div>;
+  }
+
+  if (authStatus === 'unauthorized') {
+    return <Navigate to="/login" />;
+  }
+
+  const logout = useAuthStore((state) => state.logout);
 
   const { instance } = useMsal();
-  const sessionMicrosoft = () => {
-    localStorage.removeItem('user');
-    instance.logoutPopup({
+  const sessionMicrosoft = async () => {
+    logout();
+    await instance.logout({
       postLogoutRedirectUri: '/login',
-      mainWindowRedirectUri: '/login',
     });
   };
 
@@ -87,8 +100,8 @@ const Header_Dash = () => {
         <Menu
           menuButton={
             <MenuButton className="text-gray-900 hover:text-white flex items-center gap-x-2 hover:bg-gray-500 p-2 rounded-lg transition-colors">
-              <img src={user.picture} className="w-6 h-6 object-cover rounded-full" />
-              <span>{user.name === null ? 'Andres' : user.name}</span>
+              <img src={picture} className="w-6 h-6 object-cover rounded-full" />
+              <span>{user}</span>
               <RiArrowDownSLine />
             </MenuButton>
           }
@@ -100,10 +113,10 @@ const Header_Dash = () => {
         >
           <MenuItem className="p-0 hover:bg-transparent">
             <Link to="/perfil" className="rounded-lg transition-colors text-gray-400 hover:bg-secondary-900 flex items-center gap-x-4 py-2 px-6 flex-1">
-              <img src={user.picture} className="w-8 h-8 object-cover rounded-full" />
+              <img src={picture} className="w-8 h-8 object-cover rounded-full" />
               <div className="flex flex-col text-sm">
-                <span className="text-sm">{user.name}</span>
-                <span className="text-xs text-gray-500">{user.email}</span>
+                <span className="text-sm">{user}</span>
+                <span className="text-xs text-gray-500">{email}</span>
               </div>
             </Link>
           </MenuItem>

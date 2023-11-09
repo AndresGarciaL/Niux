@@ -1,15 +1,14 @@
 import { Link } from 'react-router-dom';
 import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
-import { Menu, MenuItem, MenuButton } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import Card_Tickets from '../Components/Dashboard/Card_Tickets';
 import React, { useEffect, useState } from 'react';
-import useUserStore from '../stores/userStore';
+import { useAuthStore } from '../stores/Auth/authStore';
 const Home_Dash = () => {
   const [loading, setLoading] = useState(true); // Añade este estado
 
-  const user = useUserStore((state) => state.user);
+  const user = useAuthStore((state) => state.user?.fullName || 'No user');
   useEffect(() => {
     // Simula una carga con setTimeout, aquí deberías hacer tu llamada a la API o carga de datos.
     const timer = setTimeout(() => {
@@ -42,7 +41,7 @@ const Home_Dash = () => {
       {!loading && (
         <div>
           <div className="flex items-center justify-between mb-10">
-            <h1 className="text-4xl text-gray-900">¡Bienvenido {user.name} !</h1>
+            <h1 className="text-4xl text-gray-900">¡Bienvenido {user}!</h1>
 
             <div className="flex items-center gap-2 text-3xl">
               <RiArrowLeftSLine className="hover:cursor-pointer hover:text-white transition-colors" />
@@ -95,7 +94,7 @@ const Home_Dash = () => {
                     0001
                   </th>
                   <Link to="/dashboard/add-ticket" className="flex items-center">
-                  <td className="px-6 py-4">Mi computadora no enciende</td>
+                    <td className="px-6 py-4">Mi computadora no enciende</td>
                   </Link>
                   <td className="px-6 py-4">Publico en general</td>
                   <td className="px-6 py-4">Lorena Hernandez</td>
@@ -112,7 +111,7 @@ const Home_Dash = () => {
                     0002
                   </th>
                   <Link to="/dashboard/add-ticket" className="flex items-center">
-                  <td className="px-6 py-4">Mi computadora no enciende</td>
+                    <td className="px-6 py-4">Mi computadora no enciende</td>
                   </Link>
                   <td className="px-6 py-4">Publico en general</td>
                   <td className="px-6 py-4">Omar Caballero</td>

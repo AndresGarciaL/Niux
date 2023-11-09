@@ -25,7 +25,8 @@ const Catalogue = () => {
       try {
         const response = await axios.get('http://localhost:3000/api/products');
         const images = response.data.map((product) => {
-          const imageSrc = `http://localhost:3000/api/files/product/${product.images[0]}`;
+          console.log(product.images[0]);
+          const imageSrc = `http://localhost:3000/api/files/product/${product.images[1]}`;
           const imageAlt = product.title;
           return { ...product, imageSrc, imageAlt };
         });

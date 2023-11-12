@@ -1,10 +1,29 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import OptionsProductos_Dash from '../Components/Dashboard/Productos/OptionsProductos_Dash';
 const Productos_Dash = () => {
   const [loading, setLoading] = useState(true);
   const [selectAll, setSelectAll] = useState(false);
   const [selected, setSelected] = useState({});
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/products');
+        const images = response.data.map((product) => {
+          console.log(product.images[0]);
+          const imageSrc = `http://localhost:3000/api/files/product/${product.images[1]}`;
+          const imageAlt = product.title;
+          return { ...product, imageSrc, imageAlt };
+        });
+        setProducts(images);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -13,16 +32,10 @@ const Productos_Dash = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const users = [
-    { id: '0001', productname: 'Tarjeta de video RTX 3060 Ti', categoria: 'Tarjetas de video', stock: '19', costo: '$11,000', active: 'Si', marca: 'Msi', },
-    { id: '0002', productname: 'Memoria Ram 8 GB DDR4 3600MHz Kingston', categoria: 'Memorias RAM', stock: '20', costo: '$1,200', active: 'Si', marca: 'Kingston' },
-    // ... Más usuarios si los necesitas
-  ];
-
   const handleSelectAll = () => {
     const newSelected = {};
-    users.forEach((user) => {
-      newSelected[user.id] = !selectAll;
+    products.forEach((product) => {
+      newSelected[product.id] = !selectAll;
     });
     setSelectAll(!selectAll);
     setSelected(newSelected);
@@ -68,35 +81,30 @@ const Productos_Dash = () => {
                   <th className="sticky top-0 bg-white px-4 py-2">
                     <input type="checkbox" id="SelectAll" checked={selectAll} onChange={handleSelectAll} className="h-5 w-5 rounded border-gray-300" />
                   </th>
-                  {/* Otros encabezados de la tabla aquí */}
-                  <th className="text-white px-6 py-3">ID</th>
-                  
+                  {/* Otros encabezados de la tabla aquí */}                  
                   <th className="text-white px-6 py-3">NOMBRE PRODUCTO</th>
                   
                   <th className="text-white px-6 py-3">CATEGORIA</th>
                   <th className="text-white px-6 py-3">STOCK</th>
                   <th className="text-white px-6 py-3">COSTO UNITARIO</th>
-                  <th className="text-white px-6 py-3">ACTIVO</th>
                   <th className="text-white px-6 py-3">MARCA</th>
                   <th className="text-white px-6 py-3"></th>
                   <th className="text-white px-6 py-3"></th>
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
-                  <tr key={user.id} className="bg-white hover:bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
+                {products.map((product) => (
+                  <tr key={product.id} className="bg-white hover:bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
                     <td className="sticky left-0 bg-white px-4 py-2">
-                      <input type="checkbox" id={`select-${user.id}`} checked={!!selected[user.id]} onChange={() => handleSelect(user.id)} className="h-5 w-5 rounded border-gray-300" />
+                      <input type="checkbox" id={`select-${product.id}`} checked={!!selected[product.id]} onChange={() => handleSelect(product.id)} className="h-5 w-5 rounded border-gray-300" />
                     </td>
-                    <td className="px-6 py-4">{user.id}</td>
                     <Link to="/dashboard/update-products">
-                    <td className="px-6 py-4">{user.productname}</td>
+                    <td className="px-6 py-4">{product.title}</td>
                     </Link>
-                    <td className="px-6 py-4">{user.categoria}</td>
-                    <td className="px-6 py-4">{user.stock}</td>
-                    <td className="px-6 py-4">{user.costo}</td>
-                    <td className="px-6 py-4">{user.active}</td>
-                    <td className="px-6 py-4">{user.marca}</td>
+                    <td className="px-6 py-4">{product.category.name}</td>
+                    <td className="px-6 py-4">{product.stock}</td>
+                    <td className="px-6 py-4">{product.price}</td>
+                    <td className="px-6 py-4">{product.brand.name}</td>
                     
                     <td className="px-6 py-4 text-right">
                       <Link to="/dashboard/update-product" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">

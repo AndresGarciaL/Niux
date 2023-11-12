@@ -75,7 +75,7 @@ export class AuthService {
         socialId,
         source,
       });
-      
+
       return data;
     } catch (error) {
       throw error.response.data.message;

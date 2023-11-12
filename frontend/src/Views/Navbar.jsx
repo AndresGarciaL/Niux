@@ -1,7 +1,9 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { HiOutlineShoppingCart } from 'react-icons/hi2';
+import { useSearchStore } from '../stores/shop/searchStore';
+import { productService } from '../services/productService';
 
 const navigation = [
   { name: 'Inicio', href: '/', current: false },
@@ -15,6 +17,33 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
+  const setSearch = useSearchStore((state) => state.setSearch);
+
+  const [searchValue, setSearchValue] = useState('');
+
+  const handledButton = async (e) => {
+
+    e.preventDefault();
+        
+    const products = await productService.getAll();
+
+    const filteredProducts = products.filter((product) => {
+      const lowercaseTitle = product.title.toLowerCase();
+      const lowercaseBrandName = product.brand.name.toLowerCase();
+      const lowercaseTags = product.tags.map((tag) => tag.toLowerCase());
+      const lowercaseSearch = searchValue.split(' ').join('').toLowerCase();
+      const separatedSearch = lowercaseSearch.split('');
+
+      const titleMatch = separatedSearch.every((letter) => lowercaseTitle.includes(letter));
+      const brandNameMatch = separatedSearch.every((letter) => lowercaseBrandName.includes(letter));
+      const tagsMatch = separatedSearch.every((letter) => lowercaseTags.some((tag) => tag.includes(letter)));
+
+      return titleMatch || brandNameMatch || tagsMatch;
+    });
+
+    setSearch(filteredProducts);
+  };
+
   return (
     <Disclosure as="nav" className="bg-white sticky top-0 z-50  h-16 items-center justify-between ">
       {({ open }) => (
@@ -47,17 +76,19 @@ export default function Navbar() {
                         Search
                       </label>
                       <div className="relative">
-                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <button onClick={handledButton} className="absolute inset-y-0 right-4 flex items-center pl-3">
                           <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                             <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                           </svg>
-                        </div>
+                        </button>
                         <input
                           type="search"
                           id="default-search"
                           className="focus:outline-purple-500 block w-80 h-9 p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-50 dark:border-gray-300 dark:placeholder-gray-400 dark:text-gray-900 dark:focus:ring-purple-500 dark:focus:border-purple-500 dark:focus:outline-purple-500 "
-                          placeholder="Buscar..."
+                          placeholder="Buscar en el catálogo..."
                           required=""
+                          value={searchValue}
+                          onChange={(e) => setSearchValue(e.target.value)}
                         />
                       </div>
                     </form>

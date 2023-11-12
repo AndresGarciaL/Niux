@@ -5,7 +5,8 @@ import Navbar from './Navbar';
 import StarsRating from '../Components/Shop/StarsRating';
 import { Fragment, useEffect, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import axios from 'axios';
+import { useSearchStore } from '../stores/shop/searchStore';
+import { productService } from '../services/productService';
 
 const sortOptions = [
   { name: 'Mejor puntuación', href: '#', current: false },
@@ -18,117 +19,30 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
+const transformProduct = (product) => ({
+  ...product,
+  imageSrc: `http://localhost:3000/api/files/product/${product.images[1]}`,
+  imageAlt: product.title,
+});
+
 const Catalogue = () => {
   const [products, setProducts] = useState([]);
+  const searchStore = useSearchStore((state) => state.search);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/products');
-        const images = response.data.map((product) => {
-          console.log(product.images[0]);
-          const imageSrc = `http://localhost:3000/api/files/product/${product.images[1]}`;
-          const imageAlt = product.title;
-          return { ...product, imageSrc, imageAlt };
-        });
+        const response = !searchStore ? await productService.getAll() : searchStore;
+        const images = response.map(transformProduct);
         setProducts(images);
       } catch (error) {
         console.error(error);
       }
     };
+
     fetchProducts();
-  }, []);
+  }, [searchStore]);
 
-  // const products = [
-  //   {
-  //     id: 1,
-  //     name: 'Raspberry Pi 4 Model B 8GB de una sola Placa W125890212212',
-  //     href: '#',
-  //     imageSrc: 'Images/camisa.jpg',
-  //     imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
-  //     price: '4,999',
-  //     stock: 15,
-  //     rating: 5,
-  //     shipping: 'Envío gratis',
-  //   },
-  //   {
-  //     id: 2,
-  //     name: 'UltraHD Gaming Monitor 32 Pulgadas Curvo HDR 1000 HDMI DisplayPort USB-C',
-  //     href: '#',
-  //     imageSrc: 'Images/camisa.jpg',
-  //     imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
-  //     price: '4,999',
-  //     stock: 21,
-  //     rating: 5.0,
-  //     shipping: 'Envío gratis',
-  //   },
-  //   {
-  //     id: 3,
-  //     name: 'Teclado Mecánico Cherry MX Retroiluminado RGB USB 2.0',
-  //     href: '#',
-  //     imageSrc: 'Images/camisa.jpg',
-  //     imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
-  //     price: '4,999',
-  //     stock: 300,
-  //     rating: 3.0,
-  //     shipping: 'Envío gratis',
-  //   },
-
-  //   {
-  //     id: 4,
-  //     name: 'Tarjeta Gráfica NVIDIA GeForce RTX 3080 Ti 12GB GDDR6X PCI-E 4.0',
-  //     href: '#',
-  //     imageSrc: 'Images/camisa.jpg',
-  //     imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
-  //     price: '4,999',
-  //     stock: 100,
-  //     rating: 2.0,
-  //     shipping: 'Envío gratis',
-  //   },
-  //   {
-  //     id: 5,
-  //     name: 'SSD NVMe M.2 1TB PCIe 4.0 3D NAND TLC Velocidad de Lectura 5000MB/s',
-  //     href: '#',
-  //     imageSrc: 'Images/camisa.jpg',
-  //     imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
-  //     price: '4,999',
-  //     stock: 21,
-  //     rating: 2.5,
-  //     shipping: 'Envío gratis',
-  //   },
-  //   {
-  //     id: 6,
-  //     name: 'Procesador AMD Ryzen 9 5950X 16 Núcleos 32 Hilos 4.9GHz Socket AM4',
-  //     href: '#',
-  //     imageSrc: 'Images/camisa.jpg',
-  //     imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
-  //     price: '4,999',
-  //     stock: 31,
-  //     rating: 1.5,
-  //     shipping: 'Envío gratis',
-  //   },
-  //   {
-  //     id: 7,
-  //     name: 'Mouse Gaming Inalámbrico Recargable con Sensor Óptico 16000 DPI RGB',
-  //     href: '#',
-  //     imageSrc: 'Images/camisa.jpg',
-  //     imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
-  //     price: '4,999',
-  //     stock: 71,
-  //     rating: 4.5,
-  //     shipping: 'Envío gratis',
-  //   },
-  //   {
-  //     id: 8,
-  //     name: 'Silla Gaming Ergonómica Ajustable con Reposapiés Masajeador Bluetooth',
-  //     href: '#',
-  //     imageSrc: 'Images/camisa.jpg',
-  //     imageAlt: "Front of men's RTX 4090 ASUS ROG STRIX in black.",
-  //     price: '4,999',
-  //     stock: 45,
-  //     rating: 3.9,
-  //     shipping: 'Envío gratis',
-  //   },
-  // ];
   return (
     <div className="bg-white relative">
       <Navbar />

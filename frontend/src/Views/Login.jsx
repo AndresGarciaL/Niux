@@ -3,7 +3,6 @@ import '../Styles/Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
-import useUserStore from '../stores/userStore';
 import { RiFacebookCircleFill, RiGoogleFill } from 'react-icons/ri';
 import { useIsAuthenticated, useMsal } from '@azure/msal-react';
 import { SignInButton } from '../Components/Login/SignIn';
@@ -22,7 +21,6 @@ const Login = () => {
 
   const facebookAppId = import.meta.env.VITE_REACT_APP_FACEBOOK_APP_ID;
 
-  const setUserData = useUserStore((state) => state.setUser);
   const { instance } = useMsal();
 
   const [user, setUser] = useState(null);

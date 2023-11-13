@@ -1,15 +1,49 @@
-import React, { useEffect, useState } from 'react';
-// Icons
-import {
-  RiEdit2Line,
-  RiShieldCheckLine,
-  RiErrorWarningLine,
-} from "react-icons/ri";
-import { Link } from "react-router-dom";
-import { Switch } from "@headlessui/react";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { RiEdit2Line } from "react-icons/ri";
 
+const EditarProducto = () => {
+  // Estados para cada campo del formulario
+  const [title, setTitle] = useState('');
+  const [price, setPrice] = useState('');
+  const [description, setDescription] = useState('');
+  const [slug, setSlug] = useState('');
+  const [stock, setStock] = useState('');
+  const [tags, setTags] = useState([]);
+  const [images, setImages] = useState([]);
+  const [rating, setRating] = useState('');
+  const [shipping, setShipping] = useState('');
+  const [category, setCategory] = useState('');
+  const [brand, setBrand] = useState('');
 
-const EditarUsuario = () => {
+  // Función para manejar el envío del formulario
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const productData = {
+      title,
+      price,
+      description,
+      slug,
+      stock,
+      tags,
+      images,
+      rating,
+      shipping,
+      category,
+      brand
+    };
+
+    try {
+      const response = await axios.post('http://localhost:3000/api/products', productData);
+      console.log(response.data);
+      // Manejo adicional en caso de éxito
+    } catch (error) {
+      console.error('Hubo un error al enviar los datos', error);
+      // Manejo de errores
+    }
+  };
+
     const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,7 +73,7 @@ const EditarUsuario = () => {
         </div>
       )}{' '}
       {
-       <form>
+       <form onSubmit={handleSubmit}>
        <div className="flex items-center mb-8">
          <div className="w-1/4">
            <p>Imagen de Producto</p>
@@ -63,23 +97,7 @@ const EditarUsuario = () => {
            </p>
          </div>
        </div>
-       <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
-         <div className="w-full md:w-1/4">
-           <p>
-             ID <span className="text-red-500">*</span>
-           </p>
-         </div>
-         <div className="flex-1 flex items-center gap-4">
-           <div className="w-full">
-             <input
-               type="text"
-               value={"001"}
-               className="w-full py-2 px-4 outline-none rounded-lg bg-white"
-               placeholder="Id"
-             />
-           </div>
-         </div>
-       </div>
+       
        <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
          <div className="w-full md:w-1/4">
            <p>
@@ -90,7 +108,8 @@ const EditarUsuario = () => {
            <div className="w-full">
              <input
                type="text"
-               value={"RTX 3060 Ti"}
+               value={title} 
+               onChange={(e) => setTitle(e.target.value)} 
                className="w-full py-2 px-4 outline-none rounded-lg bg-white"
                placeholder="Nombre de producto"
              />
@@ -204,4 +223,4 @@ const EditarUsuario = () => {
   );
 };
 
-export default EditarUsuario;
+export default EditarProducto;

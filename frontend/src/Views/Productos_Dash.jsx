@@ -1,12 +1,49 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import swal from 'sweetalert';
+
 import OptionsProductos_Dash from '../Components/Dashboard/Productos/OptionsProductos_Dash';
 const Productos_Dash = () => {
+  // Dentro del render de Productos_Dash
+
+
   const [loading, setLoading] = useState(true);
   const [selectAll, setSelectAll] = useState(false);
   const [selected, setSelected] = useState({});
   const [products, setProducts] = useState([]);
+//Eliminar producto
+const handleDeleteSelected = () => {
+  const selectedIds = Object.keys(selected).filter(id => selected[id]);
+
+  if (selectedIds.length === 0) {
+    swal("Por favor, seleccione al menos un producto para eliminar.", { icon: "warning" });
+    return;
+  }
+
+  swal({
+    title: "¿Estás seguro?",
+    text: "Una vez eliminados, no podrás recuperar estos productos.",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+  .then((willDelete) => {
+    if (willDelete) {
+      Promise.all(selectedIds.map(id => axios.delete(`http://localhost:3000/api/products/${id}`)))
+        .then(() => {
+          setProducts(products.filter(product => !selectedIds.includes(product.id.toString())));
+          setSelected({});
+          swal("Productos eliminados con éxito", { icon: "success" });
+        })
+        .catch(error => {
+          console.error('Error al eliminar productos', error);
+          swal("Error al eliminar productos", { icon: "error" });
+        });
+    }
+  });
+};
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -72,7 +109,8 @@ const Productos_Dash = () => {
       )}{' '}
       {
         <div className="">
-          <OptionsProductos_Dash/>
+          
+<OptionsProductos_Dash onDeleteSelected={handleDeleteSelected} />
 
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -98,7 +136,7 @@ const Productos_Dash = () => {
                     <td className="sticky left-0 bg-white px-4 py-2">
                       <input type="checkbox" id={`select-${product.id}`} checked={!!selected[product.id]} onChange={() => handleSelect(product.id)} className="h-5 w-5 rounded border-gray-300" />
                     </td>
-                    <Link to="/dashboard/update-products">
+                    <Link to={`/dashboard/update-products/${product.id}`}>
                     <td className="px-6 py-4">{product.title}</td>
                     </Link>
                     <td className="px-6 py-4">{product.category.name}</td>
@@ -112,10 +150,12 @@ const Productos_Dash = () => {
                       </Link>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <Link to="/dashboard" className="font-medium text-red-600 dark:text-red-500 hover:underline">
-                        Eliminar
-                      </Link>
-                    </td>
+  <button onClick={() => handleDeleteSelected(product.id)} className="font-medium text-red-600 dark:text-red-500 hover:underline">
+    Eliminar
+  </button>
+</td>
+
+                    
                   </tr>
                 ))}
               </tbody>

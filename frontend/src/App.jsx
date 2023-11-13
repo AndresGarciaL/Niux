@@ -50,7 +50,7 @@ function App() {
               <Route path="add-ticket" element={<CrearTicket_Dash />}></Route>
               <Route path="orders" element={<Pedidos_Dash />}></Route>
               <Route path="products" element={<Productos_Dash />}></Route>
-              <Route path="update-product" element={<EditarProducto />}></Route>
+              <Route path="update-products/:id" element={<EditarProducto />}></Route>
               <Route path="add-product" element={<AgregarProducto />}></Route>
               <Route path="add-user" element={<AgregarUsuario />}></Route>
             </Route>

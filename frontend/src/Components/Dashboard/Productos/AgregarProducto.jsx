@@ -1,16 +1,104 @@
-import React, { useEffect, useState } from 'react';
-// Icons
-import {
-  RiEdit2Line,
-  RiShieldCheckLine,
-  RiErrorWarningLine,
-} from "react-icons/ri";
-import { Link } from "react-router-dom";
-import { Switch } from "@headlessui/react";
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { RiEdit2Line } from 'react-icons/ri';
+import { niuxApi } from '../../../api/niuxApi';
+import swal from 'sweetalert';
 
 const AgregarProducto = () => {
-    const [loading, setLoading] = useState(true);
+  const mostrarAlerta = (title, text, icon, timer) => {
+    swal({ title, text, icon, button: 'Aceptar', timer });
+  };
+
+  // Estados para cada campo del formulario
+  const [title, setTitle] = useState('');
+  const [price, setPrice] = useState('');
+  const [description, setDescription] = useState('');
+  const [stock, setStock] = useState('');
+
+  const [brands, setBrands] = useState([]);
+  const [selectedBrand, setSelectedBrand] = useState('');
+
+  const [categories, setCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState('');
+
+  useEffect(() => {
+    // Realizar la petición a la API para obtener las marcas
+    fetch('http://localhost:3000/api/brands')
+      .then((response) => response.json())
+      .then((data) => {
+        // Asignar los datos recibidos al estado
+        setBrands(data);
+      })
+      .catch((error) => {
+        // Manejo de errores en caso de fallo en la petición
+        console.error('Error fetching data: ', error);
+      });
+  }, []); // El array vacío asegura que esto se ejecute solo una vez
+
+  const handleSelectChange = (event) => {
+    setSelectedBrand(event.target.value);
+  };
+
+  useEffect(() => {
+    // Realizar la petición a la API para obtener las marcas
+    fetch('http://localhost:3000/api/categories')
+      .then((response) => response.json())
+      .then((data) => {
+        // Asignar los datos recibidos al estado
+        setCategories(data);
+      })
+      .catch((error) => {
+        // Manejo de errores en caso de fallo en la petición
+        console.error('Error fetching data: ', error);
+      });
+  }, []); // El array vacío asegura que esto se ejecute solo una vez
+
+  const limpiarFormulario = () => {
+    setTitle('');
+    setDescription('');
+    setPrice('');
+    setStock('');
+    setSelectedBrand('');
+    setSelectedCategories('');
+  };
+
+  const handleSelectChangeCat = (event) => {
+    setSelectedCategories(event.target.value);
+  };
+
+  const validarFormulario = () => {
+    return title && price && description && stock && selectedBrand && selectedCategories;
+  };
+  // Función para manejar el envío del formulario
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!validarFormulario()) {
+      swal('Error', 'Por favor, rellene todos los campos.', 'error');
+      return;
+    }
+
+    const productData = {
+      title,
+      price,
+      description,
+      stock,
+      category: selectedCategories, // Update this line
+      brand: selectedBrand,
+    };
+
+    try {
+      const response = await niuxApi.post('/products', productData);
+      mostrarAlerta('Éxito', 'Se agregó el producto correctamente.', 'success', 3000);
+      limpiarFormulario();
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+      // Manejo de errores
+    }
+  };
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -21,6 +109,9 @@ const AgregarProducto = () => {
 
   return (
     <div>
+      <div className="w-full h-16 flex items-center justify-center bg-purple-400 text-white h-18 text-2xl font-bold mb-10">
+        <h1>Agregar Nuevo Usuario</h1>
+      </div>
       {loading && (
         <div className="flex items-center justify-center min-h-screen">
           <div role="status" className="text-center flex loading-indicator">
@@ -39,174 +130,97 @@ const AgregarProducto = () => {
         </div>
       )}{' '}
       {
-        <>
-        <div className="w-full h-16 flex items-center justify-center bg-purple-400 text-white h-18 text-2xl font-bold mb-10">
-        <h1 >Agregar Nuevo Producto</h1>
-        </div>
-        
-       <form>
-       <div className="flex items-center mb-8">
+        <form onSubmit={handleSubmit}>
+          <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
+            <div className="w-full md:w-1/4">
+              <p>
+                Nombre Producto <span className="text-red-500">*</span>
+              </p>
+            </div>
+            <div className="flex-1 flex items-center gap-4">
+              <div className="w-full">
+                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full py-2 px-4 outline-none rounded-lg bg-white" placeholder="Nombre de producto" />
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
+            <div className="w-full md:w-1/4">
+              <p>
+                Descripción <span className="text-red-500">*</span>
+              </p>
+            </div>
+            <div className="flex-1 flex items-center gap-4">
+              <div className="w-full">
+                <textarea type="text" value={description} onChange={(e) => setDescription(e.target.value)} className="w-full h-40 py-2 px-4 outline-none rounded-lg bg-white" placeholder="Descripcion del producto" />
+              </div>
+            </div>
+          </div>
 
-         <div className="w-1/4">
-           <p>Imagen de Producto</p>
-         </div>
-         <div className="flex-1">
-           <div className="relative mb-2">
-             <img
-               src="../../../../public/Images/msi3060.jpg"
-               className="w-40 h-40 object-cover rounded-lg"
-             />
-             <label
-               htmlFor="avatar"
-               className="absolute bg-purple-400 text-white p-2 rounded-full hover:cursor-pointer -top-2 left-36"
-             >
-               <RiEdit2Line />
-             </label>
-             <input type="file" id="avatar" className="hidden" />
-           </div>
-           <p className="text-gray-500 text-sm">
-             Allowed file types: png, jpg, jpeg.
-           </p>
-         </div>
-       </div>
-       <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
-         <div className="w-full md:w-1/4">
-           <p>
-             ID <span className="text-red-500">*</span>
-           </p>
-         </div>
-         <div className="flex-1 flex items-center gap-4">
-           <div className="w-full">
-             <input
-               type="number"
-               className="w-full py-2 px-4 outline-none rounded-lg bg-white"
-               placeholder="Id"
-             />
-           </div>
-         </div>
-       </div>
-       <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
-         <div className="w-full md:w-1/4">
-           <p>
-             Nombre Producto <span className="text-red-500">*</span>
-           </p>
-         </div>
-         <div className="flex-1 flex items-center gap-4">
-           <div className="w-full">
-             <input
-               type="text"
-               className="w-full py-2 px-4 outline-none rounded-lg bg-white"
-               placeholder="Nombre de producto"
-             />
-           </div>
-         </div>
-       </div>
-       <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
-         <div className="w-full md:w-1/4">
-           <p>
-             Descripción <span className="text-red-500">*</span>
-           </p>
-         </div>
-         <div className="flex-1 flex items-center gap-4">
-           <div className="w-full">
-             <textarea
-               type="text"
-               className="w-full h-40 py-2 px-4 outline-none rounded-lg bg-white"
-               placeholder="Descripcion del producto"
-             />
-           </div>
-         </div>
-       </div>
-       <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-         <div className="w-full md:w-1/4">
-           <p>
-             Stock <span className="text-red-500">*</span>
-           </p>
-         </div>
-         <div className="flex-1">
-           <input
-             type="number"
-             className="w-full py-2 px-4 outline-none rounded-lg bg-white"
-             placeholder="Stock"
-           />
-         </div>
-       </div>
-       <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-         <div className="w-full md:w-1/4">
-           <p>
-             Costo Unitario <span className="text-red-500">*</span>
-           </p>
-         </div>
-         <div className="flex-1">
-           <input
-             type="number"
-             className="w-full py-2 px-4 outline-none rounded-lg bg-white"
-             placeholder="Costo Unitario"
-           />
-         </div>
-       </div>
+          <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
+            <div className="w-full md:w-1/4">
+              <p>
+                Stock <span className="text-red-500">*</span>
+              </p>
+            </div>
+            <div className="flex-1">
+              <input value={stock} onChange={(e) => setStock(+e.target.value)} type="number" className="w-full py-2 px-4 outline-none rounded-lg bg-white" placeholder="Stock del producto" />
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
+            <div className="w-full md:w-1/4">
+              <p>
+                Costo Unitario <span className="text-red-500">*</span>
+              </p>
+            </div>
+            <div className="flex-1">
+              <input value={price} onChange={(e) => setPrice(+e.target.value)} type="number" className="w-full py-2 px-4 outline-none rounded-lg bg-white" placeholder="Marca del producto" />
+            </div>
+          </div>
 
-       <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-         <div className="w-full md:w-1/4">
-           <p>
-             Categoria <span className="text-red-500">*</span>
-           </p>
-         </div>
-         <div className="flex-1">
-           <select className="w-full py-2 px-4 outline-none rounded-lg ">
-             <option value="" selected>----------</option>
-             <option value="Tarjeta Grafica">Tarjeta Grafica</option>
-             <option value="Memorias Ram">Memorias RAM</option>
-           </select>
-         </div>
-       </div>
-     
-      
+          <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
+            <div className="w-full md:w-1/4">
+              <p>
+                Marca <span className="text-red-500">*</span>
+              </p>
+            </div>
+            <div className="flex-1">
+              <select className="w-full py-2 px-4 outline-none rounded-lg" value={selectedBrand} onChange={handleSelectChange}>
+                <option value="">Selecciona una Marca</option>
+                {brands.map((brand) => (
+                  <option key={brand.id} value={brand.id}>
+                    {brand.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
+            <div className="w-full md:w-1/4">
+              <p>
+                Categoria <span className="text-red-500">*</span>
+              </p>
+            </div>
+            <div className="flex-1">
+              <select className="w-full py-2 px-4 outline-none rounded-lg" value={selectedCategories} onChange={handleSelectChangeCat}>
+                <option value="">Selecciona una Categoria</option>
+                {categories.map((category, index) => (
+                  <option key={index} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
 
-       <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-         <div className="w-full md:w-1/4">
-           <p>
-             Marca <span className="text-red-500">*</span>
-           </p>
-         </div>
-         <div className="flex-1">
-           <select className="w-full py-2 px-4 outline-none rounded-lg">
-             <option value="" selected>----------</option>
-             <option value="MSI">MSI</option>
-             <option value="Kingston">Kingston</option>
-           </select>
-         </div>
-       </div>
-       <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-         <div className="w-full md:w-1/4">
-           <p>
-             Activo <span className="text-red-500">*</span>
-           </p>
-         </div>
-         <div className="flex-1">
-           <select className="w-full py-2 px-4 outline-none rounded-lg">
-             <option value="">----------</option>
-             <option value="si">Si</option>
-             <option value="no">No</option>
-           </select>
-         </div>
-       </div>
-  
-       
-       <hr className="my-8 border-gray-500/30" />
-        <div className="flex justify-end">
-        
-                <button type="submit" className="w-[150px]  font-poppins bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-purple-600 hover:text-white hover:border-purple-600 transition-colors">
-                Agregar
-              </button>
-           
-        </div>
-     </form>
-     </>
-     
+          <hr className="my-8 border-gray-500/30" />
+          <div className="flex justify-end">
+            <button type="submit" className="w-[150px]  font-poppins bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-purple-600 hover:text-white hover:border-purple-600 transition-colors">
+            Agregar
+            </button>
+          </div>
+        </form>
       }
     </div>
-   
   );
 };
 

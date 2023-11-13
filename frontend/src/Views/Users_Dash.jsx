@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import OptionsUsers_Dash from '../Components/Dashboard/Users/OptionsUsers_Dash';
 import { useAuthStore } from '../stores/Auth/authStore';
+import { niuxApi } from '../api/niuxApi';
 
 const Users_Dash = () => {
   const [loading, setLoading] = useState(true);
@@ -14,7 +15,7 @@ const Users_Dash = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/auth/get-all-users');
+        const response = await niuxApi.get('/auth/get-all-users');
         setUsers(response.data); // Asumiendo que la respuesta es un array de usuarios
         setLoading(false);
       } catch (error) {

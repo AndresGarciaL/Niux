@@ -108,7 +108,7 @@ const AgregarProducto = () => {
   return (
     <div>
       <div className="w-full h-16 flex items-center justify-center bg-purple-400 text-white h-18 text-2xl font-bold mb-10">
-        <h1>Agregar Nuevo Usuario</h1>
+        <h1>Agregar Nuevo Producto</h1>
       </div>
       {loading && (
         <div className="flex items-center justify-center min-h-screen">

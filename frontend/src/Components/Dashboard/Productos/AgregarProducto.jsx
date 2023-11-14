@@ -21,37 +21,35 @@ const AgregarProducto = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState('');
 
-  useEffect(() => {
-    // Realizar la petición a la API para obtener las marcas
-    fetch('http://localhost:3000/api/brands')
-      .then((response) => response.json())
-      .then((data) => {
-        // Asignar los datos recibidos al estado
-        setBrands(data);
-      })
-      .catch((error) => {
-        // Manejo de errores en caso de fallo en la petición
-        console.error('Error fetching data: ', error);
-      });
-  }, []); // El array vacío asegura que esto se ejecute solo una vez
+  useEffect(()=>{
+    const fetchBrands= async () => {
+      try {
+        const response = await niuxApi.get('/brands');
+        setBrands(response.data)
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchBrands();
+  })
+
+  useEffect(()=>{
+    const fetchCategories= async () => {
+      try {
+        const response = await niuxApi.get('/categories');
+        setCategories(response.data)
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchCategories();
+  })
 
   const handleSelectChange = (event) => {
     setSelectedBrand(event.target.value);
   };
-
-  useEffect(() => {
-    // Realizar la petición a la API para obtener las marcas
-    fetch('http://localhost:3000/api/categories')
-      .then((response) => response.json())
-      .then((data) => {
-        // Asignar los datos recibidos al estado
-        setCategories(data);
-      })
-      .catch((error) => {
-        // Manejo de errores en caso de fallo en la petición
-        console.error('Error fetching data: ', error);
-      });
-  }, []); // El array vacío asegura que esto se ejecute solo una vez
 
   const limpiarFormulario = () => {
     setTitle('');

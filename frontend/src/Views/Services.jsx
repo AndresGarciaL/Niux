@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import useFormStore from '../stores/formStore';
 import { CgDetailsMore } from 'react-icons/cg';
 
+
 export const Services = () => {
   //servicio reparación de productos informacion
   const [ReparacionProducto, setReparacionProducto] = useState(false);
@@ -72,6 +73,7 @@ export const Services = () => {
   const GoFormConfiguracionRedes = () => {
     setFormData('Configuración de Redes');
   };
+
 
   return (
     <>

@@ -12,7 +12,31 @@ const Productos_Dash = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [selected, setSelected] = useState({});
   const [products, setProducts] = useState([]);
-//Eliminar producto
+
+  const handleDeleteProduct = (productId) => {
+    swal({
+      title: "¿Estás seguro?",
+      text: "Una vez eliminado, no podrás recuperar este producto.",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        axios.delete(`http://localhost:3000/api/products/${productId}`)
+          .then(() => {
+            setProducts(products.filter(product => product.id !== productId));
+            swal("Producto eliminado con éxito", { icon: "success" });
+          })
+          .catch(error => {
+            console.error('Error al eliminar el producto', error);
+            swal("Error al eliminar el producto", { icon: "error" });
+          });
+      }
+    });
+  };
+
+//Eliminar producto Seleccionado
 const handleDeleteSelected = () => {
   const selectedIds = Object.keys(selected).filter(id => selected[id]);
 
@@ -20,6 +44,8 @@ const handleDeleteSelected = () => {
     swal("Por favor, seleccione al menos un producto para eliminar.", { icon: "warning" });
     return;
   }
+  // Eliminar un producto específico
+
 
   swal({
     title: "¿Estás seguro?",
@@ -145,12 +171,12 @@ const handleDeleteSelected = () => {
                     <td className="px-6 py-4">{product.brand.name}</td>
                     
                     <td className="px-6 py-4 text-right">
-                      <Link to="/dashboard/update-product" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                      <Link to={`/dashboard/update-products/${product.id}`} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                         Editar
                       </Link>
                     </td>
                     <td className="px-6 py-4 text-right">
-  <button onClick={() => handleDeleteSelected(product.id)} className="font-medium text-red-600 dark:text-red-500 hover:underline">
+  <button onClick={() => handleDeleteProduct(product.id)} className="font-medium text-red-600 dark:text-red-500 hover:underline">
     Eliminar
   </button>
 </td>

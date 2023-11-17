@@ -6,8 +6,9 @@ import { RiEdit2Line } from "react-icons/ri";
 
 const EditarProducto = () => {
   const [productImage, setProductImage] = useState('');
-
+  const [file, setFile] = useState(null);
   const { id } = useParams();
+
   const [brands, setBrands] = useState([]);
   const [categories, setCategories] = useState([]);
   const [productData, setProductData] = useState({
@@ -17,6 +18,7 @@ const EditarProducto = () => {
     stock: '',
     category: '',
     brand: '',
+    images: [],
   });
   const [loading, setLoading] = useState(true);
 
@@ -29,21 +31,16 @@ const EditarProducto = () => {
           niuxApi.get('/categories'),
         ]);
 
-        // Suponiendo que la respuesta de la API ya contiene los UUIDs de category y brand.
         setProductData({
-          title: productRes.data.title,
-          price: productRes.data.price.toString(), // Convertir a string para la entrada
-          description: productRes.data.description,
-          stock: productRes.data.stock.toString(), // Convertir a string para la entrada
-          category: productRes.data.category.id, // Usar el ID de la categoría
-          brand: productRes.data.brand.id, // Usar el ID de la marca
+          ...productRes.data,
+          price: productRes.data.price.toString(),
+          stock: productRes.data.stock.toString(),
+          category: productRes.data.category.id,
+          brand: productRes.data.brand.id,
         });
         setBrands(brandsRes.data);
         setCategories(categoriesRes.data);
-        if(productImage){
-          
-        }
-        setProductImage(`http://localhost:3000/api/files/product/${productRes.data.images[1]}`);
+        setProductImage(`http://localhost:3000/api/files/product/${productRes.data.images[0]}`);
       } catch (error) {
         console.error(error);
       } finally {
@@ -62,37 +59,68 @@ const EditarProducto = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Crear un nuevo objeto con solo las propiedades esperadas por el backend
     const dataToSend = {
       title: productData.title,
-      price: parseFloat(productData.price), // Convertir a número
+      price: parseFloat(productData.price),
       description: productData.description,
-      stock: parseInt(productData.stock, 10), // Convertir a entero
-      category: productData.category, // Asegurarse de que sea un UUID
-      brand: productData.brand, // Asegurarse de que sea un UUID
+      stock: parseInt(productData.stock, 10),
+      category: productData.category,
+      brand: productData.brand,
     };
 
     try {
-      const response = await niuxApi.patch(`/products/${id}`, dataToSend);
+      await niuxApi.patch(`/products/${id}`, dataToSend);
       swal('Éxito', 'Producto modificado correctamente.', 'success');
-      console.log(response.data);
     } catch (error) {
       swal('Error', 'No se pudo modificar el producto.', 'error');
       console.error('Hubo un error al enviar los datos', error);
     }
-  };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, []);
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // Esta función se llamaría después de obtener una respuesta exitosa de la carga de la imagen
+const addImageToProduct = (imageUrl) => {
+  // Extrae el nombre de la imagen de la URL
+  const imageName = imageUrl.split('/').pop();
+  console.log(imageName) // Esto debería dar 'c37ebf99-a0d6-4cff-bff4-8e7ed81022d2.jpeg'
+
+  // Agrega el nombre de la imagen al arreglo 'images' en el estado 'productData'
+  setProductData((prevState) => ({
+    ...prevState,
+    images: [...prevState.images, imageName],
+     // Aquí estamos agregando el nombre de la imagen al arreglo
+  }));
+  console.log(images);
+};
+
+// Y luego en tu función handleSubmit:
+try {
+  const imageResponse = await niuxApi.post(`/files/product`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  console.log(imageResponse.data)
+
+  // Asumiendo que imageResponse.data tiene una propiedad 'secureUrl' que contiene la URL de la imagen
+  addImageToProduct(imageResponse.data.SecureUrl);
+  // Otros procesos...
+} catch (error) {
+  // Manejo de errores...
+}
+    }
+    else{
+      await updateProduct(productData.images);
+    }
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     const imageUrl = URL.createObjectURL(file);
     setProductImage(imageUrl);
+    setFile(file); // Actualizar el estado del archivo
   };
 
   return (

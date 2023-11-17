@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import OptionsUsers_Dash from '../Components/Dashboard/Users/OptionsUsers_Dash';
 import { useAuthStore } from '../stores/Auth/authStore';
 import { niuxApi } from '../api/niuxApi';
+import swal from 'sweetalert';
+
 
 const Users_Dash = () => {
   const [loading, setLoading] = useState(true);
@@ -11,6 +13,64 @@ const Users_Dash = () => {
   const [selected, setSelected] = useState({});
   const [users, setUsers] = useState([]);
   const picture = useAuthStore((state) => state.user?.picture || 'No picture');
+
+  const handleDeleteUser = (userId) => {
+    swal({
+      title: "¿Estás seguro?",
+      text: "Una vez desactivado, este usuario no se mostrará en la lista.",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        niuxApi.patch(`/auth/update/${userId}`, { isActive: false })
+          .then(() => {
+            setUsers(users.map(user => user.id === userId ? { ...user, isActive: false } : user));
+            swal("Usuario desactivado con éxito", { icon: "success" });
+          })
+          .catch(error => {
+            console.error('Error al desactivar el usuario', error);
+            swal("Error al desactivar el usuario", { icon: "error" });
+          });
+      }
+    });
+  };
+  
+//Eliminar producto Seleccionado
+const handleDeleteSelected = () => {
+  const selectedIds = Object.keys(selected).filter(id => selected[id]);
+
+  if (selectedIds.length === 0) {
+    swal("Por favor, seleccione al menos un Usuario para eliminar.", { icon: "warning" });
+    return;
+  }
+  // Eliminar un producto específico
+
+
+  swal({
+    title: "¿Estás seguro?",
+    text: "Una vez eliminados, no podrás recuperar estos Usuarios.",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+  .then((willDelete) => {
+    if (willDelete) {
+      Promise.all(selectedIds.map(id => niuxApi.delete(`/auth/find-user/${id}`)))
+        .then(() => {
+          setUsers(users.filter(user => !selectedIds.includes(user.id.toString())));
+          setSelected({});
+          swal("Usuarios eliminados con éxito", { icon: "success" });
+        })
+        .catch(error => {
+          console.error('Error al eliminar Usuarios', error);
+          swal("Error al eliminar usuario", { icon: "error" });
+        });
+    }
+  });
+};
+
   
   useEffect(() => {
     const fetchUsers = async () => {
@@ -63,7 +123,7 @@ const Users_Dash = () => {
       )}{' '}
       {
         <div className="">
-          <OptionsUsers_Dash/>
+          <OptionsUsers_Dash onDeleteSelected={handleDeleteSelected}/>
 
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -83,7 +143,7 @@ const Users_Dash = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
+              {users.filter(user => user.isActive).map((user) => (
                   <tr key={user.id} className="bg-white hover:bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
                     <td className="sticky left-0 bg-white px-4 py-2">
                       <input type="checkbox" id={`select-${user.id}`} checked={!!selected[user.id]} onChange={() => handleSelect(user.id)} className="h-5 w-5 rounded border-gray-300" />
@@ -104,9 +164,9 @@ const Users_Dash = () => {
                       </Link>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <Link to="/dashboard" className="font-medium text-red-600 dark:text-red-500 hover:underline">
+                      <button  onClick={() => handleDeleteUser(user.id)} className="font-medium text-red-600 dark:text-red-500 hover:underline">
                         Eliminar
-                      </Link>
+                      </button>
                     </td>
                   </tr>
                 ))}

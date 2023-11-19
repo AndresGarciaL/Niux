@@ -1,26 +1,133 @@
-import React, { useEffect, useState } from 'react';
-// Icons
-import {
-  RiEdit2Line,
-  RiShieldCheckLine,
-  RiErrorWarningLine,
-} from "react-icons/ri";
-import { Link } from "react-router-dom";
-import { Switch } from "@headlessui/react";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import swal from 'sweetalert';
+import { niuxApi } from '../../../api/niuxApi';
+import { RiEdit2Line } from "react-icons/ri";
 
+const EditarProducto = () => {
+  const [productImage, setProductImage] = useState('');
+  const [file, setFile] = useState(null);
+  const { id } = useParams();
 
-const EditarUsuario = () => {
-    const [loading, setLoading] = useState(true);
+  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [productData, setProductData] = useState({
+    title: '',
+    price: '',
+    description: '',
+    stock: '',
+    category: '',
+    brand: '',
+    images: [],
+  });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, []);
+    const fetchData = async () => {
+      try {
+        const [productRes, brandsRes, categoriesRes] = await Promise.all([
+          niuxApi.get(`/products/${id}`),
+          niuxApi.get('/brands'),
+          niuxApi.get('/categories'),
+        ]);
+
+        setProductData({
+          ...productRes.data,
+          price: productRes.data.price.toString(),
+          stock: productRes.data.stock.toString(),
+          category: productRes.data.category.id,
+          brand: productRes.data.brand.id,
+        });
+        setBrands(brandsRes.data);
+        setCategories(categoriesRes.data);
+        setProductImage(`http://localhost:3000/api/files/product/${productRes.data.images[0]}`);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProductData({ ...productData, [name]: value });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const dataToSend = {
+      title: productData.title,
+      price: parseFloat(productData.price),
+      description: productData.description,
+      stock: parseInt(productData.stock, 10),
+      category: productData.category,
+      brand: productData.brand,
+    };
+
+    try {
+      await niuxApi.patch(`/products/${id}`, dataToSend);
+      swal('Éxito', 'Producto modificado correctamente.', 'success');
+    } catch (error) {
+      swal('Error', 'No se pudo modificar el producto.', 'error');
+      console.error('Hubo un error al enviar los datos', error);
+    }
+
+    if (file) {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // Esta función se llamaría después de obtener una respuesta exitosa de la carga de la imagen
+const addImageToProduct = (imageUrl) => {
+  // Extrae el nombre de la imagen de la URL
+  const imageName = imageUrl.split('/').pop();
+  console.log(imageName) // Esto debería dar 'c37ebf99-a0d6-4cff-bff4-8e7ed81022d2.jpeg'
+
+  // Agrega el nombre de la imagen al arreglo 'images' en el estado 'productData'
+  setProductData((prevState) => ({
+    ...prevState,
+    images: [...prevState.images, imageName],
+     // Aquí estamos agregando el nombre de la imagen al arreglo
+  }));
+  console.log(images);
+};
+
+// Y luego en tu función handleSubmit:
+try {
+  const imageResponse = await niuxApi.post(`/files/product`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  console.log(imageResponse.data)
+
+  // Asumiendo que imageResponse.data tiene una propiedad 'secureUrl' que contiene la URL de la imagen
+  addImageToProduct(imageResponse.data.SecureUrl);
+  // Otros procesos...
+} catch (error) {
+  // Manejo de errores...
+}
+    }
+    else{
+      await updateProduct(productData.images);
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    const imageUrl = URL.createObjectURL(file);
+    setProductImage(imageUrl);
+    setFile(file); // Actualizar el estado del archivo
+  };
 
   return (
     <div>
+      <div className="w-full h-16 flex items-center justify-center bg-purple-400 text-white h-18 text-2xl font-bold mb-10">
+        <h1>Editar Producto</h1>
+      </div>
       {loading && (
         <div className="flex items-center justify-center min-h-screen">
           <div role="status" className="text-center flex loading-indicator">
@@ -39,15 +146,15 @@ const EditarUsuario = () => {
         </div>
       )}{' '}
       {
-       <form>
-       <div className="flex items-center mb-8">
+       <form onSubmit={handleSubmit}>
+        <div className="flex items-center mb-8">
          <div className="w-1/4">
            <p>Imagen de Producto</p>
          </div>
          <div className="flex-1">
            <div className="relative mb-2">
              <img
-               src="../../../../public/Images/msi3060.jpg"
+              src={productImage || '../../../../public/Images/logo2niux.png'}
                className="w-40 h-40 object-cover rounded-lg"
              />
              <label
@@ -56,30 +163,14 @@ const EditarUsuario = () => {
              >
                <RiEdit2Line />
              </label>
-             <input type="file" id="avatar" className="hidden" />
+             <input  type="file" id="avatar" className="hidden" onChange={handleImageChange}/>
            </div>
            <p className="text-gray-500 text-sm">
              Allowed file types: png, jpg, jpeg.
            </p>
          </div>
        </div>
-       <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
-         <div className="w-full md:w-1/4">
-           <p>
-             ID <span className="text-red-500">*</span>
-           </p>
-         </div>
-         <div className="flex-1 flex items-center gap-4">
-           <div className="w-full">
-             <input
-               type="text"
-               value={"001"}
-               className="w-full py-2 px-4 outline-none rounded-lg bg-white"
-               placeholder="Id"
-             />
-           </div>
-         </div>
-       </div>
+       
        <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
          <div className="w-full md:w-1/4">
            <p>
@@ -89,8 +180,10 @@ const EditarUsuario = () => {
          <div className="flex-1 flex items-center gap-4">
            <div className="w-full">
              <input
+             name="title"
                type="text"
-               value={"RTX 3060 Ti"}
+               value={productData.title}
+               onChange={handleChange}
                className="w-full py-2 px-4 outline-none rounded-lg bg-white"
                placeholder="Nombre de producto"
              />
@@ -106,8 +199,10 @@ const EditarUsuario = () => {
          <div className="flex-1 flex items-center gap-4">
            <div className="w-full">
              <textarea
+             name="description"
                type="text"
-               value={"Aumento de velocidad de reloj/memoria por determinar 12 gb gddr6 displayport x 3 hdmi x 1 (admite 4k@120hz como se especifica en hdmi 2.1) Fácil de usar Rgb mystic light mystic light te ofrece un control completo de la iluminación rgb para los dispositivos msi y los productos rgb compatibles Dragon center el exclusivo software dragon center de msi te permite supervisar, ajustar y optimizar los productos msi en tiempo real"}
+               value={productData.description}
+               onChange={handleChange}
                className="w-full h-40 py-2 px-4 outline-none rounded-lg bg-white"
                placeholder="Descripcion del producto"
              />
@@ -118,26 +213,14 @@ const EditarUsuario = () => {
        <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
          <div className="w-full md:w-1/4">
            <p>
-             Categoria <span className="text-red-500">*</span>
-           </p>
-         </div>
-         <div className="flex-1">
-           <select className="w-full py-2 px-4 outline-none rounded-lg ">
-             <option value="Niux">Tarjeta Grafica</option>
-             <option value="Publico en General">Memorias RAM</option>
-           </select>
-         </div>
-       </div>
-     
-       <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-         <div className="w-full md:w-1/4">
-           <p>
              Stock <span className="text-red-500">*</span>
            </p>
          </div>
          <div className="flex-1">
            <input
-           value={"40"}
+           name="stock"
+             value={productData.stock}
+             onChange={handleChange}
              type="text"
              className="w-full py-2 px-4 outline-none rounded-lg bg-white"
              placeholder="Nombre(s)"
@@ -152,7 +235,9 @@ const EditarUsuario = () => {
          </div>
          <div className="flex-1">
            <input
-           value={"$1999"}
+           name="price"
+             value={productData.price}
+             onChange={handleChange}
              type="text"
              className="w-full py-2 px-4 outline-none rounded-lg bg-white"
              placeholder="Nombre(s)"
@@ -167,26 +252,33 @@ const EditarUsuario = () => {
            </p>
          </div>
          <div className="flex-1">
-           <select className="w-full py-2 px-4 outline-none rounded-lg">
-             <option value="Argentina">MSI</option>
-             <option value="Colombia">Kingston</option>
-           </select>
-         </div>
+         <select name="brand" className="w-full py-2 px-4 outline-none rounded-lg" onChange={handleChange}>
+  {brands.map((brand) => (
+    <option key={brand.id} value={brand.id} selected={brand.id === productData.brand}>
+      {brand.name}
+    </option>
+  ))}
+</select>
+              
+            </div>
        </div>
        <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
          <div className="w-full md:w-1/4">
            <p>
-             Activo <span className="text-red-500">*</span>
+             Categoria <span className="text-red-500">*</span>
            </p>
          </div>
          <div className="flex-1">
-           <select className="w-full py-2 px-4 outline-none rounded-lg">
-             <option value="Argentina">Si</option>
-             <option value="Colombia">No</option>
-           </select>
-         </div>
+         <select name="category" className="w-full py-2 px-4 outline-none rounded-lg" onChange={handleChange}>
+  {categories.map((category) => (
+    <option key={category.id} value={category.id} selected={category.id === productData.category}>
+      {category.name}
+    </option>
+  ))}
+</select>
+              
+            </div>
        </div>
-  
        
        <hr className="my-8 border-gray-500/30" />
         <div className="flex justify-end">
@@ -204,4 +296,4 @@ const EditarUsuario = () => {
   );
 };
 
-export default EditarUsuario;
+export default EditarProducto;

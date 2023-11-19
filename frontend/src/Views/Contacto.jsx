@@ -145,7 +145,7 @@ function Contacto() {
                       value="Sugerencia"
                       onChange={handleInputChange}
                     />
-                    <span className="ml-2 ">Sugerencia</span>
+                    <span className="ml-2 ">Solicitud</span>
                   </label>
                   <label className="inline-flex items-center ml-6">
                     <input
@@ -155,27 +155,7 @@ function Contacto() {
                       value="Soporte"
                       onChange={handleInputChange}
                     />
-                    <span className="ml-2">Soporte</span>
-                  </label>
-                  <label className="inline-flex items-center ml-6">
-                    <input
-                      type="radio"
-                      className="form-radio"
-                      name="tipoMensaje"
-                      value="Ventas"
-                      onChange={handleInputChange}
-                    />
-                    <span className="ml-2">Ventas</span>
-                  </label>
-                  <label className="inline-flex items-center ml-6">
-                    <input
-                      type="radio"
-                      className="form-radio"
-                      name="tipoMensaje"
-                      value="Dudas"
-                      onChange={handleInputChange}
-                    />
-                    <span className="ml-2">Dudas</span>
+                    <span className="ml-2">Incidencia</span>
                   </label>
                 </div>
               </div>

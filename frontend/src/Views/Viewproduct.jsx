@@ -1,80 +1,74 @@
-import { useState } from "react";
-import { StarIcon } from "@heroicons/react/20/solid";
-import Navbar from "./Navbar";
-import Breadcrums from "./Breadcrums";
-import ImageGallery from "react-image-gallery";
-import { AiFillLock } from "react-icons/ai";
-import { FaTruck, FaShoppingCart } from "react-icons/fa";
-import { RiRefund2Line } from "react-icons/ri";
-import { MdOutlineFavorite } from "react-icons/md";
-
-const product = {
-  name: "AMD RYZEN 5 5600G ",
-  price: "$192",
-  stock: 15,
-  brand: "AMD",
-  href: "#",
-  images: [
-    {
-      original: "Images/amd5.png",
-      thumbnail: "Images/amd5.png",
-    },
-    {
-      original: "Images/amd5.png",
-      thumbnail: "Images/amd5.png",
-    },
-    {
-      original: "Images/amd5.png",
-      thumbnail: "Images/amd5.png",
-    },
-    {
-      original: "Images/amd5.png",
-      thumbnail: "Images/amd5.png",
-    },
-  ],
-
-  description:
-    'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
-  highlights: [
-    "Hand cut and sewn locally",
-    "Dyed with our proprietary colors",
-    "Pre-washed & pre-shrunk",
-    "Ultra-soft 100% cotton",
-  ],
-  details:
-    'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
-};
-const reviews = { href: "#", average: 3, totalCount: 117 };
+import { useEffect, useState } from 'react';
+import { StarIcon } from '@heroicons/react/20/solid';
+import Navbar from './Navbar';
+import Breadcrums from './Breadcrums';
+import ImageGallery from 'react-image-gallery';
+import { AiFillLock } from 'react-icons/ai';
+import { FaTruck, FaShoppingCart } from 'react-icons/fa';
+import { RiRefund2Line } from 'react-icons/ri';
+import { MdOutlineFavorite } from 'react-icons/md';
+import { useNavigate, useParams } from 'react-router-dom';
+import { productService } from '../services/productService';
+import { useCartStore } from '../stores/shop/cartStore';
+import 'react-image-gallery/styles/css/image-gallery.css';
+import { useAuthStore } from '../stores/Auth/authStore';
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(' ');
 }
 
 const Viewproduct = () => {
+  const { name } = useParams();
+  const [product, setProduct] = useState({});
+  const [productBrand, setProductBrand] = useState([]);
+  const [images, setImages] = useState([]);
+  const useUser = useAuthStore((state) => state.user);
+
+  const navigate = useNavigate();
+
+  const reloadCart = useCartStore((state) => state.reloadCart);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await productService.getProductBySlug(name);
+        setProduct(response);
+        setProductBrand(response.brand.name.toUpperCase());
+        setImages(response.images.map((image) => ({ original: `http://localhost:3000/api/files/product/${image}`, thumbnail: `http://localhost:3000/api/files/product/${image}` })));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchProduct();
+  }, []);
+
   const [count, setCount] = useState(0);
 
   const increment = () => {
     setCount(count + 1);
   };
 
-  const decrement = () => {
+  const decrement = async () => {
     if (count > 0) {
       setCount(count - 1);
     }
   };
 
   const [isFavorite, setIsFavorite] = useState(false);
-  const [isAddedToCart, setIsAddedToCart] = useState(false);
 
-  const handleClick = () => {
-    setIsAddedToCart(!isAddedToCart);
+  const handleClick = async (productId) => {
+    if (!useUser) navigate('/login');
+    await productService.setProductCart(productId, count);
+    reloadCart();
+    navigate('/cart');
   };
 
-  const props = {
-    width: 500,
-    height: 500,
-    zoomWidth: 500,
-    img: "Images/amd5.png",
+  const imageStyle = {
+    objectFit: 'cover',
+    maxHeight: '300px',
+    margin: '0 auto',
+    display: 'block',
   };
 
   return (
@@ -89,26 +83,17 @@ const Viewproduct = () => {
           <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8"></div>
 
           {/* Contenido de la galería de imágenes */}
-          <div className="lg:hidden rounded-lg mb-8">
-            <ImageGallery showPlayButton={false} items={product.images} />
-          </div>
+          <div className="lg:hidden rounded-lg mb-8">{<ImageGallery showPlayButton={false} items={images} />}</div>
 
           {/* Options */}
 
           <div className="mt-4 lg:row-span-3 lg:mt-0">
             <h2 className="sr-only">Product information</h2>
-            <h1 className="w-full text-2xl font-bold text-gray-700 sm:text-2xl">
-              {product.name}
-            </h1>
-            <h2 className="text-orange-600 font-semibold">
-              Marca: {product.brand}{" "}
-            </h2>
-            <p className="text-gray-600 font-normal">
-              Productos disponibles: ({product.stock})
-            </p>
-            <p className="mt-4 text-3xl text-purple-600 font-bold">
-              {product.price}
-            </p>
+            <h1 className="w-full text-2xl font-bold text-gray-700 sm:text-2xl">{product.title}</h1>
+
+            <h2 className="text-orange-600 font-semibold">Marca: {productBrand} </h2>
+            <p className="text-gray-600 font-normal">Productos disponibles: ({product.stock})</p>
+            <p className="mt-4 text-3xl text-purple-600 font-bold">$ {product.price}</p>
 
             {/* Reviews */}
             <div className="mt-4">
@@ -116,80 +101,38 @@ const Viewproduct = () => {
               <div className="flex items-center">
                 <div className="flex items-center">
                   {[0, 1, 2, 3, 5].map((rating) => (
-                    <StarIcon
-                      key={rating}
-                      className={classNames(
-                        reviews.average > rating
-                          ? "text-purple-600"
-                          : "text-gray-200",
-                        "h-5 w-5 flex-shrink-0"
-                      )}
-                      aria-hidden="true"
-                    />
+                    <StarIcon key={rating} className={classNames(product.rating > rating ? 'text-purple-600' : 'text-gray-200', 'h-5 w-5 flex-shrink-0')} aria-hidden="true" />
                   ))}
                 </div>
-                <p className="sr-only">{reviews.average} out of 5 stars</p>
-                <a
-                  href={reviews.href}
-                  className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                >
-                  {reviews.totalCount} opiniones
-                </a>
+                <p className="sr-only">{product.rating} out of 5 stars</p>
               </div>
 
               {/* Contador */}
               <div className="gap-1 mt-4 flex items-center text-gray-700">
-                <button
-                  className="rounded-[10px] bg-purple-700 hover:bg-purple-500 text-white font-bold py-2 px-4 flex items-center justify-center w-10"
-                  onClick={decrement}
-                >
+                <button className="rounded-[10px] bg-purple-700 hover:bg-purple-500 text-white font-bold py-2 px-4 flex items-center justify-center w-10" onClick={decrement}>
                   -
                 </button>
-                <span className="rounded-[10px] flex items-center justify-center bg-gray-200 h-10 text-lg font-normal w-10 text-center py-2 px-4">
-                  {count}
-                </span>
-                <button
-                  className="rounded-[10px] bg-purple-700 hover:bg-purple-500 text-white font-bold py-2 px-4"
-                  onClick={increment}
-                >
+                <span className="rounded-[10px] flex items-center justify-center bg-gray-200 h-10 text-lg font-normal w-10 text-center py-2 px-4">{count}</span>
+                <button className="rounded-[10px] bg-purple-700 hover:bg-purple-500 text-white font-bold py-2 px-4" onClick={increment}>
                   +
                 </button>
 
-                <button
-                  type="submit"
-                  className={`w-52 justify-center items-center flex text-center rounded-[10px] ${
-                    isAddedToCart
-                      ? "bg-red-500 hover:bg-red-400"
-                      : "bg-purple-700 hover:bg-purple-500"
-                  } text-white font-semibold py-2 px-4 flex-shrink-0`}
-                  onClick={count >= 1 ? handleClick : null}
-                >
+                <button type="submit" className={`w-52 justify-center items-center flex text-center rounded-[10px] bg-purple-700 hover:bg-purple-500'} text-white font-semibold py-2 px-4 flex-shrink-0`} onClick={() => (count >= 1 ? handleClick(product.id) : null)}>
                   <FaShoppingCart className="mr-2" />
-                  {isAddedToCart ? "Borrar del carrito" : "Agregar al carrito"}
+                  Agregar al carrito
                 </button>
 
-                <button
-                  className={`ml-1 rounded-[10px] flex items-center justify-center text-center border-gray-300 py-4 px-2 w-10 h-10 border-[2px] ${
-                    isFavorite ? "text-red-500" : "text-gray-500"
-                  }`}
-                  onClick={() => setIsFavorite(!isFavorite)}
-                >
+                <button className={`ml-1 rounded-[10px] flex items-center justify-center text-center border-gray-300 py-4 px-2 w-10 h-10 border-[2px] ${isFavorite ? 'text-red-500' : 'text-gray-500'}`} onClick={() => setIsFavorite(!isFavorite)}>
                   <MdOutlineFavorite size={20} />
                 </button>
               </div>
             </div>
 
             <form className="mt-4">
-              <button
-                type="submit"
-                className="flex w-full items-center justify-center rounded-md border border-transparent bg-purple-600 px-8 py-3 text-base text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 font-bold"
-              >
+              <button type="submit" className="flex w-full items-center justify-center rounded-md border border-transparent bg-purple-600 px-8 py-3 text-base text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 font-bold">
                 Comprar
               </button>
-              <button
-                type="submit"
-                className="mt-4 flex w-full items-center justify-center rounded-md border border-transparent bg-purple-300 px-8 py-3 text-base text-purple-600 hover:bg-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-offset-2 font-bold"
-              >
+              <button type="submit" className="mt-4 flex w-full items-center justify-center rounded-md border border-transparent bg-purple-300 px-8 py-3 text-base text-purple-600 hover:bg-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-offset-2 font-bold">
                 Ver métodos de pago
               </button>
             </form>
@@ -199,27 +142,21 @@ const Viewproduct = () => {
                 <div className="mt-4 flex items-center justify-center py-3 px-6 text-gray-700 text-lg border-gray-300 rounded-full w-24 h-24 btn-lg border-[3px]">
                   <AiFillLock size={40} />
                 </div>
-                <p className="text-center mt-2 text-gray-700 text-md">
-                  Transacción segura
-                </p>
+                <p className="text-center mt-2 text-gray-700 text-md">Transacción segura</p>
               </div>
 
               <div className="flex flex-col items-center">
                 <div className="mt-5 flex items-center justify-center py-3 px-6 text-gray-700 text-lg border-gray-300 rounded-full w-24 h-24 btn-lg border-[3px]">
                   <FaTruck size={40} />
                 </div>
-                <p className="mt-2 text-gray-700 text-md text-center">
-                  Envío protegido
-                </p>
+                <p className="mt-2 text-gray-700 text-md text-center">Envío protegido</p>
               </div>
 
               <div className="flex flex-col items-center">
                 <div className="mt-5 flex items-center justify-center py-3 px-6 text-gray-700 text-lg border-gray-300 rounded-full w-24 h-24 btn-lg border-[3px]">
                   <RiRefund2Line size={40} />
                 </div>
-                <p className="mt-2 text-gray-700 text-md text-center">
-                  Ofrece reembolso
-                </p>
+                <p className="mt-2 text-gray-700 text-md text-center">Ofrece reembolso</p>
               </div>
             </div>
           </div>
@@ -229,44 +166,28 @@ const Viewproduct = () => {
               {
                 <ImageGallery
                   showFullscreenButton={false}
+                  disableThumbnailScroll={true}
                   showNav={false}
                   thumbnailPosition="left"
                   showPlayButton={false}
-                  items={product.images}
+                  items={images.map((image) => ({
+                    ...image,
+                    renderItem: (item) => (
+                      <div className="image-gallery-image">
+                        <img src={item.original} alt={item.description} style={imageStyle} />
+                      </div>
+                    ),
+                  }))}
                 />
               }
             </div>
-
             {/* Description and details */}
+
             <div>
               <h3 className="sr-only">Description</h3>
 
               <div className="space-y-6">
                 <p className="text-base text-gray-900">{product.description}</p>
-              </div>
-            </div>
-
-            <div className="mt-10">
-              <h3 className="text-sm font-medium text-gray-900">
-                Características
-              </h3>
-
-              <div className="mt-4">
-                <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
-                  {product.highlights.map((highlight) => (
-                    <li key={highlight} className="text-gray-400">
-                      <span className="text-gray-600">{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            <div className="mt-10">
-              <h2 className="text-sm font-medium text-gray-900">Detalles</h2>
-
-              <div className="mt-4 space-y-6">
-                <p className="text-sm text-gray-600">{product.details}</p>
               </div>
             </div>
           </div>

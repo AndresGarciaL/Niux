@@ -2,11 +2,14 @@ import { FaTruck, FaShoppingCart } from 'react-icons/fa';
 import { BsFilterRight } from 'react-icons/bs';
 import SideBar_Catalogue from '../Components/Shop/SideBar_Catalogue';
 import Navbar from './Navbar';
+import { useNavigate } from 'react-router-dom';
 import StarsRating from '../Components/Shop/StarsRating';
 import { Fragment, useEffect, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { useSearchStore } from '../stores/shop/searchStore';
 import { productService } from '../services/productService';
+import { useCartStore } from '../stores/shop/cartStore';
+import { useAuthStore } from '../stores/Auth/authStore';
 
 const sortOptions = [
   { name: 'Mejor puntuación', href: '#', current: false },
@@ -21,13 +24,40 @@ function classNames(...classes) {
 
 const transformProduct = (product) => ({
   ...product,
-  imageSrc: `http://localhost:3000/api/files/product/${product.images[1]}`,
+  imageSrc: `http://localhost:3000/api/files/product/${product.images[0]}`,
   imageAlt: product.title,
 });
 
 const Catalogue = () => {
+  const navigate = useNavigate();
+
   const [products, setProducts] = useState([]);
   const searchStore = useSearchStore((state) => state.search);
+  const reloadCart = useCartStore((state) => state.reloadCart);
+
+  const useUser = useAuthStore((state) => state.user);
+
+  const [isAdded, setIsAdded] = useState({});
+
+  const handleAddToCart = async (productId) => {
+    if (!useUser) navigate('/login');
+    setIsAdded((prev) => ({
+      ...prev,
+      [productId]: !prev[productId],
+    }));
+
+    if (!isAdded[productId]) {
+      await productService.setProductCart(productId, 1);
+      reloadCart();
+    } else {
+      await productService.deleteProductsCart(productId);
+      reloadCart();
+    }
+  };
+
+  const handleNavigate = (product) => {
+    navigate(`/product/${product}`);
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -86,10 +116,10 @@ const Catalogue = () => {
           <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-2">
             {products.map((product) => (
               <div key={product.id} className="border-gray-200 border-[0.5px] rounded-[5px] group relative">
-                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-white lg:aspect-none group-hover:opacity-75 lg:h-56 flex items-center justify-center">
-                  <a href={product.href}>
+                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-white lg:aspect-none group-hover:opacity-75 lg:h-[235px] flex items-center justify-center">
+                  <div onClick={() => handleNavigate(product.slug)}>
                     <img src={product.imageSrc} alt={product.imageAlt} className="h-full w-full object-cover object-center" />
-                  </a>
+                  </div>
                 </div>
 
                 <div className="p-1 mt-1 flex ml-2 mb-2">
@@ -103,13 +133,20 @@ const Catalogue = () => {
                     <p className="text-[20px] mt-0 font-bold text-purple-600">$ {product.price}</p>
 
                     <div className="flex items-center">
-                      <p className="flex items-center h-38 w-[105px] text-center rounded-[5px] font-semibold bg-gradient-to-b text-[14px] from-purple-600 via-purple-600 to-purple-500 text-white">
+                      <p className="flex items-center text-center rounded-[5px] font-semibold bg-gradient-to-b text-[14px] w-[110px] from-purple-600 via-purple-600 to-purple-500 text-white">
                         <FaTruck className="ml-1 mr-1" /> {product.shipping}
                       </p>
 
-                      <button className="ml-1 flex items-center h-38 w-[72px] text-center rounded-[5px] font-semibold bg-gradient-to-b text-[14px] from-blue-500 via-blue-500 to-blue-500 text-white">
-                        <FaShoppingCart className="mr-1 ml-1" /> Añadir
-                      </button>
+                      {isAdded[product.id] ? (
+                        <button onClick={() => handleAddToCart(product.id)} className="ml-1 flex items-center h-38 w-[72px] text-center rounded-[5px] font-semibold bg-gradient-to-b text-[14px] from-red-500 via-red-500 to-red-500 text-white">
+                          <FaShoppingCart className="mr-1 ml-1" /> Quitar
+                          {/* Contenido del botón cuando está añadido */}
+                        </button>
+                      ) : (
+                        <button onClick={() => handleAddToCart(product.id)} className="ml-1 flex items-center h-38 w-[72px] text-center rounded-[5px] font-semibold bg-gradient-to-b text-[14px] from-blue-500 via-blue-500 to-blue-500 text-white">
+                          <FaShoppingCart className="mr-1 ml-1" /> Añadir
+                        </button>
+                      )}
                     </div>
 
                     <StarsRating ratingNumber={product.rating} />
@@ -118,7 +155,6 @@ const Catalogue = () => {
               </div>
             ))}
           </div>
-          {}
         </div>
       </div>
     </div>

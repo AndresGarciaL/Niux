@@ -9,7 +9,7 @@ import Viewproduct from './Views/Viewproduct';
 import Login from './Views/Login';
 import Register from './Views/Register';
 import Services from './Views/Services';
-import ServicesForm from './Views/ServicesForm'
+import ServicesForm from './Views/ServicesForm';
 
 /* Importaciones Dashboard */
 import Dashboard from './Views/Dashboard';
@@ -24,6 +24,7 @@ import Productos_Dash from './Views/Productos_Dash';
 import EditarProducto from './Components/Dashboard/Productos/EditarProducto';
 import AgregarProducto from './Components/Dashboard/Productos/AgregarProducto';
 import AgregarUsuario from './Components/Dashboard/Users/AgregarUsuario';
+import Cart from './Views/CartLayout';
 
 function App() {
   return (
@@ -34,11 +35,12 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/catalogue" element={<Catalogue />} />
           <Route path="/contacto" element={<Contacto />} />
-          <Route path="/product" element={<Viewproduct />} />
+          <Route path="/product/:name" element={<Viewproduct />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/services" element={<Services />} />
           <Route path="/services/form" element={<ServicesForm />} />
+          <Route path="/cart" element={<Cart />} />
 
           {/* Rutas Dashboard */}
           <Route element={<PrivateRoute />}>

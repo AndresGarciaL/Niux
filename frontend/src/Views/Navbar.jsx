@@ -4,6 +4,8 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { HiOutlineShoppingCart } from 'react-icons/hi2';
 import { useSearchStore } from '../stores/shop/searchStore';
 import { productService } from '../services/productService';
+import { useAuthStore } from '../stores/Auth/authStore';
+import { useNavigate } from 'react-router-dom';
 
 const navigation = [
   { name: 'Inicio', href: '/', current: false },
@@ -18,13 +20,19 @@ function classNames(...classes) {
 
 export default function Navbar() {
   const setSearch = useSearchStore((state) => state.setSearch);
+  const useUser = useAuthStore((state) => state.user);
 
   const [searchValue, setSearchValue] = useState('');
+  const navigate = useNavigate();
+
+  const handledButtonCart = () => {
+    navigate('/cart');
+  };
 
   const handledButton = async (e) => {
-
     e.preventDefault();
-        
+    navigate('/catalogue');
+
     const products = await productService.getAll();
 
     const filteredProducts = products.filter((product) => {
@@ -96,7 +104,7 @@ export default function Navbar() {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 lg:static lg:inset-auto lg:ml-6 lg:pr-0">
-                <button type="button" className="relative rounded-full bg-white p-1 text-black hover:text-white hover:bg-purple-400 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 ">
+                <button onClick={handledButtonCart} type="button" className="relative rounded-full bg-white p-1 text-black hover:text-white hover:bg-purple-400 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 ">
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">View notifications</span>
                   <HiOutlineShoppingCart className="h-6 w-6" aria-hidden="true" />

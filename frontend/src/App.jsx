@@ -25,6 +25,9 @@ import EditarProducto from './Components/Dashboard/Productos/EditarProducto';
 import AgregarProducto from './Components/Dashboard/Productos/AgregarProducto';
 import AgregarUsuario from './Components/Dashboard/Users/AgregarUsuario';
 import Cart from './Views/CartLayout';
+import OrderSummary from './Views/OrderSummary';
+import OrderLayout from './Views/OrderLayout';
+import OrderUser from './Views/OrderUser';
 
 function App() {
   return (
@@ -41,6 +44,8 @@ function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/services/form" element={<ServicesForm />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/order_summary" element={<OrderSummary />} />
+          <Route path="/order_user" element={<OrderLayout />} />
 
           {/* Rutas Dashboard */}
           <Route element={<PrivateRoute />}>

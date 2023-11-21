@@ -37,6 +37,15 @@ export class productService {
     }
   };
 
+  static deleteCartUser = async () => {
+    try {
+      const { data } = await niuxApi.delete('cart/delete-cart');
+      return data;
+    } catch (error) {
+      throw error.response.data.message;
+    }
+  }
+
   static deleteProductsCart = async (productId) => {
     try {
       const { data } = await niuxApi.delete(`cart/${productId}`);

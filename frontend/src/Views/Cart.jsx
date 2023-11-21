@@ -2,8 +2,8 @@ import React from 'react';
 import Navbar from './Navbar';
 import { useAuthStore } from '../stores/Auth/authStore';
 import PayPalButton from '../Components/Shop/PayPalButton';
-import { niuxApi } from '../api/niuxApi';
 import { useCartStore } from '../stores/shop/cartStore';
+import { niuxApi } from '../api/niuxApi';
 import { productService } from '../services/productService';
 
 const Cart = () => {
@@ -28,14 +28,24 @@ const Cart = () => {
     await updateCart();
   };
 
-  const mercadoPago = async () => {
-    const { data } = await niuxApi.post('/pays/create-order');
-    window.location.href = data;
-  };
-
   const totalPago = useCart.reduce((acc, item) => {
     return acc + item.totalPrice;
   }, 0);
+
+  const mercadoPago = async () => {
+    const { data } = await niuxApi.post('/pays/create-order', useCart);
+    window.location.href = data;
+  };
+
+  const bodyPreOrder = {
+    total: totalPago,
+    products: useCart.map((item) => {
+      return item.product.id;
+    }),
+    quantity: useCart.map((item) => {
+      return item.quantity;
+    }),
+  };
 
   return (
     <div>
@@ -108,8 +118,7 @@ const Cart = () => {
 
                 {/* Botones pago*/}
                 <div className="w-full flex justify-center items-center gap-2">
-                  {/* <button className="hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-gray-800 text-base font-medium leading-4 text-white">Paypal</button> */}
-                  <PayPalButton classNam="w-30 h-96" invoice="Monitor LG" total="36.00" />
+                  <PayPalButton preOrder={bodyPreOrder} classNam="w-30 h-96" invoice="Niux MX Productos" total={totalPago} />
                   <button onClick={mercadoPago} className="hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-gray-800 text-base font-medium leading-4 text-white">
                     Mercado Pago
                   </button>

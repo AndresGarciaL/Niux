@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
+import { productService } from '../../services/productService';
 
-const TablaDetallePedido = () => {
+const TableDetailsOrder = ({ products }) => {
   const [loading, setLoading] = useState(true);
-  const [selectAll, setSelectAll] = useState(false);
-  const [selected, setSelected] = useState({});
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -14,17 +13,10 @@ const TablaDetallePedido = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const pedido = [
-    { id: '0001', producto: 'Memoria Ram 8 GB DDR4 2666 MHZ', cantidad: '1', costo: '$ 1999.00' },
-    { id: '0002', producto: 'Memoria Ram 8 GB DDR4 2666 MHZ', cantidad: '2', costo: '$ 1999.00' },
-    { id: '0003', producto: 'Memoria Ram 8 GB DDR4 2666 MHZ', cantidad: '3', costo: '$ 1999.00' },
-  ];
+  const getList = products.map((product) => ({ id: product.product.id, imagen: product.product.images[0].url, producto: product.product.title, cantidad: product.quantity, costo: product.product.price }));
 
-  const getInitials = (name) => {
-    const names = name.split(' ');
-    const initials = names[0].substring(0, 1) + names[1].substring(0, 1);
-    return initials.toUpperCase();
-  };
+  const pedido = getList;
+
   return (
     <div>
       {loading && (
@@ -51,7 +43,8 @@ const TablaDetallePedido = () => {
               <thead className="text-xs text-gray-700 uppercase bg-gray-900 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                   {/* Otros encabezados de la tabla aquí */}
-                  <th className="text-white px-6 py-3">Id Productos</th>
+                  <th className="text-white px-6 py-3 text-center">Imagen</th>
+
                   <th className="text-white px-6 py-3 text-center">Productos</th>
                   <th className="text-white px-6 py-3 text-center">Cantidad</th>
                   <th className="text-white px-6 py-3 text-center">Costo</th>
@@ -59,11 +52,14 @@ const TablaDetallePedido = () => {
               </thead>
               <tbody>
                 {pedido.map((ticket) => (
-                  <tr key={ticket.id} className="bg-white hover:bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
-                    <td className="px-6 py-4 text-center">{ticket.id}</td>
+                  <tr key={ticket.id} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td className="px-6 py-4 text-center w-10 h-10 object-cover rounded-full ">
+                      <img src={productService.getImages(ticket.imagen)} />
+                    </td>
+
                     <td className="px-6 py-4 text-center">{ticket.producto}</td>
                     <td className="px-6 py-4 text-center">{ticket.cantidad}</td>
-                    <td className="px-6 py-4 text-center">{ticket.costo}</td>
+                    <td className="px-6 py-4 text-center">${ticket.costo}</td>
                   </tr>
                 ))}
               </tbody>
@@ -75,4 +71,4 @@ const TablaDetallePedido = () => {
   );
 };
 
-export default TablaDetallePedido;
+export default TableDetailsOrder;

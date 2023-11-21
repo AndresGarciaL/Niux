@@ -8,6 +8,7 @@ import { useAuthStore } from '../../stores/Auth/authStore';
 import { useMsal } from '@azure/msal-react';
 
 const Sidebar_Dash = () => {
+  
   const logout = useAuthStore((state) => state.logout);
 
   const { instance } = useMsal();

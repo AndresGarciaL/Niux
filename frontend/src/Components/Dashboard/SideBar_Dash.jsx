@@ -86,7 +86,7 @@ const Sidebar_Dash = () => {
               </Link>
             </li>
             <li>
-              <Link to="/pedidos" className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-purple-400 hover:text-white transition-colors">
+              <Link to="/dashboard/services" className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-purple-400 hover:text-white transition-colors">
                 <MdMiscellaneousServices /> Servicios
               </Link>
             </li>

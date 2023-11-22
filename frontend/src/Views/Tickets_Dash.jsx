@@ -1,14 +1,63 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import { Link } from 'react-router-dom';
 import OptionsTickets_Dash from '../Components/Dashboard/Tickets/OptionsTickets_Dash';
 import EstadoTicket from '../Components/Dashboard/Tickets/EstadoTicket';
+import { niuxApi } from '../api/niuxApi';
 
 const Tickets_Dash = () => {
   const [loading, setLoading] = useState(true);
   const [selectAll, setSelectAll] = useState(false);
   const [selected, setSelected] = useState({});
+  const [tickets, setTickets] = useState([]);
+  const [selectedTicket, setSelectedTicket] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleEdit = (ticket) => {
+    setSelectedTicket(ticket);
+    setIsModalOpen(true);
+  };
+
+  const handleUpdateTicket = async (e) => {
+    e.preventDefault();
+    console.log(selectedTicket);
+    try {
+      const response = await niuxApi.patch(`/tickets/${selectedTicket.id}`, selectedTicket);
+      console.log('Ticket actualizado:', response.data);
+      setIsModalOpen(false);
+      fetchTickets(); // Recarga la lista de tickets
+    } catch (error) {
+      console.error('Error al actualizar el ticket:', error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm('¿Estás seguro de que quieres eliminar este ticket?')) {
+      try {
+        await niuxApi.delete(`/tickets/${id}`);
+        console.log(`Ticket con id ${id} eliminado`);
+        // Recargar la lista de tickets
+        await fetchTickets();
+      } catch (error) {
+        console.error('Error al eliminar el ticket:', error);
+      }
+    }
+  };
+  // Haciendo la función fetchTickets accesible para handleDelete
+  const fetchTickets = async () => {
+    try {
+      const response = await niuxApi.get('/tickets');
+      setTickets(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error al obtener los tickets:', error);
+      // Manejo adicional de errores aquí
+    }
+  };
+
+  useEffect(() => {
+    fetchTickets();
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -16,15 +65,6 @@ const Tickets_Dash = () => {
     }, 300);
     return () => clearTimeout(timer);
   }, []);
-
-  const tickets = [
-    { id: '0001', titulo: 'Fidencio Solicitó la revision de su equipo HP que no enciende', estado: <EstadoTicket ticket="enProceso" text="En Proceso"/> , solicitante: 'Fidencio Garcia López', location: 'Publico en General', categoria: 'Mantenimiento correctivo PC', active: 'Si' },
-    { id: '0002', titulo: 'Angel Solicitó la revisión de su DVR DAHUA que no da video', estado:<EstadoTicket ticket="espera" text="En espera"/>, solicitante: 'Angel Guzman Hoil', location: 'Mexleasing', categoria: 'Mantenimiento correctivo DVR', active: 'Si' },
-    { id: '0003', titulo: 'Angel Solicitó la revisión de su DVR DAHUA que no da video', estado:<EstadoTicket ticket="nuevo" text="Nuevo"/>, solicitante: 'Angel Guzman Hoil', location: 'Mexleasing', categoria: 'Mantenimiento correctivo DVR', active: 'Si' },
-    { id: '0004', titulo: 'Angel Solicitó la revisión de su DVR DAHUA que no da video', estado:<EstadoTicket ticket="cerrado" text="Cerrado"/>, solicitante: 'Angel Guzman Hoil', location: 'Mexleasing', categoria: 'Mantenimiento correctivo DVR', active: 'Si' },
-    { id: '0005', titulo: 'Angel Solicitó la revisión de su DVR DAHUA que no da video', estado:<EstadoTicket ticket="resuelto" text="Resuelto"/>, solicitante: 'Angel Guzman Hoil', location: 'Mexleasing', categoria: 'Mantenimiento correctivo DVR', active: 'Si' },
-    // ... Más usuarios si los necesitas
-  ];
 
   const handleSelectAll = () => {
     const newSelected = {};
@@ -48,7 +88,7 @@ const Tickets_Dash = () => {
     <div>
       {loading && (
         <div className="flex items-center justify-center min-h-screen">
-          <div categoriae="status" className="text-center flex loading-indicator">
+          <div className="text-center flex loading-indicator">
             <svg aria-hidden="true" className="inline w-20 h-20 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-purple-600 " viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
@@ -93,21 +133,21 @@ const Tickets_Dash = () => {
                     </td>
                     <td className="px-6 py-4">{ticket.id}</td>
                     <Link to="/dashboard/add-ticket" className="flex items-center">
-                      <td className="px-6 py-4">{ticket.titulo}</td>
+                      <td className="px-6 py-4">{ticket.title}</td>
                     </Link>
-                    <td className="">{ticket.estado}</td>
-                    <td className="px-6 py-4">{ticket.solicitante}</td>
+                    <td className="">{ticket.state}</td>
+                    <td className="px-6 py-4">{ticket.applicant}</td>
                     <td className="px-6 py-4">{ticket.location}</td>
-                    <td className="px-6 py-4">{ticket.categoria}</td>
+                    <td className="px-6 py-4">{ticket.category}</td>
                     <td className="px-6 py-4 text-right">
-                      <Link to="/dashboard/update-ticket" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
+                      <button onClick={() => handleEdit(ticket)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
                         Editar
-                      </Link>
+                      </button>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <Link to="/dashboard" className="font-medium text-red-600 dark:text-red-500 hover:underline">
+                      <button onClick={() => handleDelete(ticket.id)} className="font-medium text-red-600 dark:text-red-500 hover:underline">
                         Eliminar
-                      </Link>
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -116,6 +156,61 @@ const Tickets_Dash = () => {
           </div>
         </div>
       }
+      {isModalOpen && (
+  <div className="modal-backdrop">
+    <div className="modal-content">
+      <h2>Editar Ticket</h2>
+      <form onSubmit={handleUpdateTicket}>
+        {/* Título del Ticket */}
+        <div className="form-group">
+          <label htmlFor="applicant">Nombre</label>
+          <input
+            type="text"
+            id="applicant"
+            value={selectedTicket?.applicant || ''}
+            onChange={(e) => setSelectedTicket({ ...selectedTicket, applicant: e.target.value })}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="title">Título</label>
+          <input
+            type="text"
+            id="title"
+            value={selectedTicket?.title || ''}
+            onChange={(e) => setSelectedTicket({ ...selectedTicket, title: e.target.value })}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="description">Descripcion</label>
+          <input
+            type="text"
+            id="description"
+            value={selectedTicket?.description || ''}
+            onChange={(e) => setSelectedTicket({ ...selectedTicket, description: e.target.value })}
+          />
+        </div>
+        <div className="form-group">
+  <label htmlFor="type">Tipo de Ticket</label>
+  <select 
+    id="type" 
+    value={selectedTicket?.type || ''} 
+    onChange={(e) => setSelectedTicket({ ...selectedTicket, type: e.target.value })}
+  >
+    <option value="">----------</option>
+    <option value="Solicitud">Solicitud</option>
+    <option value="Incidencia">Incidencia</option>
+  </select>
+</div>
+        
+        {/* Botón para actualizar */}
+        <button type="submit" className="btn-update">Actualizar Ticket</button>
+      </form>
+      {/* Botón para cerrar el modal */}
+      <button onClick={() => setIsModalOpen(false)} className="btn-close">Cerrar</button>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

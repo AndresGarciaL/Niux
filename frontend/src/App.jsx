@@ -1,6 +1,5 @@
 import Error404 from './Error404';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
 /* Importaciones Users */
 import Contacto from './Views/Contacto';
 import Catalogue from './Views/Catalogue';
@@ -24,6 +23,9 @@ import Productos_Dash from './Views/Productos_Dash';
 import EditarProducto from './Components/Dashboard/Productos/EditarProducto';
 import AgregarProducto from './Components/Dashboard/Productos/AgregarProducto';
 import AgregarUsuario from './Components/Dashboard/Users/AgregarUsuario';
+import  Services_Dash  from './Views/Services_Dash';
+import EditarServicio from './Components/Dashboard/Services/EditarServicio';
+import AgregarServicio from './Components/Dashboard/Services/AgregarServicio';
 import Cart from './Views/CartLayout';
 import OrderSummary from './Views/OrderSummary';
 import OrderLayout from './Views/OrderLayout';
@@ -60,6 +62,9 @@ function App() {
               <Route path="update-products/:id" element={<EditarProducto />}></Route>
               <Route path="add-product" element={<AgregarProducto />}></Route>
               <Route path="add-user" element={<AgregarUsuario />}></Route>
+              <Route path="services" element={<Services_Dash />}></Route>
+              <Route path="/dashboard/edit-service/:serviceId" element={<EditarServicio/>} />
+              <Route path="add-service" element={<AgregarServicio />}></Route>
             </Route>
           </Route>
 

@@ -53,11 +53,12 @@ const OrderSummary = () => {
                       <p className="text-sm leading-none text-gray-600">
                         Cantidad: <span className="text-gray-800"> {order.quantity} </span>
                       </p>
+                      <p className="text-sm leading-none text-gray-600">
+                        Producto: <span className="text-gray-800"> ${order.product.price * order.quantity} </span>
+                      </p>
                     </div>
                   </div>
-                  <div className="flex mt-4 md:mt-0 md:justify-end items-center w-full ">
-                    <p className="text-xl lg:text-2xl font-semibold leading-5 lg:leading-6 text-gray-800">${order.product.price * order.quantity}</p>
-                  </div>
+                  <div className="flex mt-4 md:mt-0 md:justify-end items-center w-full ">{/* <p className="text-xl lg:text-1xl pt-8  font-semibold leading-5 lg:leading-6 text-gray-800">${order.product.price * order.quantity}</p> */}</div>
                 </div>
               </div>
             ))}

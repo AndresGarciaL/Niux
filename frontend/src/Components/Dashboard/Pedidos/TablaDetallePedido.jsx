@@ -2,10 +2,8 @@ import React, { useEffect, useState } from 'react';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 
-const TablaDetallePedido = () => {
+const TablaDetallePedido = ({ props }) => {
   const [loading, setLoading] = useState(true);
-  const [selectAll, setSelectAll] = useState(false);
-  const [selected, setSelected] = useState({});
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -14,17 +12,8 @@ const TablaDetallePedido = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const pedido = [
-    { id: '0001', producto: 'Memoria Ram 8 GB DDR4 2666 MHZ', cantidad: '1', costo: '$ 1999.00' },
-    { id: '0002', producto: 'Memoria Ram 8 GB DDR4 2666 MHZ', cantidad: '2', costo: '$ 1999.00' },
-    { id: '0003', producto: 'Memoria Ram 8 GB DDR4 2666 MHZ', cantidad: '3', costo: '$ 1999.00' },
-  ];
+  const pedido = props.detallePedido.map((order) => ({ id: order.id, producto: order.product.title, cantidad: order.quantity, costo: order.product.price }));
 
-  const getInitials = (name) => {
-    const names = name.split(' ');
-    const initials = names[0].substring(0, 1) + names[1].substring(0, 1);
-    return initials.toUpperCase();
-  };
   return (
     <div>
       {loading && (
@@ -63,7 +52,7 @@ const TablaDetallePedido = () => {
                     <td className="px-6 py-4 text-center">{ticket.id}</td>
                     <td className="px-6 py-4 text-center">{ticket.producto}</td>
                     <td className="px-6 py-4 text-center">{ticket.cantidad}</td>
-                    <td className="px-6 py-4 text-center">{ticket.costo}</td>
+                    <td className="px-6 py-4 text-center">${ticket.costo}</td>
                   </tr>
                 ))}
               </tbody>

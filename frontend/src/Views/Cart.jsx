@@ -119,7 +119,7 @@ const Cart = () => {
                 {/* Botones pago*/}
                 <div className="w-full flex justify-center items-center gap-2">
                   <PayPalButton preOrder={bodyPreOrder} classNam="w-30 h-96" invoice="Niux MX Productos" total={totalPago} />
-                  <button onClick={mercadoPago} className="hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 py-5 w-96 md:w-full bg-gray-800 text-base font-medium leading-4 text-white">
+                  <button onClick={mercadoPago}  className="hover:bg-blue-400 rounded-lg focus:outline-none focus:ring-2 mt-[-65px] focus:ring-offset-2 focus:ring-gray-800 py-5 w-92 md:w-full bg-blue-500 text-base font-medium leading-4 text-white">
                     Mercado Pago
                   </button>
                 </div>
@@ -131,7 +131,7 @@ const Cart = () => {
             <div className="flex  flex-col md:flex-row xl:flex-col justify-start items-stretch h-full w-full md:space-x-6 lg:space-x-8 xl:space-x-0 ">
               <div className="flex flex-col justify-start items-start flex-shrink-0">
                 <div className="flex justify-center  w-full  md:justify-start items-center space-x-4 py-8 border-b border-gray-200">
-                  <img src={useUser.picture} alt="avatar" />
+                  <img className="w-16 h-16" src={useUser.picture} alt="avatar" />
                   <div className=" flex justify-start items-start flex-col space-y-2">
                     <p className="text-base font-semibold leading-4 text-left text-gray-800">{useUser.fullName}</p>
                   </div>

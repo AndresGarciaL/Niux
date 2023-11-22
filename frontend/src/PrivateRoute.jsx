@@ -3,8 +3,13 @@ import { Outlet, Navigate } from 'react-router-dom';
 import { useAuthStore } from './stores/Auth/authStore';
 
 const PrivateRoute = () => {
-  const user = useAuthStore((state) => state.user);
-  if (!user) {
+  const useUser = useAuthStore((state) => state.user);
+
+  if (!useUser.roles.includes('admin')) {
+    return <Navigate to="/" />;
+  }
+
+  if (!useUser) {
     return <Navigate to="/login" />;
   }
 

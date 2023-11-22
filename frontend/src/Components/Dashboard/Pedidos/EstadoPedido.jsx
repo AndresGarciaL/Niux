@@ -8,31 +8,71 @@ const EstadoPedido = (props) => {
   let status = '';
   let textColor = '';
 
-  switch (pedido) {
-    case 'espera':
-      status = 'bg-yellow-500/40 text-yellow-600';
-      textColor = 'text-yellow-500';
+  let finalText = '';
+
+  switch (text) {
+    case 'refunded':
+      finalText = 'Reembolsado';
       break;
-      case 'cancelado':
+
+    case 'failed':
+      finalText = 'Fallido';
+      break;
+
+    case 'pending':
+      finalText = 'Pendiente';
+      break;
+
+    case 'cancelled':
+      finalText = 'Cancelado';
+      break;
+
+    case 'processing':
+      finalText = 'Procesando';
+
+      break;
+
+    case 'completed':
+      finalText = 'Completado';
+      break;
+
+    default:
+      break;
+  }
+
+  switch (pedido) {
+    case 'refunded':
       status = 'bg-red-700/50 text-red-100';
       textColor = 'text-red-500';
       break;
-    case 'enProceso':
+
+    case 'failed':
+      status = 'bg-red-700/50 text-red-100';
+      textColor = 'text-red-500';
+      break;
+
+    case 'pending':
+      status = 'bg-yellow-500/40 text-yellow-600';
+      textColor = 'text-yellow-500';
+      break;
+    case 'cancelled':
+      status = 'bg-red-700/50 text-red-100';
+      textColor = 'text-red-500';
+      break;
+    case 'processing':
       status = 'bg-blue-500/40 text-blue-600';
       textColor = 'text-blue-500';
       break;
-    case 'completado':
+    case 'completed':
       status = 'bg-green-500/40 text-green-600';
       textColor = 'text-green-500';
       break;
-    
   }
 
   return (
-    <div className='' >
+    <div className="">
       {/* Estado del pedido*/}
-        <p className={`${status} rounded-lg flex flex-col h-18 text-center`} >{text}</p>
-      
+      <p className={`${status} rounded-lg flex flex-col h-18 text-center`}>{finalText}</p>
     </div>
   );
 };

@@ -90,4 +90,13 @@ export class AuthService {
       throw error.response.data.message;
     }
   };
+
+  static getUserById = async (userId) => {
+    try {
+      const { data } = await niuxApi.get('/auth/find-user/' + userId);
+      return data.roles;
+    } catch (error) {
+      throw error.response.data.message;
+    }
+  };
 }

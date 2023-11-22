@@ -16,6 +16,16 @@ export const storeApi = (set) => ({
     }
   },
 
+  register: async (email, fullName, password) => {
+    try {
+      const { token, ...user } = await AuthService.register(email, fullName, password);
+      set({ status: 'authorized', token, user });
+    } catch (error) {
+      set({ status: 'unauthorized', token: undefined, user: undefined });
+      throw error;
+    }
+  },
+
   socialLogin: async (email, socialId, source) => {
     try {
       const { token, ...user } = await AuthService.socialLogin(email, socialId, source);

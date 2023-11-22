@@ -9,12 +9,16 @@ import { SignInButton } from '../Components/Login/SignIn';
 import { LoginSocialFacebook } from 'reactjs-social-login';
 import { useAuthStore } from '../stores/Auth/authStore';
 import { AuthService } from '../services/authService';
+import { GridLoader } from 'react-spinners';
 
 const Login = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const useLogin = useAuthStore((state) => state.login);
   const useSocialLogin = useAuthStore((state) => state.socialLogin);
   const useSocialRegister = useAuthStore((state) => state.socialRegister);
+
+  const [errorCredentials, setErrorCredentials] = useState(false);
 
   const [userEmail, setEmail] = useState('');
   const [userPassword, setPassword] = useState('');
@@ -55,6 +59,8 @@ const Login = () => {
     const fetchUserProfile = async () => {
       try {
         if (user) {
+          setLoading(true);
+
           const response = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
             headers: {
               Authorization: `Bearer ${user.access_token}`,
@@ -66,16 +72,19 @@ const Login = () => {
           if (!validateUser) {
             useSocialRegister(response.data.email, response.data.name, response.data.id, 'google', response.data.picture);
             setTimeout(() => {
+              setLoading(false);
               navigate('/dashboard');
             }, 2000);
           } else {
             useSocialLogin(response.data.email, response.data.id, 'google');
             setTimeout(() => {
+              setLoading(false);
               navigate('/dashboard');
             }, 2000);
           }
         }
       } catch (error) {
+        setLoading(false);
         console.error('Error al obtener el perfil del usuario:', error);
       }
     };
@@ -106,9 +115,16 @@ const Login = () => {
 
     try {
       await useLogin(userEmail, userPassword);
-      navigate('/dashboard');
+
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        navigate('/dashboard');
+      }, 2000);
     } catch (error) {
-      console.error('Error during login:', error);
+      setErrorCredentials(true);
+      // console.log(error.error);
+      setLoading(false);
     }
   };
 
@@ -138,6 +154,8 @@ const Login = () => {
               appId={facebookAppId}
               onResolve={async (response) => {
                 try {
+                  setLoading(true);
+
                   const pictureResponse = await axios.get(`https://graph.facebook.com/v18.0/${response.data.userID}/picture`);
 
                   const validateUser = await AuthService.socialUserAlreadyExists(response.data.email, response.data.id, 'facebook');
@@ -153,6 +171,8 @@ const Login = () => {
                     }, 2000);
                   }
                 } catch (error) {
+                  setLoading(false);
+
                   console.error('Error al hacer la solicitud:', error);
                 }
               }}
@@ -177,9 +197,16 @@ const Login = () => {
           </p>
         </div>
         <div className="w-full mb-8">
+          {errorCredentials ? (
+            <p className="text-center relative text-red-400 font-bold bg-gray-100 before:max-w-[50px] md:before:max-w-[120px] before:w-full before:-left-[60px] md:before:-left-[140px] before:h-[1px] before:bg-current before:absolute before:top-[50%] after:max-w-[50px] md:after:max-w-[120px] after:w-full after:h-[1px] after:bg-current after:absolute after:top-[50%] after:-right-[60px] md:after:-right-[140px]">
+              Correo y/o contraseña incorrecta
+            </p>
+          ) : (
+            ''
+          )}
           <form onSubmit={onSubmit}>
             <div className="flex justify-center mb-4">
-              <input value={userEmail} onChange={(e) => setEmail(e.target.value)} type="email" className="w-full max-w-md py-2 px-4 rounded-lg outline-purple-600 border-[2px] border-purple-400" placeholder="Correo electrónico" />
+              <input value={userEmail} onChange={(e) => (setEmail(e.target.value), setErrorCredentials(false))} type="email" className="w-full max-w-md py-2 px-4 rounded-lg outline-purple-600 border-[2px] border-purple-400" placeholder="Correo electrónico" />
             </div>
             <div className="flex justify-center mb-6">
               <input value={userPassword} onChange={(e) => setPassword(e.target.value)} type="password" className="w-full max-w-md py-2 px-4 rounded-lg outline-purple-600 border-[2px] border-purple-400" placeholder="Password" />
@@ -197,6 +224,24 @@ const Login = () => {
               </button>
             </div>
           </form>
+          {loading && (
+            <div
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 999,
+              }}
+            >
+              <GridLoader size={25} color="#b70df3" />
+            </div>
+          )}
         </div>
         <div>
           <span className="text-gray-500">

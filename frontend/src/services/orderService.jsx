@@ -11,6 +11,26 @@ export class OrderService {
     }
   };
 
+  static getAllOrders = async () => {
+    try {
+      const { data } = await niuxApi.get('/orders');
+
+      return data;
+    } catch (error) {
+      throw error.response.data.message;
+    }
+  };
+
+  static editOrder = async (order, body) => {
+    try {
+      const { data } = await niuxApi.patch(`/orders/${order}`, body);
+
+      return data;
+    } catch (error) {
+      throw error.response.data.message;
+    }
+  };
+
   static createOrder = async (order) => {
     try {
       const { data } = await niuxApi.post('/orders', order);
@@ -18,7 +38,7 @@ export class OrderService {
       return data;
     } catch (error) {
       throw error.response.data.message;
-    } 
+    }
   };
 
   static getRecentOrderUser = async () => {

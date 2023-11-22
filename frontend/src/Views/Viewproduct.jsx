@@ -71,6 +71,13 @@ const Viewproduct = () => {
     display: 'block',
   };
 
+  const addToPay = async (productId) => {
+    if (!useUser) navigate('/login');
+    await productService.setProductCart(product.id, 1);
+    reloadCart();
+    navigate('/cart');
+  };
+
   return (
     <div className="bg-white">
       <Navbar />
@@ -128,14 +135,14 @@ const Viewproduct = () => {
               </div>
             </div>
 
-            <form className="mt-4">
-              <button type="submit" className="flex w-full items-center justify-center rounded-md border border-transparent bg-purple-600 px-8 py-3 text-base text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 font-bold">
+            <div className="mt-4">
+              <button onClick={() => addToPay(product.id)} type="submit" className="flex w-full items-center justify-center rounded-md border border-transparent bg-purple-600 px-8 py-3 text-base text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 font-bold">
                 Comprar
               </button>
               <button type="submit" className="mt-4 flex w-full items-center justify-center rounded-md border border-transparent bg-purple-300 px-8 py-3 text-base text-purple-600 hover:bg-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-offset-2 font-bold">
                 Ver métodos de pago
               </button>
-            </form>
+            </div>
             {/* Certificaciones */}
             <div className="flex items-center gap-10 justify-center">
               <div className="flex flex-col items-center">

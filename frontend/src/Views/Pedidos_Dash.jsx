@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
-import { Link } from 'react-router-dom';
 import EstadoPedido from '../Components/Dashboard/Pedidos/EstadoPedido';
 import OptionsPedidos_Dash from '../Components/Dashboard/Pedidos/OptionsPedidos_Dash';
 import ModalDetallesPedido from '../Components/Dashboard/Pedidos/ModalDetallesPedido';
 import ModalEditarPedido from '../Components/Dashboard/Pedidos/ModalEditarPedido';
+import { OrderService } from '../services/orderService';
+import { useOrderSearch } from '../stores/Order/orderStore';
 
 const Pedidos_Dash = () => {
+  const orderSearch = useOrderSearch((state) => state.orderSearch);
   const [loading, setLoading] = useState(true);
-  const [selectAll, setSelectAll] = useState(false);
-  const [selected, setSelected] = useState({});
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -19,33 +19,37 @@ const Pedidos_Dash = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const pedido = [
-    { id: '0001', usuario: 'Fidencio Garcia Lopez', detallePedido: 'Teclado VelocityStrike RGB', estado: <EstadoPedido pedido="cancelado" text="Cancelado"/> , total: '$ 1999.00', fechaPedido: '12/10/2023' },
-    { id: '0002', usuario: 'Rosa Leyva Arevalo', detallePedido: 'Disco Duro TurboStorage 1TB', estado:<EstadoPedido pedido="espera" text="En espera"/>, total: '$ 294.00', fechaPedido: '12/10/2023'},
-    { id: '0003', usuario: 'Omar Caballero Hinojosa',detallePedido: 'Tarjeta Gráfica ThunderFire GTX 3080', estado:<EstadoPedido pedido="completado" text="Completado"/>, total: '$ 1999.00', fechaPedido: '12/10/2023'},
-    { id: '0004', usuario: 'Diego Mendoza Gutierrez', detallePedido: 'Impresora LaserJet Pro 9000', estado:<EstadoPedido pedido="enProceso" text="En Proceso"/>, total: '$ 159.00', fechaPedido: '12/10/2023' },
-    { id: '0005', usuario: 'Maria Jose Sosa', detallePedido: 'Memoria USB TurboFlash 128GB', estado:<EstadoPedido  pedido="completado" text="Completado"/>, total: '$ 1234.00', fechaPedido: '12/10/2023' },
-    // ... Más usuarios si los necesitas
-  ];
+  const [orders, setOrders] = useState([]);
+  const [refreshTable, setRefreshTable] = useState(false);
+  const [reloadComponent, setReloadComponent] = useState(false);
 
-  const handleSelectAll = () => {
-    const newSelected = {};
-    pedido.forEach((ticket) => {
-      newSelected[ticket.id] = !selectAll;
-    });
-    setSelectAll(!selectAll);
-    setSelected(newSelected);
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = !orderSearch ? await OrderService.getAllOrders() : orderSearch;
+        setOrders(response);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchOrders();
+  }, [refreshTable, reloadComponent, orderSearch]);
+
+  useEffect(() => {
+    console.log(orderSearch);
+  }, [orderSearch]);
+
+  const pedidos = orders.map((order) => ({ id: order.id, usuario: order.user.fullName, detallePedido: order.orderProducts, estado: <EstadoPedido pedido={order.status} text={order.status} />, total: order.total, fechaPedido: order.createdAt }));
+
+  const deleteButton = async (orderId) => {
+    await OrderService.editOrder(orderId, { isActive: false });
+    setRefreshTable(!refreshTable);
   };
 
-  const handleSelect = (id) => {
-    setSelected((prevSelected) => ({ ...prevSelected, [id]: !prevSelected[id] }));
+  const handleReloadComponent = () => {
+    setReloadComponent(!reloadComponent);
   };
 
-  const getInitials = (name) => {
-    const names = name.split(' ');
-    const initials = names[0].substring(0, 1) + names[1].substring(0, 1);
-    return initials.toUpperCase();
-  };
   return (
     <div>
       {loading && (
@@ -73,9 +77,6 @@ const Pedidos_Dash = () => {
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-900 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                  <th className="sticky top-0 bg-white px-4 py-2">
-                    <input type="checkbox" id="SelectAll" checked={selectAll} onChange={handleSelectAll} className="h-5 w-5 rounded border-gray-300" />
-                  </th>
                   {/* Otros encabezados de la tabla aquí */}
                   <th className="text-white px-6 py-3">ID</th>
                   <th className="text-white px-6 py-3">Usuario</th>
@@ -88,27 +89,23 @@ const Pedidos_Dash = () => {
                 </tr>
               </thead>
               <tbody>
-                {pedido.map((ticket) => (
+                {pedidos.map((ticket) => (
                   <tr key={ticket.id} className="bg-white hover:bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
-                    <td className="sticky left-0 bg-white px-4 py-2">
-                      <input type="checkbox" id={`select-${ticket.id}`} checked={!!selected[ticket.id]} onChange={() => handleSelect(ticket.id)} className="h-5 w-5 rounded border-gray-300" />
-                    </td>
                     <td className="px-6 py-4">{ticket.id}</td>
                     <td className="">{ticket.usuario}</td>
                     <td className="px-6 py-4 text-center">
-                        <ModalDetallesPedido className="z-10 font-medium  text-purple-600 dark:text-blue-500 hover:underline"/>
-
+                      <ModalDetallesPedido props={ticket} className="z-10 font-medium  text-purple-600 dark:text-blue-500 hover:underline  " />
                     </td>
                     <td className="">{ticket.estado}</td>
-                    <td className="px-6 py-4">{ticket.total}</td>
-                    <td className="px-6 py-4">{ticket.fechaPedido}</td>
+                    <td className="px-6 py-4">${ticket.total}</td>
+                    <td className="px-6 py-4">{new Date(ticket.fechaPedido).toLocaleString()}</td>
                     <td className="px-6 py-4 text-right">
-                     <ModalEditarPedido/>
+                      <ModalEditarPedido key={handleReloadComponent} order={ticket} onReload={handleReloadComponent} />
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <Link to="/dashboard" className="font-medium text-red-600 dark:text-red-500 hover:underline">
+                      <button onClick={() => deleteButton(ticket.id)} className="font-medium text-red-600 dark:text-red-500 hover:underline">
                         Eliminar
-                      </Link>
+                      </button>
                     </td>
                   </tr>
                 ))}

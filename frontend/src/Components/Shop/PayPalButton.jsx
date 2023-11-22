@@ -26,7 +26,21 @@ const PayPalButton = (props) => {
         await OrderService.createOrder(props.preOrder);
         await actions.order?.capture();
         await productService.deleteCartUser(useUser);
-        actions.redirect('http://localhost:5173/order_summary');
+
+        props.preOrder.products.map(async (product) => {
+          const getProduct = await productService.getProductById(product);
+
+          const productIndex = props.preOrder.products.indexOf(product);
+
+          const quantity = productIndex !== -1 ? props.preOrder.quantity[productIndex] : 0;
+
+          const newStock = getProduct.stock - quantity;
+          console.log(newStock);
+
+          await productService.deleteStockProduct(product, newStock);
+        });
+
+        actions.redirect(import.meta.env.VITE_HOST + '/order_summary');
       }}
     ></PayPalButtons>
   );

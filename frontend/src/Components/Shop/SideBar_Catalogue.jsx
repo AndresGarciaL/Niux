@@ -1,72 +1,61 @@
-import React, { useState } from 'react';
-import { MdLaptop } from 'react-icons/md';
-import { BsGpuCard } from 'react-icons/bs';
+import React, { useEffect, useState } from 'react';
+import { MdLaptop, MdMonitor, MdOutlineStorage } from 'react-icons/md';
+import { BsCpu, BsGpuCard, BsHeadphones, BsKeyboard, BsMotherboard, BsMouse } from 'react-icons/bs';
 import { FaComputer } from 'react-icons/fa6';
 import { IoHeadsetSharp } from 'react-icons/io5';
-import { AiFillStar, AiFillRightCircle, AiFillDownCircle } from 'react-icons/ai';
+import { AiFillStar } from 'react-icons/ai';
 import { RiMenu3Line, RiCloseLine } from 'react-icons/ri';
-import { Disclosure } from '@headlessui/react';
+import { niuxApi } from '../../api/niuxApi';
+import { CgSmartphoneRam } from 'react-icons/cg';
+import { FaGamepad } from 'react-icons/fa';
+import { useSearchStore } from '../../stores/shop/searchStore';
 
 const SideBar_Catalogue = () => {
+  const setSearch = useSearchStore((state) => state.setSearch);
+
   const sectionIcons = {
     Destacados: <AiFillStar />,
     Componentes: <BsGpuCard />,
     Laptops: <MdLaptop />,
     Accesorios: <IoHeadsetSharp />,
     Software: <FaComputer />,
+    Motherboard: <BsMotherboard />,
+    'Tarjeta Gráfica': <BsGpuCard />,
+    Procesadores: <BsCpu />,
+    Ram: <CgSmartphoneRam />,
+    Almacenamiento: <MdOutlineStorage />,
+    Gaming: <FaGamepad />,
+    Teclado: <BsKeyboard />,
+    Ratón: <BsMouse />,
+    Monitor: <MdMonitor />,
+    Auriculares: <BsHeadphones />,
   };
 
-  const filters = [
-    {
-      id: 'destacados',
-      name: 'Destacados',
-      options: [
-        { value: 'ofertas', label: 'Ofertas', checked: false },
-        { value: 'nuevos', label: 'Nuevos', checked: false },
-        { value: 'mejor-valorados', label: 'Mejor Valorados', checked: false },
-      ],
-    },
-    {
-      id: 'componentes',
-      name: 'Componentes',
-      options: [
-        { value: 'tarjetas-graficas', label: 'Tarjetas Gráficas', checked: false },
-        { value: 'procesadores', label: 'Procesadores', checked: false },
-        { value: 'memoria-ram', label: 'Memoria RAM', checked: false },
-        { value: 'almacenamiento', label: 'Almacenamiento', checked: false },
-        { value: 'placas-base', label: 'Placas Base', checked: false },
-      ],
-    },
-    {
-      id: 'laptops',
-      name: 'Laptops',
-      options: [
-        { value: 'gaming', label: 'Gaming', checked: false },
-        { value: 'ultrabooks', label: 'Ultrabooks', checked: false },
-        { value: 'estudiantes', label: 'Estudiantes', checked: false },
-        { value: 'creativos', label: 'Creativos', checked: false },
-      ],
-    },
-    {
-      id: 'accesorios',
-      name: 'Accesorios',
-      options: [
-        { value: 'ratones', label: 'Ratones', checked: false },
-        { value: 'teclados', label: 'Teclados', checked: false },
-        { value: 'monitores', label: 'Monitores', checked: false },
-        { value: 'auriculares', label: 'Auriculares', checked: false },
-      ],
-    },
-    {
-      id: 'software',
-      name: 'Software',
-      options: [
-        { value: 'sistemas-operativos', label: 'Sistemas Operativos', checked: false },
-        { value: 'software-creativo', label: 'Software Creativo', checked: false },
-        { value: 'antivirus', label: 'Antivirus', checked: false },
-      ],
-    },
-  ];
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const getCategories = async () => {
+      const response = await niuxApi.get('/categories');
+      setCategories(response.data);
+    };
+    getCategories();
+  }, []);
+
+  const filters = categories.map((category) => ({
+    id: category.id,
+    name: category.name.replace(/\w\S*/g, (txt) => {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    }),
+  }));
+
+  const handledButton = async (categoryId, categoryName) => {
+    try {
+      const response = await niuxApi.get(`/products/filter-category/${categoryId}`);
+      setSearch(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const [showMenu, setShowMenu] = useState(false);
   return (
@@ -76,38 +65,20 @@ const SideBar_Catalogue = () => {
           <div className=" flex items-center p-8">
             <h1 className="mt-2 text-center ml-[25px] text-gray-700 font-bold text-2xl">Categorías</h1>
           </div>
-          <form className="">
+          <div className="">
             <h3 className="sr-only">Categories</h3>
 
-            {filters.map((section, index) => (
-              <Disclosure as="div" key={section.id} className="py-4">
-                {({ open }) => (
-                  <>
-                    <h3 className="-my-3 flow-root">
-                      <Disclosure.Button className={`relative w-[230px] flex items-center gap-4 py-3 px-6 hover:bg-purple-400 hover:text-white transition-colors text-gray-600 font-bold text-lg border border-gray-300 rounded-2xl btn-lg ${index === 0 ? 'bg-purple-500 text-white' : ''}`}>
-                        {sectionIcons[section.name]}
+            {filters.map((section) => (
+              <h3 className="-my-3 flow-root">
+                <button onClick={(e) => handledButton(section.id, section.name)} className={`relative w-[240px] mb-5 flex items-center gap-4 py-3 px-6 hover:bg-purple-400 hover:text-white transition-colors text-gray-600 font-bold text-lg border border-gray-300 rounded-2xl btn-lg `}>
+                  {sectionIcons[section.name]}
 
-                        {section.name}
-                        <span className="absolute right-6 top-1/2 transform -translate-y-1/2">{open ? <AiFillDownCircle /> : <AiFillRightCircle />}</span>
-                      </Disclosure.Button>
-                    </h3>
-                    <Disclosure.Panel className="pt-6">
-                      <div className="space-y-4">
-                        {section.options.map((option, optionIdx) => (
-                          <div key={option.value} className="flex items-center">
-                            <input id={`filter-${section.id}-${optionIdx}`} name={`${section.id}[]`} defaultValue={option.value} type="checkbox" defaultChecked={option.checked} className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                            <label htmlFor={`filter-${section.id}-${optionIdx}`} className="ml-3 text-sm text-gray-600">
-                              {option.label}
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                    </Disclosure.Panel>
-                  </>
-                )}
-              </Disclosure>
+                  {section.name}
+                  <span className="absolute right-6 top-1/2 transdiv -translate-y-1/2"></span>
+                </button>
+              </h3>
             ))}
-          </form>
+          </div>
         </div>
       </div>
       <button onClick={() => setShowMenu(!showMenu)} className="xl:hidden fixed bottom-4 right-4 bg-primary text-gray-700 p-3 rounded-full z-50">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from './ModalOrder';
 import TableDetailsOrder from './TableDetailsOrder';
-import { MdPageview } from 'react-icons/md'
+import { MdPageview } from 'react-icons/md';
 
 function ModalDetailsOrder({ props }) {
   const [isModalOpen, setModalOpen] = useState(false);
